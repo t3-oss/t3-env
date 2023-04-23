@@ -99,24 +99,28 @@ This library supports the full power of Zod, so you can use `default` and `trans
 ```ts
 export const env = createEnv({
   server: {
-    SOME_NUMBER: z.string()
+    SOME_NUMBER: z
+      .string()
       // transform to number
       .transform((s) => parseInt(s, 10))
       // make sure transform worked
       .pipe(z.number()),
 
-    COERCED_BOOLEAN: z.string()
+    COERCED_BOOLEAN: z
+      .string()
       // transform to boolean using preferred coercion logic
       .transform((s) => s !== "false" && s !== "0"),
 
-    ONLY_BOOLEAN: z.string()
+    ONLY_BOOLEAN: z
+      .string()
       // only allow "true" or "false"
       .refine((s) => s === "true" || s === "false")
       // transform to boolean
       .transform((s) => s === "true"),
   },
   // ...
-})
+});
+```
 
 ### Additional Options
 
@@ -134,4 +138,7 @@ Condition to skip validation. Defaults to `!!process.env.SKIP_ENV_VALIDATION && 
 
 - [ ] Bring your own validation library - currently only supports Zod.
 - [ ] Validate that all `_input` fields are strings to begin with, transforms may be applied on strings.
+
+```
+
 ```
