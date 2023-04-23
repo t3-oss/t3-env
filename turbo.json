@@ -13,7 +13,7 @@
       "dependsOn": ["build"],
       "outputs": []
     },
-    "type-check": {
+    "typecheck": {
       "cache": false
     }
   }
