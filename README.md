@@ -89,6 +89,11 @@ export const env = createEnv({
    * We can use the `looseProcessEnv` which doesn't enforce the keys.
    */
   looseProcessEnv: import.meta.env,
+  /*
+   * Default skipValidation uses `process` which is not avaialble,
+   * set it manually to a preferred expression.
+   */
+  skipValidation: !!import.meta.env.SKIP_ENV_VALIDATION,
 });
 ```
 
