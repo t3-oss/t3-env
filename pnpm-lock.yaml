@@ -38,7 +38,7 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(solid-js@1.7.3)(vite@4.3.1)
       '@t3-oss/env-core':
-        specifier: 0.1.0-alpha.0
+        specifier: 0.1.0
         version: link:../../packages/core
       astro:
         specifier: ^2.3.0
@@ -57,7 +57,7 @@ importers:
   examples/nextjs:
     dependencies:
       '@t3-oss/env-nextjs':
-        specifier: 0.1.0-alpha.0
+        specifier: 0.1.0
         version: link:../../packages/nextjs
       '@types/node':
         specifier: ^18.15.13
@@ -105,7 +105,7 @@ importers:
   packages/nextjs:
     dependencies:
       '@t3-oss/env-core':
-        specifier: 0.1.0-alpha.0
+        specifier: 0.1.0
         version: link:../core
     devDependencies:
       eslint:

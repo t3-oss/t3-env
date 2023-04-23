@@ -2,6 +2,7 @@
   "name": "@t3-oss/env-root",
   "packageManager": "pnpm@8.3.1",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "turbo build --filter @t3-oss/env*",
     "dev": "turbo dev --filter @t3-oss/env*",
