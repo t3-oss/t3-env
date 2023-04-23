@@ -41,6 +41,7 @@ export function createEnv<
     ...opts,
     // @ts-expect-error TODO: Fix this
     client: opts.client,
+    strictProcessEnv: opts.processEnv,
     clientPrefix: "NEXT_PUBLIC_",
   });
 }

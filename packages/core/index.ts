@@ -35,13 +35,13 @@ export type CreateEnvOptions<
    * Enforces all environment variables to be set. Required for Next.js.
    * @default process.env
    */
-  processEnv?: Record<keyof TServer | keyof TClient, string | undefined>;
+  strictProcessEnv?: Record<keyof TServer | keyof TClient, string | undefined>;
 
   /**
    * Manual destruction of `process.env`.
    * Doesn't enforce that all environment variables are set.
    */
-  _unsafeProcessEnv?: Record<string, string | undefined>;
+  looseProcessEnv?: Record<string, string | undefined>;
 
   /**
    * How to determine whether the app is running on the server or the client.
@@ -66,7 +66,8 @@ export function createEnv<
   const _client = typeof opts.client === "object" ? opts.client : {};
   const client = z.object(_client);
   const server = z.object(opts.server);
-  const processEnv = opts.processEnv ?? opts._unsafeProcessEnv ?? process.env;
+  const processEnv =
+    opts.strictProcessEnv ?? opts.looseProcessEnv ?? process.env;
   const isServer = opts.isServer ?? typeof window === "undefined";
   const skip =
     opts.skipValidation ??
