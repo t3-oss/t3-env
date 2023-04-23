@@ -138,7 +138,3 @@ Condition to skip validation. Defaults to `!!process.env.SKIP_ENV_VALIDATION && 
 
 - [ ] Bring your own validation library - currently only supports Zod.
 - [ ] Validate that all `_input` fields are strings to begin with, transforms may be applied on strings.
-
-```
-
-```
