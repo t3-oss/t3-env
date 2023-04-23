@@ -21,9 +21,9 @@
       }
     ],
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./app/*"]
     }
   },
-  "include": ["next-env.d.ts", "src", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "app", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

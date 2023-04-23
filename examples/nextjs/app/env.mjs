@@ -3,12 +3,13 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    PORT: z.string(),
+    SECRET: z.string(),
   },
   client: {
-    NEXT_PUBLIC_API_URL: z.string(),
+    NEXT_PUBLIC_GREETING: z.string(),
   },
   processEnv: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    SECRET: process.env.SECRET,
+    NEXT_PUBLIC_GREETING: process.env.NEXT_PUBLIC_GREETING,
   },
 });
