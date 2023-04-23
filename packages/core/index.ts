@@ -2,11 +2,11 @@ import z, { ZodObject, ZodType } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 
-export type CreateEnvOptions<
+export interface BaseOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
-> = {
+> {
   /**
    * Client-side environment variables are exposed to the client by default. Set what prefix they have
    */
@@ -24,29 +24,11 @@ export type CreateEnvOptions<
    */
   client: {
     [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-    ? TClient[TKey]
-    : ErrorMessage<`${TKey extends string
-      ? TKey
-      : never} is not prefixed with ${TPrefix}.`>;
+      ? TClient[TKey]
+      : ErrorMessage<`${TKey extends string
+          ? TKey
+          : never} is not prefixed with ${TPrefix}.`>;
   };
-
-  /**
-   * Manual destruction of `process.env`.
-   * Enforces all environment variables to be set. Required for Next.js.
-   * @default process.env
-   */
-  strictProcessEnv?:
-  Record<{
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-    ? TKey
-    : never;
-  }[keyof TClient] | keyof TServer, string | undefined>;
-
-  /**
-   * Manual destruction of `process.env`.
-   * Doesn't enforce that all environment variables are set.
-   */
-  looseProcessEnv?: Record<string, string | undefined>;
 
   /**
    * How to determine whether the app is running on the server or the client.
@@ -59,20 +41,55 @@ export type CreateEnvOptions<
    * @default !!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"
    */
   skipValidation?: boolean;
-};
+}
+
+export interface LooseOptions<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>,
+  TClient extends Record<string, ZodType>
+> extends BaseOptions<TPrefix, TServer, TClient> {
+  runtimeEnvStrict?: never;
+  /**
+   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
+   * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
+   */
+  runtimeEnv: Record<string, string | undefined>;
+}
+
+export interface StrictOptions<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>,
+  TClient extends Record<string, ZodType>
+> extends BaseOptions<TPrefix, TServer, TClient> {
+  /**
+   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
+   * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
+   */
+  runtimeEnvStrict: Record<
+    | {
+        [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+          ? TKey
+          : never;
+      }[keyof TClient]
+    | keyof TServer,
+    string | undefined
+  >;
+  runtimeEnv?: never;
+}
 
 export function createEnv<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
 >(
-  opts: CreateEnvOptions<TPrefix, TServer, TClient>
+  opts:
+    | LooseOptions<TPrefix, TServer, TClient>
+    | StrictOptions<TPrefix, TServer, TClient>
 ): z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>> {
   const _client = typeof opts.client === "object" ? opts.client : {};
   const client = z.object(_client);
   const server = z.object(opts.server);
-  const processEnv =
-    opts.strictProcessEnv ?? opts.looseProcessEnv ?? process.env;
+  const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
   const isServer = opts.isServer ?? typeof window === "undefined";
   const skip =
     opts.skipValidation ??
@@ -81,12 +98,12 @@ export function createEnv<
       process.env.SKIP_ENV_VALIDATION !== "0");
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
-  if (skip) return processEnv as any;
+  if (skip) return runtimeEnv as any;
 
   const merged = server.merge(client);
   const parsed = isServer
-    ? merged.safeParse(processEnv) // on server we can validate all env vars
-    : client.safeParse(processEnv); // on client we can only validate the ones that are exposed
+    ? merged.safeParse(runtimeEnv) // on server we can validate all env vars
+    : client.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
 
   if (parsed.success === false) {
     console.error(

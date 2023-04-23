@@ -10,7 +10,7 @@ export const env = createEnv({
   },
   // Astro bundles all environment variables so
   // we don't need to manually destructure them
-  looseProcessEnv: import.meta.env,
+  runtimeEnv: import.meta.env,
   // process is not available in Astro, so we must set this explicitely
   skipValidation: import.meta.env.SKIP_ENV_VALIDATION === "development",
   clientPrefix: "PUBLIC_",

@@ -46,7 +46,7 @@ export const env = createEnv({
    *
    * 💡 You'll get typeerrors if not all variables from `server` & `client` are included here.
    */
-  processEnv: {
+  runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
@@ -85,10 +85,9 @@ export const env = createEnv({
     ASTRO_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
   /*
-   * Everything is included in the bundle, so we don't need to destructure.
-   * We can use the `looseProcessEnv` which doesn't enforce the keys.
+   * Astro bundles all environment variables, so we don't need to destructure them manually.
    */
-  looseProcessEnv: import.meta.env,
+  runtimeEnv: import.meta.env,
   /*
    * Default skipValidation uses `process` which is not avaialble,
    * set it manually to a preferred expression.
@@ -130,17 +129,41 @@ export const env = createEnv({
 });
 ```
 
-### Additional Options
+### Options
 
-#### `isServer`
+#### `clientPrefix`
+
+Prefix to export environemnt variables to the client. This should be set depending on your framework, e.g. `NEXT_PUBLIC_` for Next.js or `PUBLIC_` for Astro.
+
+#### `server`
+
+Zod schema for server-side environment variables.
+
+#### `client`
+
+Zod schema for client-side environment variables.
+
+#### `runtimeEnv`
+
+Environment variables available at runtime. This is usually `process.env` or `import.meta.env`.
+
+#### `runtimeEnvStrict`
+
+A more strict version of `runtimeEnv` which will type-error that all variables from the `server` and `client` schemas are included. Useful for frameworks that don't bundle all environment variables unless they're explicitly accesses such as Next.js.
+
+> **Note 1:** Exact one of `runtimeEnv` and `runtimeEnvStrict` should be set.
+
+> **Note 2:** `runtimeEnv` is strict by default in `@t3-oss/env-nextjs`.
+
+#### `isServer` (optional)
 
 How to determine if we're on the server or client. Defaults to `typeof window === 'undefined'`.
 
-#### `skipValidation`
+#### `skipValidation` (optional)
 
 Condition to skip validation. Defaults to `!!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"`.
 
-> ⚠️ Skipping might be useful for local development, linting or Docker deployments.
+> **Note:** Since this uses `process` by default, you'll get errors if not overriding it in environments where `process` isn't available.
 
 ## Roadmap
 
