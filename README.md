@@ -107,6 +107,9 @@ This library supports the full power of Zod, so you can use `default` and `trans
 > All environment variables are strings, so make sure that the first `ZodType` is a `z.string()`. This will be enforced on type-level in the future.
 
 ```ts
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
 export const env = createEnv({
   server: {
     SOME_NUMBER: z
