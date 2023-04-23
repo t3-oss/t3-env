@@ -1,12 +1,13 @@
 {
-  "name": "@t3-env/core",
-  "description": "form library tightly coupled with trpc mutations",
-  "version": "0.1.0",
+  "name": "@t3-oss/env-core",
+  "version": "0.1.0-alpha.0",
   "keywords": [
     "create-t3-app",
     "environment variables",
     "zod"
   ],
+  "author": "Julius Marminge",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/t3-oss/t3-env",

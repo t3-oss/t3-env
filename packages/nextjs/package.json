@@ -1,7 +1,6 @@
 {
-  "name": "@t3-env/nextjs",
-  "description": "form library tightly coupled with trpc mutations",
-  "version": "0.1.0",
+  "name": "@t3-oss/env-nextjs",
+  "version": "0.1.0-alpha.0",
   "keywords": [
     "create-t3-app",
     "environment variables",
@@ -38,7 +37,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-env/core": "^0.1.0"
+    "@t3-oss/env-core": "0.1.0-alpha.0"
   },
   "peerDependencies": {
     "zod": "^3.0.0"
