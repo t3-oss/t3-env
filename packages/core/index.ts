@@ -8,6 +8,11 @@ export type CreateEnvOptions<
   TClient extends Record<string, ZodType>
 > = {
   /**
+   * Client-side environment variables are exposed to the client by default. Set what prefix they have
+   */
+  clientPrefix: TPrefix;
+
+  /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
@@ -17,7 +22,7 @@ export type CreateEnvOptions<
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
    */
-  client: {
+  client?: {
     [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
       ? TClient[TKey]
       : ErrorMessage<`${TKey extends string
@@ -26,15 +31,17 @@ export type CreateEnvOptions<
   };
 
   /**
-   * Manual destruction of `process.env`. Required for Next.js.
+   * Manual destruction of `process.env`.
+   * Enforces all environment variables to be set. Required for Next.js.
    * @default process.env
    */
   processEnv?: Record<keyof TServer | keyof TClient, string | undefined>;
 
   /**
-   * Client-side environment variables are exposed to the client by default. Set what prefix they have
+   * Manual destruction of `process.env`.
+   * Doesn't enforce that all environment variables are set.
    */
-  clientPrefix: TPrefix;
+  _unsafeProcessEnv?: Record<string, string | undefined>;
 
   /**
    * How to determine whether the app is running on the server or the client.
@@ -58,16 +65,19 @@ export function createEnv<
 ): z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>> {
   const _client = typeof opts.client === "object" ? opts.client : {};
   const client = z.object(_client);
-  const server = z.object(opts.server ?? {});
-  const processEnv = opts.processEnv ?? {};
+  const server = z.object(opts.server);
+  const processEnv = opts.processEnv ?? opts._unsafeProcessEnv ?? process.env;
   const isServer = opts.isServer ?? typeof window === "undefined";
-  const skip = opts.skipValidation ?? false;
-
-  const merged = server.merge(client);
+  const skip =
+    opts.skipValidation ??
+    (!!process.env.SKIP_ENV_VALIDATION &&
+      process.env.SKIP_ENV_VALIDATION !== "false" &&
+      process.env.SKIP_ENV_VALIDATION !== "0");
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return processEnv as any;
 
+  const merged = server.merge(client);
   const parsed = isServer
     ? merged.safeParse(processEnv) // on server we can validate all env vars
     : client.safeParse(processEnv); // on client we can only validate the ones that are exposed

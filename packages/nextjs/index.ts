@@ -16,7 +16,7 @@ export function createEnv<
      * Specify your client-side environment variables schema here. This way you can ensure the app isn't
      * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
      */
-    client: {
+    client?: {
       [TKey in keyof TClient]: TKey extends `NEXT_PUBLIC_${string}`
         ? TClient[TKey]
         : ErrorMessage<`${TKey extends string
@@ -29,6 +29,12 @@ export function createEnv<
      * @default process.env
      */
     processEnv?: Record<keyof TServer | keyof TClient, string | undefined>;
+
+    /**
+     * Whether to skip validation of environment variables.
+     * @default !!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"
+     */
+    skipValidation?: boolean;
   }
 ) {
   return createEnvCore({
