@@ -100,15 +100,20 @@ This library supports the full power of Zod, so you can use `default` and `trans
 export const env = createEnv({
   server: {
     SOME_NUMBER: z.string()
-      .transform((s) => parseInt(s, 10)) // transform to number
-      .pipe(z.number()), // make sure transform worked
+      // transform to number
+      .transform((s) => parseInt(s, 10))
+      // make sure transform worked
+      .pipe(z.number()),
 
     COERCED_BOOLEAN: z.string()
-      .transform((s) => s !== "false" && s !== "0"), // transform to boolean using preferred coercion logic
+      // transform to boolean using preferred coercion logic
+      .transform((s) => s !== "false" && s !== "0"),
 
     ONLY_BOOLEAN: z.string()
-      .refine((s) => s === "true" || s === "false") // only allow "true" or "false"
-      .transform((s) => s === "true"), // transform to boolean
+      // only allow "true" or "false"
+      .refine((s) => s === "true" || s === "false")
+      // transform to boolean
+      .transform((s) => s === "true"),
   },
   // ...
 })
