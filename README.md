@@ -5,8 +5,9 @@ Deploying your app with invalid environment variables is a hassle. This package 
 ## Installation
 
 ```bash
+# Core package, no framework specific features
 pnpm add @t3-env/core
-# or, preconfigured for Next.js
+# or, with options preconfigured for Next.js
 pnpm add @t3-env/nextjs
 ```
 
