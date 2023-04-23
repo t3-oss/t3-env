@@ -5,5 +5,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@examples/*"]
+  "ignore": ["@examples/astro", "@examples/nextjs"]
 }
