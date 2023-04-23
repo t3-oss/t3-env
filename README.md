@@ -5,7 +5,9 @@ Deploying your app with invalid environment variables is a hassle. This package 
 ## Installation
 
 ```bash
-pnpm add @t3-oss/env
+pnpm add @t3-env/core
+# or, preconfigured for Next.js
+pnpm add @t3-env/nextjs
 ```
 
 > Currently only supports Zod (which you'll need to install separately). Bring your own validation library is on the roadmap.
