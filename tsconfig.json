@@ -1,10 +1,4 @@
 {
-  "include": [
-    "src",
-    "test",
-    "packages/nextjs/index.ts",
-    "packages/core/index.ts"
-  ],
   "compilerOptions": {
     /* LANGUAGE COMPILATION OPTIONS */
     "target": "ES2020",
