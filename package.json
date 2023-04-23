@@ -4,12 +4,16 @@
   "scripts": {
     "build": "turbo build --filter @t3-env/*",
     "dev": "turbo dev --filter @t3-env/*",
-    "lint": "turbo lint",
+    "lint": "turbo lint && manypkg check",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
+    "@manypkg/cli": "^0.20.0",
     "@types/node": "^18.15.13",
-    "typescript": "^5.0.4",
-    "turbo": "^1.9.3"
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.39.0",
+    "turbo": "^1.9.3",
+    "typescript": "^5.0.4"
   }
 }

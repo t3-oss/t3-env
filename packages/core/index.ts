@@ -65,6 +65,7 @@ export function createEnv<
 
   const merged = server.merge(client);
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return processEnv as any;
 
   const parsed = isServer
@@ -79,7 +80,7 @@ export function createEnv<
     throw new Error("Invalid environment variables");
   }
 
-  return new Proxy(parsed.data, {
+  const env = new Proxy(parsed.data, {
     get(target, prop) {
       if (typeof prop !== "string") return undefined;
       if (!isServer && !prop.startsWith(opts.clientPrefix))
@@ -88,5 +89,8 @@ export function createEnv<
         );
       return target[prop as keyof typeof target];
     },
-  }) as any;
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+  return env as any;
 }
