@@ -18,10 +18,10 @@ This package supports the full power of Zod, meaning you can use `transforms` an
 
 ```ts
 // src/env.mjs
-import { createEnv } from '@t3-oss/env/nextjs'
+import { createEnv } from "@t3-oss/env/nextjs";
 
 export const env = createEnv({
-  /* 
+  /*
    * Serverside Environment variables, not available on the client.
    * Will throw if you access these variables on the client.
    */
@@ -29,34 +29,35 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     OPEN_AI_API_KEY: z.string().min(1),
   },
-  /* 
+  /*
    * Environment variables available on the client (and server).
-   * 
+   *
    * 💡 You'll get typeerrors if these are not prefixed with NEXT_PUBLIC_.
    */
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
   /*
-   * Due to how Next.js bundles environment variables on Edge and Client, 
+   * Due to how Next.js bundles environment variables on Edge and Client,
    * we need to manually destructure them to make sure all are included in bundle.
-   * 
+   *
    * 💡 You'll get typeerrors if not all variables from `server` & `client` are included here.
    */
   processEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-  } 
-})
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  },
+});
 
 // src/app/hello/route.ts
-import { env } from '../env.mjs'
+import { env } from "../env.mjs";
 
 export const GET = (req: Request) => {
   const DATABASE_URL = env.DATABASE_URL;
   // use it...
-}
+};
 ```
 
 ### With any framework
@@ -65,10 +66,10 @@ Below is an example of Astro, but in principle it should work with any framework
 
 ```ts
 // src/env.mjs
-import { createEnv } from '@t3-oss/env/core';
+import { createEnv } from "@t3-oss/env/core";
 
 export const env = createEnv({
-  /* 
+  /*
    * Specify what prefix the client-side variables must have.
    * This is enforced both on type-level and at runtime.
    */
@@ -80,10 +81,11 @@ export const env = createEnv({
   client: {
     ASTRO_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
-  /* 
+  /*
    * Everything is included in the bundle, so we don't need to destructure.
+   * We can use the `looseProcessEnv` which doesn't enforce the keys.
    */
-  processEnv: import.meta.env,
+  looseProcessEnv: import.meta.env,
 });
 ```
 
@@ -127,3 +129,4 @@ Condition to skip validation. Defaults to `!!process.env.SKIP_ENV_VALIDATION && 
 
 - [ ] Bring your own validation library - currently only supports Zod.
 - [ ] Validate that all `_input` fields are strings to begin with, transforms may be applied on strings.
+```
