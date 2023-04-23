@@ -1,0 +1,10 @@
+node_modules
+dist
+
+.astro
+.next
+.turbo
+.vercel
+.DS_Store
+
+next-env.d.ts

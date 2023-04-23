@@ -1,0 +1,52 @@
+{
+  "name": "@t3-env/nextjs",
+  "description": "form library tightly coupled with trpc mutations",
+  "version": "0.1.0",
+  "keywords": [
+    "create-t3-app",
+    "environment variables",
+    "zod",
+    "nextjs"
+  ],
+  "author": "Julius Marminge",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t3-oss/t3-env",
+    "directory": "packages/nextjs"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@t3-env/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.31.0",
+    "tsup": "^6.2.3",
+    "typescript": "^4.9.4",
+    "zod": "^3.20.2"
+  }
+}
