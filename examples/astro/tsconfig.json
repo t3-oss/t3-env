@@ -4,10 +4,8 @@
     "allowJs": true,
     "checkJs": true,
     "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    "jsxImportSource": "solid-js",
+    "types": ["astro/client"]
   },
-  "include": [
-    "src",
-    "astro.config.mjs"
-  ]
+  "include": ["src", "astro.config.mjs"]
 }
