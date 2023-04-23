@@ -22,12 +22,12 @@ export type CreateEnvOptions<
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
    */
-  client?: {
+  client: {
     [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
+    ? TClient[TKey]
+    : ErrorMessage<`${TKey extends string
+      ? TKey
+      : never} is not prefixed with ${TPrefix}.`>;
   };
 
   /**
@@ -35,7 +35,12 @@ export type CreateEnvOptions<
    * Enforces all environment variables to be set. Required for Next.js.
    * @default process.env
    */
-  strictProcessEnv?: Record<keyof TServer | keyof TClient, string | undefined>;
+  strictProcessEnv?:
+  Record<{
+    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+    ? TKey
+    : never;
+  }[keyof TClient] | keyof TServer, string | undefined>;
 
   /**
    * Manual destruction of `process.env`.
