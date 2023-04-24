@@ -25,5 +25,14 @@ pnpm add @t3-oss/env-nextjs zod
 
 For usage intructions, please refer to the appropriate documentation:
 
-- [Core](/docs/core)
-- [Next.js](/docs/nextjs)
+import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
+
+<div className="flex gap-2 mt-4">
+  <Link href="/docs/core" className={buttonVariants()}>
+    Core
+  </Link>
+  <Link href="/docs/nextjs" className={buttonVariants()}>
+    Next.js
+  </Link>
+</div>

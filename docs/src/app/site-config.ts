@@ -11,7 +11,7 @@ export const siteConfig = {
     },
     {
       title: "Docs",
-      href: "/docs",
+      href: "/docs/introduction",
     },
   ],
   sidebarNav: [
