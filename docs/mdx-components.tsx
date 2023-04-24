@@ -49,7 +49,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ul: (props) => <ul className="mt-4 list-disc pl-8" {...props} />,
     code: (props) => (
       <code
-        className="relative rounded bg-muted py-[0.2rem] px-[0.3rem] font-mono text-sm font-semibold text-muted-foreground"
+        className="relative font-mono rounded bg-muted py-[0.2rem] px-[0.3rem] text-sm font-semibold text-muted-foreground"
         {...props}
       />
     ),

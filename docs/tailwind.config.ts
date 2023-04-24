@@ -59,6 +59,7 @@ export default {
       fontFamily: {
         cal: ["var(--font-cal)", ...fontFamily.sans],
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        mono: ["var(--font-mono)", ...fontFamily.mono],
       },
       keyframes: {
         "fade-up": {
