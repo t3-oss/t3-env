@@ -1,0 +1,67 @@
+# Core
+
+The core package can be used in any framework of your choice. To use it, figure out what prefix your framework uses for exposing environment variables to the client. For example, Astro uses `PUBLIC_`, while Vite uses `VITE_PUBLIC`. You should be able to find this in the frameworks documentation.
+
+Then, you can create your schema like so:
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  /*
+   * Specify what prefix the client-side variables must have.
+   * This is enforced both on type-level and at runtime.
+   */
+  clientPrefix: "PUBLIC_",
+  server: {
+    DATABASE_URL: z.string().url(),
+    OPEN_AI_API_KEY: z.string().min(1),
+  },
+  client: {
+    PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  /**
+   * What object holds the environment variables at runtime.
+   * Often `process.env` or `import.meta.env`
+   */
+  runtimeEnv: process.env,
+});
+```
+
+You'll notice that if your `clientPrefix` is `PUBLIC_`, you won't be allowed to enter any other keys in the `client` object without getting type-errors. This client prefix is also enforced at runtime to make sure validation works on both the server and client.
+
+<Callout>
+
+If your framework doesn't support `process.env`, you'll also need to override the default `skipValidation` option, since that references `process.env`.
+
+</Callout>
+
+## Additional strictness for `runtimeEnv`
+
+If your framework doesn't bundle all environment variables by default, but instead only bundles the ones you use, you can use the `runtimeEnvStrict` option to make sure you don't forget to add any variables to your runtime.
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  clientPrefix: "PUBLIC_",
+  server: {
+    DATABASE_URL: z.string().url(),
+    OPEN_AI_API_KEY: z.string().min(1),
+  },
+  client: {
+    PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  /**
+   * Makes sure you explicitely access **all** environment variables
+   * from `server` and `client` in your `runtimeEnv`.
+   */
+  runtimeEnvStrict: {
+    DATABASE_URL: process.env.DATABASE_URL,
+    OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
+    PUBLIC_PUBLISHABLE_KEY: process.env.PUBLIC_PUBLISHABLE_KEY,
+  },
+});
+```
+
+When using the strict option, missing any of the variables in `runtimeEnvStrict` will result in a type error.

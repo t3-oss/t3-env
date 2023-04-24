@@ -1,0 +1,49 @@
+# Recipes
+
+`t3-env` supports the full power of Zod meaning you can use transforms, default values etc. to create a set of powerful and flexible validation schemas for your environment variables. Below we'll look at a few example recipes for
+
+<Callout>
+  All environment variables are strings, so make sure that the first `ZodType`
+  is a `z.string()`. This will be enforced on type-level in the future.
+</Callout>
+
+## Booleans
+
+Coercing booleans from strings is a common use case. Below are 2 examples of how to do this, but you can choose any coercian logic you want.
+
+```ts
+export const env = createEnv({
+  server: {
+    COERCED_BOOLEAN: z
+      .string()
+      // transform to boolean using preferred coercion logic
+      .transform((s) => s !== "false" && s !== "0"),
+
+    ONLY_BOOLEAN: z
+      .string()
+      // only allow "true" or "false"
+      .refine((s) => s === "true" || s === "false")
+      // transform to boolean
+      .transform((s) => s === "true"),
+  },
+  // ...
+});
+```
+
+## Numbers
+
+Coercing numbers from strings is another common use case.
+
+```ts
+export const env = createEnv({
+  server: {
+    SOME_NUMBER: z
+      .string()
+      // transform to number
+      .transform((s) => parseInt(s, 10))
+      // make sure transform worked
+      .pipe(z.number()),
+  },
+  // ...
+});
+```

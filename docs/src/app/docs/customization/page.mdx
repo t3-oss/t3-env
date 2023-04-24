@@ -1,0 +1,56 @@
+# Customization
+
+Below are some examples of how you can customize the behavior of the library. The default values are shown in the snippets below.
+
+## Skipping validation
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  // ...
+  // Tell the library to skip validation if condition is true.
+  skipValidation:
+    !!process.env.SKIP_ENV_VALIDATION &&
+    process.env.SKIP_ENV_VALIDATION !== "false" &&
+    process.env.SKIP_ENV_VALIDATION !== "0",
+});
+```
+
+## Overriding the default error handler
+
+<Callout type="info">This option is not released just yet.</Callout>
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  // ...
+  // Called when the schema validation fails.
+  onValidationFail: (error: ZodError) => {
+    console.error(
+      "❌ Invalid environment variables:",
+      parsed.error.flatten().fieldErrors
+    );
+    throw new Error("Invalid environment variables");
+  },
+  // Called when server variables are accessed on the client.
+  onInvalidAccess: (variable: string) => {
+    throw new Error(
+      "❌ Attempted to access a server-side environment variable on the client"
+    );
+  },
+});
+```
+
+## Tell when we're in a server context
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  // ...
+  // Tell the library when we're in a server context.
+  isServer: typeof window === "undefined",
+});
+```

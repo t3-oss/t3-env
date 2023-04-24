@@ -1,0 +1,28 @@
+# Next.js
+
+The Next.js package comes preconfigured for Next.js and also enforces some extra rules by default to make sure you have out-of-the-box compatibility in all different Next.js runtimes.
+
+```js title="src/env.mjs"
+import { createEnv } from "@t3-oss/env-nextjs";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+    OPEN_AI_API_KEY: z.string().min(1),
+  },
+  client: {
+    NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  runtimeEnv: {
+    DATABASE_URL: process.env.DATABASE_URL,
+    OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
+    NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
+  },
+});
+```
+
+<Callout type="info">
+
+Unlike in the core package, `runtimeEnv` is strict by default, meaning you'll have to destructure all the keys manually. This is due to how Next.js bundles environment variables and only explicitely accessed variables are included in the bundle. Missing keys will result in a type-error.
+
+</Callout>
