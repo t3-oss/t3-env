@@ -12,7 +12,7 @@ const nextConfig = {
     appDir: true,
   },
   redirects: () => [
-    { source: "/docs", destination: "/docs/installation", permanent: true },
+    { source: "/docs", destination: "/docs/introduction", permanent: true },
   ],
 };
 

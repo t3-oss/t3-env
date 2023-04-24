@@ -15,7 +15,7 @@ export default function IndexPage() {
         >
           <Balancer>
             Framework agnostic validation for{" "}
-            <span className="underline decoration-red-500 decoration-wavy decoration-from-font underline-offset-2">
+            <span className="underline decoration-red-500 decoration-wavy decoration-from-font underline-offset-4">
               type-safe
             </span>{" "}
             environment variables.

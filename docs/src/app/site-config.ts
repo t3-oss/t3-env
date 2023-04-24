@@ -19,6 +19,11 @@ export const siteConfig = {
       title: "Getting Started",
       items: [
         {
+          title: "Introduction",
+          href: "/docs/introduction",
+          items: [],
+        },
+        {
           title: "Installation",
           href: "/docs/installation",
           items: [],
