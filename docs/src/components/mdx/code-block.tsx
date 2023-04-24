@@ -8,6 +8,7 @@ import { Icons } from "../icons";
 export function Codeblock(
   props: DetailedHTMLProps<React.HTMLAttributes<HTMLPreElement>, HTMLPreElement>
 ) {
+  const { children, ...rest } = props;
   const language = props["data-language" as keyof typeof props] as string;
   const Icon = {
     js: Icons.javascript,
@@ -51,8 +52,9 @@ export function Codeblock(
       <pre
         ref={ref}
         className="relative my-4 overflow-x-scroll rounded-lg border bg-muted p-4 font-mono text-sm font-semibold text-muted-foreground"
+        {...rest}
       >
-        {props.children}
+        {children}
       </pre>
     </>
   );

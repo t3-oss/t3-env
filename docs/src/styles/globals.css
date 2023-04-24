@@ -115,4 +115,20 @@
   [data-rehype-pretty-code-title] ~ pre {
     @apply mt-0 rounded-t-none;
   }
+
+  pre[data-theme="light"],
+  code[data-theme="light"] {
+    @apply block dark:hidden;
+  }
+
+  pre[data-theme="dark"],
+  code[data-theme="dark"] {
+    @apply hidden dark:block;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+}
+
+@media (prefers-color-scheme: light) {
 }

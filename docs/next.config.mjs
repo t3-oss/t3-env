@@ -23,7 +23,7 @@ export default withMdx({
         rehypePrettyCode,
         /** @type {import("rehype-pretty-code").Options} */
         ({
-          theme: "one-dark-pro",
+          theme: { dark: "one-dark-pro", light: "github-light" },
           getHighlighter,
           onVisitLine(node) {
             // Prevent lines from collapsing in `display: grid` mode, and allow empty
