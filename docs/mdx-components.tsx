@@ -15,21 +15,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     h2: (props) => (
       <h2
-        className="mt-10 scroll-m-20 border-b pb-2 font-cal text-3xl transition-colors first:mt-0"
+        className="mt-10 scroll-m-20 border-b pb-2 font-cal text-3xl first:mt-0"
         {...props}
       />
     ),
     h3: (props) => (
-      <h3
-        className="mt-8 scroll-m-20 font-cal text-2xl text-foreground"
-        {...props}
-      />
+      <h3 className="mt-8 scroll-m-20 font-cal text-2xl" {...props} />
     ),
     h4: (props) => (
-      <h4
-        className="m-0 scroll-m-20 font-cal text-xl text-foreground"
-        {...props}
-      />
+      <h4 className="m-0 scroll-m-20 font-cal text-xl" {...props} />
     ),
     p: (props) => (
       <p className="leading-7 [&:not(:first-child)]:mt-6" {...props} />
