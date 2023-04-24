@@ -6,9 +6,9 @@ Deploying your app with invalid environment variables is a hassle. This package 
 
 ```bash
 # Core package, no framework specific features
-pnpm add @t3-oss/env-core
+pnpm add @t3-oss/env-core zod
 # or, with options preconfigured for Next.js
-pnpm add @t3-oss/env-nextjs
+pnpm add @t3-oss/env-nextjs zod
 ```
 
 > Currently only supports Zod (which you'll need to install separately). Bring your own validation library is on the roadmap.
@@ -22,6 +22,7 @@ This package supports the full power of Zod, meaning you can use `transforms` an
 ```ts
 // src/env.mjs
 import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   /*
@@ -70,6 +71,7 @@ Below is an example of Astro, but in principle it should work with any framework
 ```ts
 // src/env.mjs
 import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
 
 export const env = createEnv({
   /*
@@ -104,6 +106,9 @@ This library supports the full power of Zod, so you can use `default` and `trans
 > All environment variables are strings, so make sure that the first `ZodType` is a `z.string()`. This will be enforced on type-level in the future.
 
 ```ts
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
 export const env = createEnv({
   server: {
     SOME_NUMBER: z
