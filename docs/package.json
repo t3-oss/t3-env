@@ -12,6 +12,7 @@
     "@next/mdx": "^13.3.1",
     "@radix-ui/react-popover": "^1.0.5",
     "@radix-ui/react-scroll-area": "^1.0.3",
+    "@vercel/analytics": "^1.0.0",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "lucide-react": "0.176.0",
