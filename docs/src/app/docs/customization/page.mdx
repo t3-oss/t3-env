@@ -19,15 +19,13 @@ export const env = createEnv({
 
 ## Overriding the default error handler
 
-<Callout type="info">This option is not released just yet.</Callout>
-
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
 
 export const env = createEnv({
   // ...
   // Called when the schema validation fails.
-  onValidationFail: (error: ZodError) => {
+  onValidationError: (error: ZodError) => {
     console.error(
       "❌ Invalid environment variables:",
       parsed.error.flatten().fieldErrors

@@ -1,4 +1,4 @@
-import type { ZodType } from "zod";
+import type { z, ZodType } from "zod";
 import { createEnv as createEnvCore, type ErrorMessage } from "../core";
 
 export function createEnv<
@@ -42,6 +42,19 @@ export function createEnv<
    * @default !!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"
    */
   skipValidation?: boolean;
+
+  /**
+   * Called when validation fails. By default the error is logged,
+   * and an error is thrown telling what environment variables are invalid.
+   * Function must throw an error at the end.
+   */
+  onValidationError?: (error: z.ZodError) => never;
+
+  /**
+   * Called when a server-side environment variable is accessed on the client.
+   * By default an error is thrown.
+   */
+  onInvalidAccess?: (variable: string) => never;
 }) {
   return createEnvCore({
     ...opts,

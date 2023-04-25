@@ -37,6 +37,18 @@ export interface BaseOptions<
   isServer?: boolean;
 
   /**
+   * Called when validation fails. By default the error is logged,
+   * and an error is thrown telling what environment variables are invalid.
+   */
+  onValidationError?: (error: z.ZodError) => never;
+
+  /**
+   * Called when a server-side environment variable is accessed on the client.
+   * By default an error is thrown.
+   */
+  onInvalidAccess?: (variable: string) => never;
+
+  /**
    * Whether to skip validation of environment variables.
    * @default !!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"
    */
@@ -106,6 +118,9 @@ export function createEnv<
     : client.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
 
   if (parsed.success === false) {
+    if (opts.onValidationError) {
+      return opts.onValidationError(parsed.error);
+    }
     console.error(
       "❌ Invalid environment variables:",
       parsed.error.flatten().fieldErrors
@@ -116,10 +131,14 @@ export function createEnv<
   const env = new Proxy(parsed.data, {
     get(target, prop) {
       if (typeof prop !== "string") return undefined;
-      if (!isServer && !prop.startsWith(opts.clientPrefix))
+      if (!isServer && !prop.startsWith(opts.clientPrefix)) {
+        if (opts.onInvalidAccess) {
+          return opts.onInvalidAccess(prop);
+        }
         throw new Error(
           "❌ Attempted to access a server-side environment variable on the client"
         );
+      }
       return target[prop as keyof typeof target];
     },
   });
