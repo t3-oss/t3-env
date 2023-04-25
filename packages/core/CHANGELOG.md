@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.2.1
+
+### Patch Changes
+
+- [#12](https://github.com/t3-oss/t3-env/pull/12) [`c17f462`](https://github.com/t3-oss/t3-env/commit/c17f46205ba676b1a9b139fc4dc3395e4c074862) Thanks [@stefanprobst](https://github.com/stefanprobst)! - add types to package.json exports map
+
 ## 0.2.0
 
 ### Minor Changes
