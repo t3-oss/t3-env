@@ -1,8 +1,5 @@
 import type { ZodError, ZodType } from "zod";
-import {
-  createEnv as createEnvCore,
-  type ErrorMessage,
-} from "@t3-oss/env-core";
+import { createEnv as createEnvCore, type ErrorMessage } from "../core";
 
 export function createEnv<
   TServer extends Record<string, ZodType>,
