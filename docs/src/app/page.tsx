@@ -33,8 +33,6 @@ export default function IndexPage() {
         >
           <Link
             href={siteConfig.links.docs}
-            target="_blank"
-            rel="noreferrer"
             className={buttonVariants({ size: "lg" })}
           >
             Documentation

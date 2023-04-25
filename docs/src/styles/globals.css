@@ -117,12 +117,14 @@
   }
 
   pre[data-theme="light"],
-  code[data-theme="light"] {
+  code[data-theme="light"],
+  [data-rehype-pretty-code-title][data-theme="light"] {
     @apply block dark:hidden;
   }
 
   pre[data-theme="dark"],
-  code[data-theme="dark"] {
+  code[data-theme="dark"],
+  [data-rehype-pretty-code-title][data-theme="dark"] {
     @apply hidden dark:block;
   }
 }
