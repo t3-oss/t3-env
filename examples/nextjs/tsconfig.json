@@ -24,6 +24,6 @@
       "~/*": ["./app/*"]
     }
   },
-  "include": ["next-env.d.ts", "app", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "app", ".next/types/**/*.ts", "next.config.mjs"],
   "exclude": ["node_modules"]
 }
