@@ -1,4 +1,4 @@
-import z, { ZodObject, ZodType } from "zod";
+import z, { type ZodError, type ZodObject, type ZodType } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 
@@ -40,7 +40,7 @@ export interface BaseOptions<
    * Called when validation fails. By default the error is logged,
    * and an error is thrown telling what environment variables are invalid.
    */
-  onValidationError?: (error: z.ZodError) => never;
+  onValidationError?: (error: ZodError) => never;
 
   /**
    * Called when a server-side environment variable is accessed on the client.
@@ -98,46 +98,53 @@ export function createEnv<
     | LooseOptions<TPrefix, TServer, TClient>
     | StrictOptions<TPrefix, TServer, TClient>
 ): z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>> {
-  const _client = typeof opts.client === "object" ? opts.client : {};
-  const client = z.object(_client);
-  const server = z.object(opts.server);
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
-  const isServer = opts.isServer ?? typeof window === "undefined";
+
   const skip =
     opts.skipValidation ??
     (!!process.env.SKIP_ENV_VALIDATION &&
       process.env.SKIP_ENV_VALIDATION !== "false" &&
       process.env.SKIP_ENV_VALIDATION !== "0");
-
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
+
+  const _client = typeof opts.client === "object" ? opts.client : {};
+  const client = z.object(_client);
+  const server = z.object(opts.server);
+  const isServer = opts.isServer ?? typeof window === "undefined";
 
   const merged = server.merge(client);
   const parsed = isServer
     ? merged.safeParse(runtimeEnv) // on server we can validate all env vars
     : client.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
 
+  const onValidationError =
+    opts.onValidationError ??
+    ((error: ZodError) => {
+      console.error(
+        "❌ Invalid environment variables:",
+        error.flatten().fieldErrors
+      );
+      throw new Error("Invalid environment variables");
+    });
+
+  const onInvalidAccess =
+    opts.onInvalidAccess ??
+    ((_variable: string) => {
+      throw new Error(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+    });
+
   if (parsed.success === false) {
-    if (opts.onValidationError) {
-      return opts.onValidationError(parsed.error);
-    }
-    console.error(
-      "❌ Invalid environment variables:",
-      parsed.error.flatten().fieldErrors
-    );
-    throw new Error("Invalid environment variables");
+    return onValidationError(parsed.error);
   }
 
   const env = new Proxy(parsed.data, {
     get(target, prop) {
       if (typeof prop !== "string") return undefined;
       if (!isServer && !prop.startsWith(opts.clientPrefix)) {
-        if (opts.onInvalidAccess) {
-          return opts.onInvalidAccess(prop);
-        }
-        throw new Error(
-          "❌ Attempted to access a server-side environment variable on the client"
-        );
+        return onInvalidAccess(prop);
       }
       return target[prop as keyof typeof target];
     },
