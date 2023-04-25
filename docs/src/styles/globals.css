@@ -37,11 +37,11 @@
   }
 
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    --background: 229 85% 8%;
+    --foreground: 228 5% 82%;
 
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
+    --muted: 224 71% 4%;
+    --muted-foreground: 213 31% 91%;
 
     --accent: 216 34% 17%;
     --accent-foreground: 210 40% 98%;
@@ -54,7 +54,6 @@
 
     --card: 224 71% 4%;
     --card-foreground: 213 31% 91%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 1.2%;
 
@@ -78,6 +77,38 @@
 }
 
 @layer components {
+  /* Hamburger menu icon animation */
+
+  .hamburger svg g {
+    @apply origin-center;
+    transition: transform 0.1s ease-in-out;
+  }
+  .hamburger svg path {
+    @apply opacity-100;
+    transition: transform 0.1s ease-in-out 0.1s, opacity 0.1s ease-in-out;
+  }
+  .hamburger svg.open path {
+    transition: transform 0.1s ease-in-out, opacity 0s ease-in-out;
+  }
+  .hamburger svg.open g {
+    transition: transform 0.1s ease-in-out 0.1s;
+  }
+  .hamburger svg.open > path {
+    @apply opacity-0;
+  }
+  .hamburger svg.open > g:nth-of-type(1) {
+    @apply rotate-45;
+  }
+  .hamburger svg.open > g:nth-of-type(1) path {
+    transform: translate3d(0, 6px, 0);
+  }
+  .hamburger svg.open > g:nth-of-type(2) {
+    @apply -rotate-45;
+  }
+  .hamburger svg.open > g:nth-of-type(2) path {
+    transform: translate3d(0, -6px, 0);
+  }
+
   pre > code {
     counter-reset: line;
     padding: unset !important;
