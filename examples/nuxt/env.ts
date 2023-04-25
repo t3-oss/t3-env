@@ -8,8 +8,4 @@ export const env = createEnv({
   client: {
     NUXT_PUBLIC_GREETING: z.string(),
   },
-  runtimeEnv: {
-    SECRET: process.env.SECRET,
-    NUXT_PUBLIC_GREETING: process.env.NUXT_PUBLIC_GREETING,
-  },
 });
