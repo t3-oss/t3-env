@@ -23,7 +23,54 @@ pnpm add @t3-oss/env-nextjs zod
 
 # Usage
 
-For usage intructions, please refer to the appropriate documentation:
+Create a file `env.ts` in your project and define your schema:
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
+export const env = createEnv({
+  clientPrefix: "PUBLIC_",
+  server: {
+    DATABASE_URL: z.string().url(),
+    OPEN_AI_API_KEY: z.string().min(1),
+  },
+  client: {
+    PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  runtimeEnv: process.env, // or `import.meta.env`, or similar
+});
+```
+
+Then, import the `env` object in your application and use it, taking advantage of type-safety and auto-completion:
+
+```ts title="some-api-endpoint.ts"
+import { env } from "~/env"; // On server
+
+export const GET = async () => {
+  // do fancy ai stuff
+  const magic = await fetch("...", {
+    headers: { Authorization: env.OPEN_AI_API_KEY },
+  });
+  // ...
+};
+```
+
+```ts title="some-component.tsx"
+import { env } from "~/env"; // On client - same import!
+
+export const SomeComponent = () => {
+  return (
+    <SomeProvider publishableKey={env.PUBLIC_PUBLISHABLE_KEY}>
+      {/* ... */}
+    </SomeProvider>
+  );
+};
+```
+
+## Further configuration
+
+For more detailed usage intructions, please refer to the documentation of each package:
 
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";

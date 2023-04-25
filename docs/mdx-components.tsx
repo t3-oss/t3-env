@@ -1,5 +1,4 @@
 import * as React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import type { MDXComponents } from "mdx/types";
 
@@ -48,8 +47,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       />
     ),
     pre: Codeblock,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    img: (props) => <Image {...(props as any)} />,
+
+    img: (props) => <img {...props} className="rounded-lg" />,
 
     // Add custom components.
     Callout,

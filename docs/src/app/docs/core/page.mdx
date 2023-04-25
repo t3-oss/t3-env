@@ -28,7 +28,7 @@ export const env = createEnv({
 });
 ```
 
-You'll notice that if your `clientPrefix` is `PUBLIC_`, you won't be allowed to enter any other keys in the `client` object without getting type-errors. This client prefix is also enforced at runtime to make sure validation works on both the server and client.
+For all available options, see [Customization](/docs/customization).
 
 <Callout>
 
@@ -36,7 +36,19 @@ If your framework doesn't support `process.env`, you'll also need to override th
 
 </Callout>
 
+You'll notice that if your `clientPrefix` is `PUBLIC_`, you won't be allowed to enter any other keys in the `client` object without getting type-errors. Below you can see we get a descriptive error when we set `VITE_PUBLIC_API_URL` instead of `PUBLIC_API_URL`:
+
+![invalid client prefix](https://user-images.githubusercontent.com/51714798/234410449-271d7afe-b541-45bf-acaa-134cbec4c51a.png)
+
+This client prefix is also enforced at runtime to make sure validation works on both the server and client.
+
 ## Additional strictness for `runtimeEnv`
+
+<Callout type="info">
+
+Exactly one of `runtimeEnv` and `runtimeEnvStrict` should be specified.
+
+</Callout>
 
 If your framework doesn't bundle all environment variables by default, but instead only bundles the ones you use, you can use the `runtimeEnvStrict` option to make sure you don't forget to add any variables to your runtime.
 
@@ -64,4 +76,6 @@ export const env = createEnv({
 });
 ```
 
-When using the strict option, missing any of the variables in `runtimeEnvStrict` will result in a type error.
+When using the strict option, missing any of the variables in `runtimeEnvStrict` will result in a type error:
+
+![missing runtimeEnv](https://user-images.githubusercontent.com/51714798/234409775-fee3edbd-a73b-415a-829f-28f6f6092707.png)
