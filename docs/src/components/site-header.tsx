@@ -9,7 +9,7 @@ import { MobileDropdown } from "@/components/mobile-nav";
 
 export function SiteHeader() {
   return (
-    <header className="bg-background sticky top-0 z-40 w-full border-b">
+    <header className="bg-background sticky top-0 z-50 w-full border-b">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <Link href="/" className="items-center space-x-2 flex mr-6">
           <Icons.logo className="h-6 w-6" />

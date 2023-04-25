@@ -39,7 +39,7 @@ export function MobileDropdown(props: {
           <Icons.menu className={cn("h-6 w-6", isOpen && "open")} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform md:hidden">
+      <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen bg-background animate-none rounded-none border-none transition-transform md:hidden">
         <ScrollArea className="pb-8">
           {props.items.docs.map((item, index) => (
             <div key={index} className="flex flex-col space-y-3 pt-6">
