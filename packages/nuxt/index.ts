@@ -1,4 +1,4 @@
-import type { ZodType } from "zod";
+import type { ZodError, ZodType } from "zod";
 import {
   createEnv as createEnvCore,
   type ErrorMessage,
@@ -20,10 +20,10 @@ export function createEnv<
    */
   client: {
     [TKey in keyof TClient]: TKey extends `NUXT_PUBLIC_${string}`
-    ? TClient[TKey]
-    : ErrorMessage<`${TKey extends string
-      ? TKey
-      : never} is not prefixed with NUXT_PUBLIC_.`>;
+      ? TClient[TKey]
+      : ErrorMessage<`${TKey extends string
+          ? TKey
+          : never} is not prefixed with NUXT_PUBLIC_.`>;
   };
 
   /**
@@ -37,7 +37,7 @@ export function createEnv<
    * and an error is thrown telling what environment variables are invalid.
    * Function must throw an error at the end.
    */
-  onValidationError?: (error: z.ZodError) => never;
+  onValidationError?: (error: ZodError) => never;
 
   /**
    * Called when a server-side environment variable is accessed on the client.
