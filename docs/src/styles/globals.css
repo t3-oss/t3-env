@@ -78,6 +78,38 @@
 }
 
 @layer components {
+  /* Hamburger menu icon animation */
+
+  .hamburger svg g {
+    @apply origin-center;
+    transition: transform 0.1s ease-in-out;
+  }
+  .hamburger svg path {
+    @apply opacity-100;
+    transition: transform 0.1s ease-in-out 0.1s, opacity 0.1s ease-in-out;
+  }
+  .hamburger svg.open path {
+    transition: transform 0.1s ease-in-out, opacity 0s ease-in-out;
+  }
+  .hamburger svg.open g {
+    transition: transform 0.1s ease-in-out 0.1s;
+  }
+  .hamburger svg.open > path {
+    @apply opacity-0;
+  }
+  .hamburger svg.open > g:nth-of-type(1) {
+    @apply rotate-45;
+  }
+  .hamburger svg.open > g:nth-of-type(1) path {
+    transform: translate3d(0, 6px, 0);
+  }
+  .hamburger svg.open > g:nth-of-type(2) {
+    @apply -rotate-45;
+  }
+  .hamburger svg.open > g:nth-of-type(2) path {
+    transform: translate3d(0, -6px, 0);
+  }
+
   pre > code {
     counter-reset: line;
     padding: unset !important;

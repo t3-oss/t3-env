@@ -11,9 +11,13 @@ export function SiteHeader() {
   return (
     <header className="bg-background sticky top-0 z-40 w-full border-b">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <MobileDropdown
-          items={{ main: siteConfig.mainNav, docs: siteConfig.sidebarNav }}
-        />
+        <Link href="/" className="items-center space-x-2 flex mr-6">
+          <Icons.logo className="h-6 w-6" />
+          <span className="hidden font-bold text-lg sm:inline-block">
+            {siteConfig.name}
+          </span>
+        </Link>
+
         <MainNav items={siteConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
@@ -48,6 +52,9 @@ export function SiteHeader() {
               </div>
             </Link> */}
             <ThemeToggle />
+            <MobileDropdown
+              items={{ main: siteConfig.mainNav, docs: siteConfig.sidebarNav }}
+            />
           </nav>
         </div>
       </div>

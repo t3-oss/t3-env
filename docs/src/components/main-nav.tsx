@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { siteConfig } from "@/app/site-config";
 import { cn } from "@/lib/cn";
 import { Icons } from "@/components/icons";
 import { usePathname } from "next/navigation";
@@ -22,12 +21,6 @@ export function MainNav(props: { items: NavItem[] }) {
 
   return (
     <div className="flex gap-6 md:gap-10">
-      <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <Icons.logo className="h-6 w-6" />
-        <span className="hidden font-bold text-lg sm:inline-block">
-          {siteConfig.name}
-        </span>
-      </Link>
       {props.items?.length ? (
         <nav className="hidden gap-6 md:flex">
           {props.items?.map(
