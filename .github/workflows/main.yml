@@ -5,6 +5,7 @@ on:
     branches: ["*"]
   push:
     branches: ["main"]
+  merge_group:
 
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
