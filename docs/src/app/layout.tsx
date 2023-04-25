@@ -41,6 +41,13 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
+  openGraph: {
+    images: [{ url: "/opengraph-image.png" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [{ url: "/opengraph-image.png" }],
+  },
 };
 
 interface RootLayoutProps {
