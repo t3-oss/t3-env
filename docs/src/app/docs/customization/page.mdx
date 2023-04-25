@@ -28,7 +28,7 @@ export const env = createEnv({
   onValidationError: (error: ZodError) => {
     console.error(
       "❌ Invalid environment variables:",
-      parsed.error.flatten().fieldErrors
+      error.flatten().fieldErrors
     );
     throw new Error("Invalid environment variables");
   },
