@@ -20,10 +20,10 @@ export function createEnv<
    */
   client: {
     [TKey in keyof TClient]: TKey extends `NUXT_PUBLIC_${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with NUXT_PUBLIC_.`>;
+    ? TClient[TKey]
+    : ErrorMessage<`${TKey extends string
+      ? TKey
+      : never} is not prefixed with NUXT_PUBLIC_.`>;
   };
 
   /**
@@ -31,6 +31,19 @@ export function createEnv<
    * @default !!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"
    */
   skipValidation?: boolean;
+
+  /**
+   * Called when validation fails. By default the error is logged,
+   * and an error is thrown telling what environment variables are invalid.
+   * Function must throw an error at the end.
+   */
+  onValidationError?: (error: z.ZodError) => never;
+
+  /**
+   * Called when a server-side environment variable is accessed on the client.
+   * By default an error is thrown.
+   */
+  onInvalidAccess?: (variable: string) => never;
 }) {
   return createEnvCore({
     ...opts,
