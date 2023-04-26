@@ -2,7 +2,8 @@ import { type ZodType } from "zod";
 
 import { createEnv as createEnvCore, type StrictOptions } from "../core";
 
-type ClientPrefix = "NEXT_PUBLIC_";
+const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
+type ClientPrefix = typeof CLIENT_PREFIX;
 
 interface Options<
   TServer extends Record<string, ZodType>,
@@ -23,7 +24,7 @@ export function createEnv<
 >({ runtimeEnv, ...opts }: Options<TServer, TClient>) {
   return createEnvCore<ClientPrefix, TServer, TClient>({
     ...opts,
-    clientPrefix: "NEXT_PUBLIC_",
+    clientPrefix: CLIENT_PREFIX,
     runtimeEnvStrict: runtimeEnv,
   });
 }
