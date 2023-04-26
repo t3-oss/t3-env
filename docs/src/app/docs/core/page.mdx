@@ -4,7 +4,7 @@ The core package can be used in any framework of your choice. To use it, figure 
 
 Then, you can create your schema like so:
 
-```ts title="src/env.ts"
+```ts title="src/env.mjs"
 import { createEnv } from "@t3-oss/env-core";
 
 export const env = createEnv({
@@ -52,7 +52,7 @@ Exactly one of `runtimeEnv` and `runtimeEnvStrict` should be specified.
 
 If your framework doesn't bundle all environment variables by default, but instead only bundles the ones you use, you can use the `runtimeEnvStrict` option to make sure you don't forget to add any variables to your runtime.
 
-```ts title="src/env.ts"
+```ts title="src/env.mjs"
 import { createEnv } from "@t3-oss/env-core";
 
 export const env = createEnv({

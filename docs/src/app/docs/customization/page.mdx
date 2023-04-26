@@ -4,7 +4,7 @@ Below are some examples of how you can customize the behavior of the library. Th
 
 ## Skipping validation
 
-```ts title="src/env.ts"
+```ts title="src/env.mjs"
 import { createEnv } from "@t3-oss/env-core";
 
 export const env = createEnv({
@@ -19,7 +19,7 @@ export const env = createEnv({
 
 ## Overriding the default error handler
 
-```ts title="src/env.ts"
+```ts title="src/env.mjs"
 import { createEnv } from "@t3-oss/env-core";
 
 export const env = createEnv({
@@ -43,7 +43,7 @@ export const env = createEnv({
 
 ## Tell when we're in a server context
 
-```ts title="src/env.ts"
+```ts title="src/env.mjs"
 import { createEnv } from "@t3-oss/env-core";
 
 export const env = createEnv({
