@@ -35,6 +35,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
