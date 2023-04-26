@@ -1,6 +1,12 @@
 # Installation
 
-## Core
+<Steps>
+
+### Install dependencies
+
+Install the package you need depending on your framework:
+
+#### Core
 
 Includes the core functionality, compatible with any framework:
 
@@ -8,7 +14,7 @@ Includes the core functionality, compatible with any framework:
 pnpm add @t3-oss/env-core zod
 ```
 
-## Next.js
+#### Next.js
 
 Includes a few preconfigured options for Next.js:
 
@@ -21,9 +27,9 @@ pnpm add @t3-oss/env-nextjs zod
   support for any validation library of your choice.
 </Callout>
 
-# Usage
+### Usage
 
-Create a file `env.ts` in your project and define your schema:
+Create a new file `env.ts` in your project and define your schema:
 
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
@@ -41,6 +47,14 @@ export const env = createEnv({
   runtimeEnv: process.env, // or `import.meta.env`, or similar
 });
 ```
+
+<Callout>
+
+For frameworks that doesn't support TypeScript configuration files, we recommend using a `env.mjs` file instead, so you can import it in the configuration file later.
+
+</Callout>
+
+### Create your schema
 
 Then, import the `env` object in your application and use it, taking advantage of type-safety and auto-completion:
 
@@ -67,6 +81,8 @@ export const SomeComponent = () => {
   );
 };
 ```
+
+</Steps>
 
 ## Further configuration
 

@@ -22,7 +22,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <h3 className="mt-8 scroll-m-20 font-cal text-2xl" {...props} />
     ),
     h4: (props) => (
-      <h4 className="m-0 scroll-m-20 font-cal text-xl" {...props} />
+      <h4 className="mt-6 -mb-4 scroll-m-20 font-cal text-2xl" {...props} />
     ),
     p: (props) => (
       <p className="leading-7 [&:not(:first-child)]:mt-6" {...props} />
@@ -52,6 +52,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
     // Add custom components.
     Callout,
+    Steps: ({ ...props }) => (
+      <div
+        className="[&>h3]:step mb-12 ml-4 border-l pl-6 [counter-reset:step]"
+        {...props}
+      />
+    ),
 
     // Pass through all other components.
     ...components,
