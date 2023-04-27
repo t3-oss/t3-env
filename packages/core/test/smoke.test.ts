@@ -141,6 +141,7 @@ describe("return type is correctly inferred", () => {
     expect(env).toMatchObject({
       BAR: "bar",
     });
+  });
 });
 
 describe("errors when validation fails", () => {
