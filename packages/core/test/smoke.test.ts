@@ -123,6 +123,25 @@ describe("return type is correctly inferred", () => {
       FOO_BAR: "foo",
     });
   });
+
+  test("without client vars", () => {
+    const env = createEnv({
+      clientPrefix: "FOO_",
+      server: { BAR: z.string() },
+      client: {},
+      runtimeEnvStrict: {
+        BAR: "bar",
+      },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{
+      BAR: string;
+    }>();
+
+    expect(env).toMatchObject({
+      BAR: "bar",
+    });
+  });
 });
 
 describe("errors when validation fails", () => {
