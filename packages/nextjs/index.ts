@@ -6,8 +6,11 @@ const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
 type ClientPrefix = typeof CLIENT_PREFIX;
 
 interface Options<
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<`${ClientPrefix}${string}`, ZodType>
+  TServer extends Record<string, ZodType> = NonNullable<unknown>,
+  TClient extends Record<
+    `${ClientPrefix}${string}`,
+    ZodType
+  > = NonNullable<unknown>
 > extends Omit<
     StrictOptions<ClientPrefix, TServer, TClient>,
     "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
@@ -19,8 +22,11 @@ interface Options<
 }
 
 export function createEnv<
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<`${ClientPrefix}${string}`, ZodType>
+  TServer extends Record<string, ZodType> = NonNullable<unknown>,
+  TClient extends Record<
+    `${ClientPrefix}${string}`,
+    ZodType
+  > = NonNullable<unknown>
 >({ runtimeEnv, ...opts }: Options<TServer, TClient>) {
   return createEnvCore<ClientPrefix, TServer, TClient>({
     ...opts,

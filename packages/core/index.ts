@@ -91,8 +91,8 @@ export interface StrictOptions<
 
 export function createEnv<
   TPrefix extends string,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
+  TServer extends Record<string, ZodType> = NonNullable<unknown>,
+  TClient extends Record<string, ZodType> = NonNullable<unknown>
 >(
   opts:
     | LooseOptions<TPrefix, TServer, TClient>
