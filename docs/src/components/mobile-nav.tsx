@@ -54,8 +54,15 @@ export function MobileDropdown(props: {
                           "flex py-1 text-base font-medium text-muted-foreground transition-colors hover:text-primary",
                           item.href === pathname && "text-foreground"
                         )}
+                        target={item.external ? "_blank" : ""}
+                        rel={item.external ? "noreferrer" : ""}
                       >
                         {item.title}
+                        {item.label && (
+                          <span className="ml-2 rounded-md bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:bg-teal-600">
+                            {item.label}
+                          </span>
+                        )}
                       </Link>
                     ) : (
                       item.title
