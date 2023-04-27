@@ -76,6 +76,18 @@
   }
 }
 
+@layer utilities {
+  .step {
+    counter-increment: step;
+  }
+
+  .step:before {
+    @apply absolute w-8 h-8 bg-accent font-cal rounded-full font-medium text-center text-base inline-flex items-center justify-center -indent-px;
+    @apply ml-[-41px];
+    content: counter(step);
+  }
+}
+
 @layer components {
   /* Hamburger menu icon animation */
 
@@ -132,7 +144,7 @@
 
   [data-rehype-pretty-code-title] {
     padding: 0.75rem 0 0.75rem 2.5rem;
-    @apply mt-4 rounded-t-lg border border-b-0 bg-background font-cal;
+    @apply mt-4 rounded-t-lg border border-b-0 bg-accent font-cal;
   }
 
   [data-rehype-pretty-code-title]:has(+ [data-language-icon]) {
@@ -160,8 +172,6 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-}
-
-@media (prefers-color-scheme: light) {
+[data-rehype-pretty-code-fragment] .line--highlighted {
+  @apply rounded p-1  bg-muted-foreground/40;
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef, useState, type DetailedHTMLProps } from "react";
-import clsx from "clsx";
-import { CheckCheck, CopyCheck } from "lucide-react";
+import { CheckCheck, Copy } from "lucide-react";
 import { Icons } from "../icons";
+import { cn } from "@/lib/cn";
 
 export function Codeblock(
   props: DetailedHTMLProps<React.HTMLAttributes<HTMLPreElement>, HTMLPreElement>
@@ -36,14 +36,14 @@ export function Codeblock(
         }}
         className="absolute right-2 top-[10px] z-20 h-8 w-8 cursor-pointer rounded p-1 text-muted-foreground hover:bg-muted"
       >
-        <CopyCheck
-          className={clsx(
+        <Copy
+          className={cn(
             "absolute h-6 w-6 p-0 transition-all",
             copied && "scale-0"
           )}
         />
         <CheckCheck
-          className={clsx(
+          className={cn(
             "absolute h-6 w-6 scale-0 p-1 transition-all",
             copied && "scale-100"
           )}
