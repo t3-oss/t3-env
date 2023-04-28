@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.2.2
+
+### Patch Changes
+
+- [#21](https://github.com/t3-oss/t3-env/pull/21) [`fcf6851`](https://github.com/t3-oss/t3-env/commit/fcf685136b906ceeee05d423ff7549a6f578b277) Thanks [@chungweileong94](https://github.com/chungweileong94)! - Fix empty env object type
+
 ## 0.2.1
 
 ### Patch Changes
