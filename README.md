@@ -15,9 +15,11 @@ pnpm add @t3-oss/env-nextjs zod
 
 ## Usage
 
+> For full documentation, see https://env.t3.gg
+
 This package supports the full power of Zod, meaning you can use `transforms` and `default` values.
 
-### With Next.js
+### Define your schema
 
 ```ts
 // src/env.mjs
@@ -54,7 +56,11 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
   },
 });
+```
 
+### Use said schema in your app with autocompletion and type inference
+
+```ts
 // src/app/hello/route.ts
 import { env } from "../env.mjs";
 
@@ -63,112 +69,6 @@ export const GET = (req: Request) => {
   // use it...
 };
 ```
-
-### With any framework
-
-Below is an example of Astro, but in principle it should work with any framework.
-
-```ts
-// src/env.mjs
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
-
-export const env = createEnv({
-  /*
-   * Specify what prefix the client-side variables must have.
-   * This is enforced both on type-level and at runtime.
-   */
-  clientPrefix: "ASTRO_PUBLIC_",
-  server: {
-    DATABASE_URL: z.string().url(),
-    OPEN_AI_API_KEY: z.string().min(1),
-  },
-  client: {
-    ASTRO_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
-  },
-  /*
-   * Astro bundles all environment variables, so we don't need to destructure them manually.
-   */
-  runtimeEnv: import.meta.env,
-  /*
-   * Default skipValidation uses `process` which is not avaialble,
-   * set it manually to a preferred expression.
-   */
-  skipValidation: !!import.meta.env.SKIP_ENV_VALIDATION,
-});
-```
-
-### Recipes
-
-This library supports the full power of Zod, so you can use `default` and `transform` to transform your environment variables and perform even more granular validation.
-
-> **Warning**
-> All environment variables are strings, so make sure that the first `ZodType` is a `z.string()`. This will be enforced on type-level in the future.
-
-```ts
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
-
-export const env = createEnv({
-  server: {
-    SOME_NUMBER: z
-      .string()
-      // transform to number
-      .transform((s) => parseInt(s, 10))
-      // make sure transform worked
-      .pipe(z.number()),
-
-    COERCED_BOOLEAN: z
-      .string()
-      // transform to boolean using preferred coercion logic
-      .transform((s) => s !== "false" && s !== "0"),
-
-    ONLY_BOOLEAN: z
-      .string()
-      // only allow "true" or "false"
-      .refine((s) => s === "true" || s === "false")
-      // transform to boolean
-      .transform((s) => s === "true"),
-  },
-  // ...
-});
-```
-
-### Options
-
-#### `clientPrefix`
-
-Prefix to export environemnt variables to the client. This should be set depending on your framework, e.g. `NEXT_PUBLIC_` for Next.js or `PUBLIC_` for Astro.
-
-#### `server`
-
-Zod schema for server-side environment variables.
-
-#### `client`
-
-Zod schema for client-side environment variables.
-
-#### `runtimeEnv`
-
-Environment variables available at runtime. This is usually `process.env` or `import.meta.env`.
-
-#### `runtimeEnvStrict`
-
-A more strict version of `runtimeEnv` which will type-error that all variables from the `server` and `client` schemas are included. Useful for frameworks that don't bundle all environment variables unless they're explicitly accesses such as Next.js.
-
-> **Note 1:** Exact one of `runtimeEnv` and `runtimeEnvStrict` should be set.
-
-> **Note 2:** `runtimeEnv` is strict by default in `@t3-oss/env-nextjs`.
-
-#### `isServer` (optional)
-
-How to determine if we're on the server or client. Defaults to `typeof window === 'undefined'`.
-
-#### `skipValidation` (optional)
-
-Condition to skip validation. Defaults to `!!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"`.
-
-> **Note:** Since this uses `process` by default, you'll get errors if not overriding it in environments where `process` isn't available.
 
 ## Roadmap
 
