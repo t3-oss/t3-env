@@ -36,7 +36,7 @@ export const env = createEnv({
 
 <Callout type="info">
 
-Unlike in the core package, `runtimeEnv` is strict by default, meaning you'll have to destructure all the keys manually. This is due to how Next.js bundles environment variables and only explicitely accessed variables are included in the bundle. Missing keys will result in a type-error:
+Unlike in the core package, `runtimeEnv` is strict by default, meaning you'll have to destructure all the keys manually. This is due to how Next.js bundles environment variables and only explicitly accessed variables are included in the bundle. Missing keys will result in a type-error:
 
 ![missing runtimeEnv](https://user-images.githubusercontent.com/51714798/234409775-fee3edbd-a73b-415a-829f-28f6f6092707.png)
 
