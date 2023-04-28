@@ -19,8 +19,11 @@ interface Options<
 }
 
 export function createEnv<
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<`${ClientPrefix}${string}`, ZodType>
+  TServer extends Record<string, ZodType> = NonNullable<unknown>,
+  TClient extends Record<
+    `${ClientPrefix}${string}`,
+    ZodType
+  > = NonNullable<unknown>
 >({ runtimeEnv, ...opts }: Options<TServer, TClient>) {
   return createEnvCore<ClientPrefix, TServer, TClient>({
     ...opts,
