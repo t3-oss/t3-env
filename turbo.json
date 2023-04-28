@@ -18,7 +18,9 @@
       "outputs": []
     },
     "typecheck": {
-      "cache": false
+      "dependsOn": ["build"],
+      "outputs": [],
+      "cache": true
     }
   }
 }
