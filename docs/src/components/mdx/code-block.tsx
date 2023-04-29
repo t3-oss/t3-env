@@ -1,16 +1,24 @@
 "use client";
 
-import { useRef, useState, type DetailedHTMLProps } from "react";
+import { useRef, useState } from "react";
 import { CheckCheck, Copy } from "lucide-react";
 import { Icons } from "../icons";
 import { cn } from "@/lib/cn";
 
-export function Codeblock(
-  props: DetailedHTMLProps<React.HTMLAttributes<HTMLPreElement>, HTMLPreElement>
-) {
+export type CodeblockProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLPreElement>,
+  HTMLPreElement
+> & {
+  /** set by `rehype-pretty-code` */
+  "data-language"?: string;
+  /** set by `rehype-pretty-code` */
+  "data-theme"?: string;
+};
+
+export function Codeblock(props: CodeblockProps) {
   const { children, ...rest } = props;
-  const language = props["data-language" as keyof typeof props] as string;
-  const theme = props["data-theme" as keyof typeof props] as string;
+  const language = props["data-language"] as string;
+  const theme = props["data-theme"] as string;
   const Icon = {
     js: Icons.javascript,
     ts: Icons.typescript,
