@@ -66,13 +66,13 @@ export function Callout(props: CalloutProps): ReactElement {
   return (
     <div
       className={clsx(
-        "mt-6 flex rounded-lg border py-2 pr-4",
+        "mt-6 flex rounded-lg border p-4",
         "contrast-more:border-current contrast-more:dark:border-current",
         classes[type]
       )}
     >
       <div
-        className="select-none pl-3 pr-2 text-xl"
+        className="select-none pr-2 text-xl"
         style={{
           fontFamily:
             '"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
