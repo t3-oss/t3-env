@@ -6,11 +6,7 @@ export const siteConfig = {
     "Never build your apps with invalid environment variables again. Validate and transform your environment with the full power of Zod.",
   mainNav: [
     {
-      title: "Home",
-      href: "/",
-    },
-    {
-      title: "Docs",
+      title: "Documentation",
       href: "/docs/introduction",
     },
   ],
