@@ -41,7 +41,7 @@ export function DocsSidebarNavItems(props: {
             key={index}
             href={item.href}
             className={cn(
-              "group flex w-full items-center rounded-md border border-transparent px-2 py-1.5 hover:underline",
+              "group flex w-full items-center rounded-md border border-transparent h-9 px-3 hover:underline",
               item.disabled && "cursor-not-allowed opacity-60",
               {
                 "font-medium bg-accent border-border text-accent-foreground":
