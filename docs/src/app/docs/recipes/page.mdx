@@ -21,7 +21,7 @@ export const env = createEnv({
       
     SIMPLE_COERCED_BOOLEAN: z
       .coerce
-      // same as `.transform((s) => Boolean(s)).pipe(z.boolean())`
+      // behaves same as `z.string().transform((s) => Boolean(s)).pipe(z.boolean())`
       .boolean(),
 
     ONLY_BOOLEAN: z
@@ -51,7 +51,7 @@ export const env = createEnv({
       
      SIMPLE_COERCED_NUMBER: z
       .coerce
-      // same as `.transform((v) => Number(v)).pipe(z.number())`
+      // behaves same as `z.string().transform((v) => Number(v)).pipe(z.number())`
       .number()
   },
   // ...
