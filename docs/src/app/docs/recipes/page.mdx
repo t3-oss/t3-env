@@ -18,6 +18,11 @@ export const env = createEnv({
       .string()
       // transform to boolean using preferred coercion logic
       .transform((s) => s !== "false" && s !== "0"),
+      
+    SIMPLE_COERCED_BOOLEAN: z
+      .coerce
+      // same as `.transform((s) => Boolean(s)).pipe(z.boolean())`
+      .boolean(),
 
     ONLY_BOOLEAN: z
       .string()
@@ -43,6 +48,11 @@ export const env = createEnv({
       .transform((s) => parseInt(s, 10))
       // make sure transform worked
       .pipe(z.number()),
+      
+     SIMPLE_COERCED_NUMBER: z
+      .coerce
+      // same as `.transform((v) => Number(v)).pipe(z.number())`
+      .number()
   },
   // ...
 });
