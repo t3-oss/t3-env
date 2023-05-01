@@ -51,7 +51,7 @@ jobs:
           commit: "chore(release): 📦 version packages"
           title: "chore(release): 📦  version packages"
           version: node .github/changeset-version.js && git status
-          publish: npx changeset publish
+          publish: npx changeset publish && pnpm install
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
