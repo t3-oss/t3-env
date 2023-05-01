@@ -50,7 +50,7 @@ jobs:
         with:
           commit: "chore(release): 📦 version packages"
           title: "chore(release): 📦  version packages"
-          version: node .github/changeset-version.js
+          version: node .github/changeset-version.js && git status
           publish: npx changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
