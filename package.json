@@ -9,7 +9,7 @@
     "lint": "turbo lint && manypkg check",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
-    "postversion": "pnpm install"
+    "postversion": "echo \"installing deps\" && pnpm install"
   },
   "dependencies": {
     "@changesets/changelog-github": "^0.4.8",
