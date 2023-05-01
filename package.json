@@ -9,6 +9,7 @@
     "lint": "turbo lint && manypkg check",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
+    "version": "changeset version",
     "postversion": "echo \"installing deps\" && pnpm install"
   },
   "dependencies": {
