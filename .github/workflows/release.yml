@@ -47,6 +47,7 @@ jobs:
 
       # Using custom token `MY_GITHUB_TOKEN` with more access to avoid rate limiting
       - name: Create Release
+        id: changeset
         uses: changesets/action@v1.4.1
         with:
           commit: "chore(release): 📦 version packages"
