@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-core",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "keywords": [
     "create-t3-app",
     "environment variables",

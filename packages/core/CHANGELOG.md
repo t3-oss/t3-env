@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 1.0.0
+
+### Major Changes
+
+- [`6119d5a`](https://github.com/t3-oss/t3-env/commit/6119d5afc3dd35a8b3e242d26019c6465bd1a298) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - teststs
+
 ## 0.2.2
 
 ### Patch Changes
