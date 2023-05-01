@@ -46,6 +46,7 @@ jobs:
         run: pnpm turbo --filter "./packages/*" build
 
       - name: Create Release
+        id: changeset
         uses: changesets/action@v1.4.1
         with:
           commit: "chore(release): 📦 version packages"
@@ -55,3 +56,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Sync lockfile if necessary
+        if: steps.changeset.outputs.hasChangesets == 'true'
+        run: |
+          git checkout changeset-release/main
+          pnpm install
+          git add .
+          git commit -m "chore(release): 📦 sync lockfile"
+          git push origin changeset-release/main
