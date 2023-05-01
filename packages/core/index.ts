@@ -108,7 +108,7 @@ export function createEnv<
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
 
-  console.log("YOOO");
+  console.log("YOOOooo");
 
   const _client = typeof opts.client === "object" ? opts.client : {};
   const client = z.object(_client);
