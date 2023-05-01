@@ -8,9 +8,7 @@
     "dev": "turbo dev --filter @t3-oss/env*",
     "lint": "turbo lint && manypkg check",
     "test": "turbo test",
-    "typecheck": "turbo typecheck",
-    "version": "echo \"versioning\" && npx changeset version",
-    "postversion": "echo \"installing deps\" && pnpm install"
+    "typecheck": "turbo typecheck"
   },
   "dependencies": {
     "@changesets/changelog-github": "^0.4.8",
