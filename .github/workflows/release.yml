@@ -61,7 +61,7 @@ jobs:
         if: steps.changeset.outputs.hasChangesets == 'true'
         run: |
           git checkout changeset-release/main
-          pnpm install
+          pnpm install --no-frozen-lockfile
           git add .
           git commit -m "chore(release): 📦 sync lockfile"
           git push origin changeset-release/main
