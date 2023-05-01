@@ -45,13 +45,24 @@ jobs:
       - name: Build
         run: pnpm turbo --filter "./packages/*" build
 
+      # Using custom token `MY_GITHUB_TOKEN` with more access to avoid rate limiting
       - name: Create Release
+        id: changeset
         uses: changesets/action@v1.4.1
         with:
           commit: "chore(release): 📦 version packages"
           title: "chore(release): 📦  version packages"
-          version: node .github/changeset-version.js
           publish: npx changeset publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Changeset has some issues with pnpm so we sync it up manually
+      - name: Sync lockfile if necessary
+        if: steps.changeset.outputs.hasChangesets == 'true'
+        run: |
+          git checkout changeset-release/main
+          pnpm install --no-frozen-lockfile
+          git add .
+          git commit -m "chore(release): 📦 sync lockfile"
+          git push origin changeset-release/main
