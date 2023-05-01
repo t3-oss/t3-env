@@ -8,4 +8,4 @@ import { exec } from "child_process";
 // This is a workaround until this is handled automatically by `changeset version`.
 // See https://github.com/changesets/changesets/issues/421.
 exec("npx changeset version");
-exec("npm install");
+exec("pnpm install");
