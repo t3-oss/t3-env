@@ -9,7 +9,7 @@
     "lint": "turbo lint && manypkg check",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
-    "version": "npx changeset version",
+    "version": "echo \"versioning\" && npx changeset version",
     "postversion": "echo \"installing deps\" && pnpm install"
   },
   "dependencies": {
