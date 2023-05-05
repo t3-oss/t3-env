@@ -5,6 +5,7 @@ on:
     branches: ["*"]
   push:
     branches: ["main"]
+  merge_group:
 
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -43,7 +44,7 @@ jobs:
         run: pnpm install
 
       - name: Build, lint and type-check
-        run: pnpm turbo build lint typecheck
+        run: pnpm turbo build lint typecheck test
 
       - name: Check workspaces
         run: pnpm manypkg check

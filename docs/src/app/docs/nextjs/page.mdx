@@ -2,8 +2,21 @@
 
 The Next.js package comes preconfigured for Next.js and also enforces some extra rules by default to make sure you have out-of-the-box compatibility in all different Next.js runtimes.
 
+<Steps>
+
+### Install dependencies
+
+Install the required dependencies:
+
+```bash
+pnpm add @t3-oss/env-nextjs zod
+```
+
+### Create your schema
+
 ```js title="src/env.mjs"
 import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   server: {
@@ -23,6 +36,53 @@ export const env = createEnv({
 
 <Callout type="info">
 
-Unlike in the core package, `runtimeEnv` is strict by default, meaning you'll have to destructure all the keys manually. This is due to how Next.js bundles environment variables and only explicitely accessed variables are included in the bundle. Missing keys will result in a type-error.
+Unlike in the core package, `runtimeEnv` is strict by default, meaning you'll have to destructure all the keys manually. This is due to how Next.js bundles environment variables and only explicitly accessed variables are included in the bundle. Missing keys will result in a type-error:
+
+![missing runtimeEnv](https://user-images.githubusercontent.com/51714798/234409775-fee3edbd-a73b-415a-829f-28f6f6092707.png)
 
 </Callout>
+
+### Validate schema on build (recommended)
+
+We recommend you importing your newly created file in your `next.config.mjs`. This will make sure your environment variables are validated at build time which will save you a lot of time and headaches down the road.
+
+```js title="next.config.mjs" {1}
+import "./src/env.mjs";
+
+/** @type {import("next").NextConfig} */
+const config = {
+  /** ... */
+};
+
+export default config;
+```
+
+### Use your schema
+
+Then, import the `env` object in your application and use it, taking advantage of type-safety and auto-completion:
+
+```ts title="some-api-endpoint.ts"
+import { env } from "~/env"; // On server
+
+export const GET = async () => {
+  // do fancy ai stuff
+  const magic = await fetch("...", {
+    headers: { Authorization: env.OPEN_AI_API_KEY },
+  });
+  // ...
+};
+```
+
+```ts title="some-component.tsx"
+import { env } from "~/env"; // On client - same import!
+
+export const SomeComponent = () => {
+  return (
+    <SomeProvider publishableKey={env.PUBLIC_PUBLISHABLE_KEY}>
+      {/* ... */}
+    </SomeProvider>
+  );
+};
+```
+
+</Steps>

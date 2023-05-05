@@ -1,11 +1,24 @@
 # Core
 
-The core package can be used in any framework of your choice. To use it, figure out what prefix your framework uses for exposing environment variables to the client. For example, Astro uses `PUBLIC_`, while Vite uses `VITE_PUBLIC`. You should be able to find this in the frameworks documentation.
+The core package can be used in any framework of your choice. To use it, figure out what prefix your framework uses for exposing environment variables to the client. For example, Astro uses `PUBLIC_`, while Vite uses `VITE_`. You should be able to find this in the frameworks documentation.
+
+<Steps>
+
+### Install dependencies
+
+First, install the core package:
+
+```bash
+npm install @t3-oss/env-core zod
+```
+
+### Create your schema
 
 Then, you can create your schema like so:
 
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
+import { z } from 'zod';
 
 export const env = createEnv({
   /*
@@ -28,7 +41,7 @@ export const env = createEnv({
 });
 ```
 
-You'll notice that if your `clientPrefix` is `PUBLIC_`, you won't be allowed to enter any other keys in the `client` object without getting type-errors. This client prefix is also enforced at runtime to make sure validation works on both the server and client.
+For all available options, see [Customization](/docs/customization).
 
 <Callout>
 
@@ -36,7 +49,41 @@ If your framework doesn't support `process.env`, you'll also need to override th
 
 </Callout>
 
+You'll notice that if your `clientPrefix` is `PUBLIC_`, you won't be allowed to enter any other keys in the `client` object without getting type-errors. Below you can see we get a descriptive error when we set `VITE_PUBLIC_API_URL` instead of `PUBLIC_API_URL`:
+
+![invalid client prefix](https://user-images.githubusercontent.com/51714798/234410449-271d7afe-b541-45bf-acaa-134cbec4c51a.png)
+
+This client prefix is also enforced at runtime to make sure validation works on both the server and client.
+
+### Validate schema on build (recommended)
+
+The steps required to validate your schema on build will vary from framework to framework, but you'll usually be able to import the env file in your configuration file, or in any file that's pulled in the beginning of the build process.
+
+### Use your schema
+
+Then, import the `env` object in your application and use it, taking advantage of type-safety and auto-completion:
+
+```ts title="some-api-endpoint.ts"
+import { env } from "~/env"; // On server
+
+export const GET = async () => {
+  // do fancy ai stuff
+  const magic = await fetch("...", {
+    headers: { Authorization: env.OPEN_AI_API_KEY },
+  });
+  // ...
+};
+```
+
+</Steps>
+
 ## Additional strictness for `runtimeEnv`
+
+<Callout type="info">
+
+Exactly one of `runtimeEnv` and `runtimeEnvStrict` should be specified.
+
+</Callout>
 
 If your framework doesn't bundle all environment variables by default, but instead only bundles the ones you use, you can use the `runtimeEnvStrict` option to make sure you don't forget to add any variables to your runtime.
 
@@ -53,7 +100,7 @@ export const env = createEnv({
     PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
   },
   /**
-   * Makes sure you explicitely access **all** environment variables
+   * Makes sure you explicitly access **all** environment variables
    * from `server` and `client` in your `runtimeEnv`.
    */
   runtimeEnvStrict: {
@@ -64,4 +111,6 @@ export const env = createEnv({
 });
 ```
 
-When using the strict option, missing any of the variables in `runtimeEnvStrict` will result in a type error.
+When using the strict option, missing any of the variables in `runtimeEnvStrict` will result in a type error:
+
+![missing runtimeEnv](https://user-images.githubusercontent.com/51714798/234409775-fee3edbd-a73b-415a-829f-28f6f6092707.png)

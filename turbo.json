@@ -13,8 +13,14 @@
       "dependsOn": ["build"],
       "outputs": []
     },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
     "typecheck": {
-      "cache": false
+      "dependsOn": ["build"],
+      "outputs": [],
+      "cache": true
     }
   }
 }

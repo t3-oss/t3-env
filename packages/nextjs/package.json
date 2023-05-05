@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nextjs",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "keywords": [
     "create-t3-app",
     "environment variables",
@@ -19,6 +19,7 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
@@ -34,10 +35,12 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "0.2.0"
+    "@t3-oss/env-core": "0.2.2"
   },
   "peerDependencies": {
     "zod": "^3.0.0"
