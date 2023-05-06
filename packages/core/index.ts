@@ -1,6 +1,10 @@
 import z, { type ZodError, type ZodObject, type ZodType } from "zod";
 
 export type ErrorMessage<T extends string> = T;
+export type Simplify<T> = {
+  [P in keyof T]: T[P];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
 
 export interface BaseOptions<
   TPrefix extends string,
@@ -50,7 +54,7 @@ export interface BaseOptions<
 
   /**
    * Whether to skip validation of environment variables.
-   * @default !!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"
+   * @default false
    */
   skipValidation?: boolean;
 }
@@ -65,7 +69,7 @@ export interface LooseOptions<
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
    */
-  runtimeEnv: Record<string, string | undefined>;
+  runtimeEnv: Record<string, string | boolean | number | undefined>;
 }
 
 export interface StrictOptions<
@@ -84,7 +88,7 @@ export interface StrictOptions<
           : never;
       }[keyof TClient]
     | keyof TServer,
-    string | undefined
+    string | boolean | number | undefined
   >;
   runtimeEnv?: never;
 }
@@ -97,14 +101,10 @@ export function createEnv<
   opts:
     | LooseOptions<TPrefix, TServer, TClient>
     | StrictOptions<TPrefix, TServer, TClient>
-): z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>> {
+): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
-  const skip =
-    opts.skipValidation ??
-    (!!process.env.SKIP_ENV_VALIDATION &&
-      process.env.SKIP_ENV_VALIDATION !== "false" &&
-      process.env.SKIP_ENV_VALIDATION !== "0");
+  const skip = !!opts.skipValidation;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
 

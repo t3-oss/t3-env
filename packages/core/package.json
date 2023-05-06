@@ -39,6 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
+    "typescript": ">=4.7.2",
     "zod": "^3.0.0"
   },
   "devDependencies": {

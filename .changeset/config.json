@@ -9,7 +9,7 @@
   "ignore": [
     "@examples/astro",
     "@examples/nextjs",
-    "@t3-env/docs",
-    "@examples/nuxt"
+    "@examples/nuxt",
+    "@t3-env/docs"
   ]
 }

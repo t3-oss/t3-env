@@ -144,6 +144,31 @@ describe("return type is correctly inferred", () => {
   });
 });
 
+test("can pass number and booleans", () => {
+  const env = createEnv({
+    clientPrefix: "FOO_",
+    server: {
+      PORT: z.number(),
+      IS_DEV: z.boolean(),
+    },
+    client: {},
+    runtimeEnvStrict: {
+      PORT: 123,
+      IS_DEV: true,
+    },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<{
+    PORT: number;
+    IS_DEV: boolean;
+  }>();
+
+  expect(env).toMatchObject({
+    PORT: 123,
+    IS_DEV: true,
+  });
+});
+
 describe("errors when validation fails", () => {
   test("envs are missing", () => {
     expect(() =>
