@@ -9,5 +9,4 @@ export default defineConfig((opts) => ({
   sourcemap: true,
   minify: true,
   outDir: "dist",
-  target: "es2020",
 }));
