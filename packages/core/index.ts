@@ -69,7 +69,7 @@ export interface LooseOptions<
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
    */
-  runtimeEnv: Record<string, string | undefined>;
+  runtimeEnv: Record<string, string | boolean | number | undefined>;
 }
 
 export interface StrictOptions<
@@ -88,7 +88,7 @@ export interface StrictOptions<
           : never;
       }[keyof TClient]
     | keyof TServer,
-    string | undefined
+    string | boolean | number | undefined
   >;
   runtimeEnv?: never;
 }
