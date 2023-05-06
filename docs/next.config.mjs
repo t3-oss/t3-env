@@ -8,9 +8,6 @@ import { getHighlighter } from "shiki";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
-  experimental: {
-    appDir: true,
-  },
   redirects: () => [
     { source: "/docs", destination: "/docs/introduction", permanent: true },
   ],
