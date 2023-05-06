@@ -103,11 +103,13 @@ export function createEnv<
   opts:
     | LooseOptions<TPrefix, TServer, TClient>
     | StrictOptions<TPrefix, TServer, TClient>
-): TClient extends Record<string, never>
-  ? Simplify<z.infer<ZodObject<TServer>>>
-  : TServer extends Record<string, never>
-  ? Simplify<z.infer<ZodObject<TClient>>>
-  : Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
+): Simplify<
+  TClient extends Record<string, never>
+    ? z.infer<ZodObject<TServer>>
+    : TServer extends Record<string, never>
+    ? z.infer<ZodObject<TClient>>
+    : z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>
+> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const skip = !!opts.skipValidation;
