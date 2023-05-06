@@ -12,13 +12,19 @@ First, install the core package:
 npm install @t3-oss/env-core zod
 ```
 
+<Callout>
+
+`@t3-oss/env-core` requires a minimum of `typescript@4.7.2`.
+
+</Callout>
+
 ### Create your schema
 
 Then, you can create your schema like so:
 
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
-import { z } from 'zod';
+import { z } from "zod";
 
 export const env = createEnv({
   /*
