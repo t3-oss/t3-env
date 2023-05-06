@@ -142,6 +142,25 @@ describe("return type is correctly inferred", () => {
       BAR: "bar",
     });
   });
+
+  test("without server vars", () => {
+    const env = createEnv({
+      clientPrefix: "FOO_",
+      server: {},
+      client: { FOO_BAR: z.string() },
+      runtimeEnvStrict: {
+        FOO_BAR: "bar",
+      },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{
+      FOO_BAR: string;
+    }>();
+
+    expect(env).toMatchObject({
+      FOO_BAR: "bar",
+    });
+  });
 });
 
 describe("errors when validation fails", () => {
