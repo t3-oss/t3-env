@@ -65,7 +65,7 @@ export function Codeblock(props: CodeblockProps) {
       </button>
       <pre
         ref={ref}
-        className="relative my-4 overflow-x-scroll rounded-lg border bg-muted p-4 font-mono text-sm font-semibold text-muted-foreground"
+        className="relative my-4 overflow-x-auto rounded-lg border bg-muted p-4 font-mono text-sm font-semibold text-muted-foreground"
         {...rest}
       >
         {children}

@@ -14,10 +14,10 @@ export function DocsSidebarNav(props: { items: NestedNavItem[] }) {
   const pathname = usePathname();
 
   return props.items.length ? (
-    <div className="w-full">
+    <div className="w-full px-2">
       {props.items.map((item, index) => (
         <div key={index} className={cn("pb-6")}>
-          <h4 className="mb-1 rounded-md px-2 py-1 text-sm font-semibold">
+          <h4 className="mb-1 rounded-md px-3 py-1 text-sm font-semibold">
             {item.title}
           </h4>
           {item?.items?.length && (
@@ -41,7 +41,7 @@ export function DocsSidebarNavItems(props: {
             key={index}
             href={item.href}
             className={cn(
-              "group flex w-full items-center rounded-md border border-transparent px-2 py-1.5 hover:underline",
+              "group flex w-full items-center rounded-md border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ringfocus-visible:outline-none focus-visible:ring-ring ring-offset-background h-9 px-3",
               item.disabled && "cursor-not-allowed opacity-60",
               {
                 "font-medium bg-accent border-border text-accent-foreground":
