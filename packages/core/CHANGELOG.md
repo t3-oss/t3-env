@@ -1,5 +1,21 @@
 # @t3-oss/env-core
 
+## 0.3.0
+
+### Minor Changes
+
+- [`a50e929`](https://github.com/t3-oss/t3-env/commit/a50e92977129ac1b7c1c46e3d0cae43d87842069) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - don't restrict runtimeEnv to just strings
+
+  turns out some frameworks inject environment variables as booleans or numbers, this allows you to use those without getting type errors
+
+### Patch Changes
+
+- [`979cd9a`](https://github.com/t3-oss/t3-env/commit/979cd9ac167677a237bf2a0a440eea94e3e6667a) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - prettify return type with simplify
+
+- [#35](https://github.com/t3-oss/t3-env/pull/35) [`f0bc010`](https://github.com/t3-oss/t3-env/commit/f0bc0109251c355f00d8f432a53134a9ac3c34c5) Thanks [@chungweileong94](https://github.com/chungweileong94)! - Remove process.env usage
+
+- [#51](https://github.com/t3-oss/t3-env/pull/51) [`f0b200c`](https://github.com/t3-oss/t3-env/commit/f0b200c428b732f1421a56bc2b82c51c2fca1767) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - fix: set typescript peerdep to >=4.7
+
 ## 0.2.2
 
 ### Patch Changes
