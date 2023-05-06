@@ -50,7 +50,7 @@ export interface BaseOptions<
 
   /**
    * Whether to skip validation of environment variables.
-   * @default !!process.env.SKIP_ENV_VALIDATION && process.env.SKIP_ENV_VALIDATION !== "false" && process.env.SKIP_ENV_VALIDATION !== "0"
+   * @default false
    */
   skipValidation?: boolean;
 }
@@ -100,11 +100,7 @@ export function createEnv<
 ): z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
-  const skip =
-    opts.skipValidation ??
-    (!!process.env.SKIP_ENV_VALIDATION &&
-      process.env.SKIP_ENV_VALIDATION !== "false" &&
-      process.env.SKIP_ENV_VALIDATION !== "0");
+  const skip = !!opts.skipValidation;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
 
