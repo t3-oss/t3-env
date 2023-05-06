@@ -1,5 +1,14 @@
 # @t3-oss/env-nuxt
 
+## 0.3.1
+
+### Patch Changes
+
+- [`4473a06`](https://github.com/t3-oss/t3-env/commit/4473a0654d951557255162310b65099d41b2f6a5) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - add missing types field to packagejson.exports
+
+- Updated dependencies []:
+  - @t3-oss/env-core@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes
