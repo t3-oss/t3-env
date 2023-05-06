@@ -1,0 +1,20 @@
+{
+  "name": "@examples/ts",
+  "version": "0.1.0",
+  "description": "Example for plain ts nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx esr ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@t3-oss/env-core": "^0.3.1",
+    "@types/node": "^20.1.0",
+    "dotenv": "^16.0.3",
+    "esbuild-runner": "^2.2.2",
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
+  }
+}
