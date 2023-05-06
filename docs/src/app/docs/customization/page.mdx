@@ -4,6 +4,12 @@ Below are some examples of how you can customize the behavior of the library. Th
 
 ## Skipping validation
 
+<Callout type="warning">
+
+Skipping validation is not encouraged and will lead to your types and runtime values being out of sync. It is available to let you opt out of validation during linting (or similar), or if you're building with Docker and not all environment variables are present when building the image.
+
+</Callout>
+
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
 

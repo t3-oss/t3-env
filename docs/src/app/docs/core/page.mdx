@@ -22,6 +22,12 @@ npm install @t3-oss/env-core zod
 
 Then, you can create your schema like so:
 
+<Callout>
+
+The file below is named `env.ts`, but you can name it whatever you want. Some frameworks even generate a `env.d.ts` file that will collide with `env.ts` which means you'll have to name it something else.
+
+</Callout>
+
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
@@ -49,12 +55,6 @@ export const env = createEnv({
 
 For all available options, see [Customization](/docs/customization).
 
-<Callout>
-
-If your framework doesn't support `process.env`, you'll also need to override the default `skipValidation` option, since that references `process.env`.
-
-</Callout>
-
 You'll notice that if your `clientPrefix` is `PUBLIC_`, you won't be allowed to enter any other keys in the `client` object without getting type-errors. Below you can see we get a descriptive error when we set `VITE_PUBLIC_API_URL` instead of `PUBLIC_API_URL`:
 
 ![invalid client prefix](https://user-images.githubusercontent.com/51714798/234410449-271d7afe-b541-45bf-acaa-134cbec4c51a.png)
@@ -64,6 +64,8 @@ This client prefix is also enforced at runtime to make sure validation works on 
 ### Validate schema on build (recommended)
 
 The steps required to validate your schema on build will vary from framework to framework, but you'll usually be able to import the env file in your configuration file, or in any file that's pulled in the beginning of the build process.
+
+Note that some frameworks don't import their environment variables in their configuration file.
 
 ### Use your schema
 

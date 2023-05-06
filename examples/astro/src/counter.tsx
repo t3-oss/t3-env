@@ -1,4 +1,4 @@
-import { env } from "./env.mjs";
+import { env } from "./t3-env";
 
 export function ClientComponent() {
   // Try changing PUBLIC_API_URL to PORT - the component will throw
