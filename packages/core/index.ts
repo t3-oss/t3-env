@@ -1,6 +1,10 @@
 import z, { type ZodError, type ZodObject, type ZodType } from "zod";
 
 export type ErrorMessage<T extends string> = T;
+export type Simplify<T> = {
+  [P in keyof T]: T[P];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
 
 export interface BaseOptions<
   TPrefix extends string,
@@ -97,7 +101,7 @@ export function createEnv<
   opts:
     | LooseOptions<TPrefix, TServer, TClient>
     | StrictOptions<TPrefix, TServer, TClient>
-): z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>> {
+): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const skip = !!opts.skipValidation;
