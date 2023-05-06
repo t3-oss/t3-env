@@ -231,8 +231,8 @@ importers:
   packages/nuxt:
     dependencies:
       '@t3-oss/env-core':
-        specifier: 0.2.0
-        version: 0.2.0(zod@3.20.2)
+        specifier: 0.2.2
+        version: link:../core
     devDependencies:
       eslint:
         specifier: ^8.39.0
@@ -2039,14 +2039,6 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       defer-to-connect: 1.1.3
-    dev: false
-
-  /@t3-oss/env-core@0.2.0(zod@3.20.2):
-    resolution: {integrity: sha512-wLccO5kbyRzcTvaHTctrQLS6oYDdgWiA7ARg5nGEYqxrLK6dFv5WPJHWOYp2BzHufDFN4KtFFjg9FTv7RV0jWg==}
-    peerDependencies:
-      zod: ^3.0.0
-    dependencies:
-      zod: 3.20.2
     dev: false
 
   /@trysound/sax@0.2.0:
