@@ -1,0 +1,19 @@
+{
+  "name": "@examples/nuxt",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "turbo build --filter env-nuxt && nuxt prepare"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.13",
+    "nuxt": "^3.4.2"
+  },
+  "dependencies": {
+    "@t3-oss/env-nuxt": "0.1.0",
+    "zod": "^3.20.2"
+  }
+}

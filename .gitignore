@@ -3,6 +3,8 @@ dist
 
 .astro
 .next
+.nuxt
+.output
 .turbo
 .vercel
 .DS_Store

@@ -5,6 +5,11 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "fixed": [["@t3-oss/env-core", "@t3-oss/env-nextjs"]],
-  "ignore": ["@examples/astro", "@examples/nextjs"]
+  "fixed": [["@t3-oss/env-core", "@t3-oss/env-nextjs", "@t3-oss/env-nuxt"]],
+  "ignore": [
+    "@examples/astro",
+    "@examples/nextjs",
+    "@examples/nuxt",
+    "@t3-env/docs"
+  ]
 }

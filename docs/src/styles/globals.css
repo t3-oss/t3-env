@@ -179,3 +179,6 @@
 [data-rehype-pretty-code-fragment] .line--highlighted {
   @apply rounded p-1  bg-muted-foreground/40;
 }
+[data-rehype-pretty-code-fragment] .word {
+  @apply rounded p-1  bg-muted-foreground/40;
+}

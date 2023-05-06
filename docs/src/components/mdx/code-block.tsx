@@ -22,6 +22,7 @@ export function Codeblock(props: CodeblockProps) {
   const Icon = {
     js: Icons.javascript,
     ts: Icons.typescript,
+    vue: Icons.vue,
     bash: Icons.bash,
   }[language];
 

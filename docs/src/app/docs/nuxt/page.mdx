@@ -1,0 +1,76 @@
+# Nuxt
+
+The Nuxt package comes preconfigured for Nuxt, and fills the `runtimeEnv` option automatically. All you need to do is define your schemas!
+
+<Steps>
+
+### Install dependencies
+
+Install the required dependencies:
+
+```bash
+pnpm add @t3-oss/env-nuxt zod
+```
+
+<Callout>
+
+`@t3-oss/env-core` requires a minimum of `typescript@4.7.2`.
+
+</Callout>
+
+### Create your schema
+
+```ts title="env.ts"
+import { createEnv } from "@t3-oss/env-nuxt";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+    OPEN_AI_API_KEY: z.string().min(1),
+  },
+  client: {
+    NUXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
+  },
+});
+```
+
+### Validate schema on build (recommended)
+
+We recommend you importing your newly created file in your `nuxt.config.ts`. This will make sure your environment variables are validated at build time which will save you a lot of time and headaches down the road.
+
+```ts title="nuxt.config.ts" {1}
+import "./env";
+
+export default defineNuxtConfig({
+  // ...
+});
+```
+
+### Use your schema
+
+Then, import the `env` object in your application and use it, taking advantage of type-safety and auto-completion:
+
+```ts title="server/api/some-endpoint.ts" /env.OPEN_AI_API_KEY/
+import { env } from "~~/env"; // On server
+
+export default defineEventHandler(() => {
+  // do fancy ai stuff
+  const magic = await fetch("...", {
+    headers: { Authorization: env.OPEN_AI_API_KEY },
+  });
+  // ...
+});
+```
+
+```vue title="app.vue" /env.NUXT_PUBLIC_GREETING/
+<script setup lang="ts">
+import { env } from "~~/env"; // On client - same import!
+</script>
+<template>
+  <div>Client says {{ env.NUXT_PUBLIC_GREETING }}!</div>
+  <a href="/api/hello">See what the server has to say!</a>
+</template>
+```
+
+</Steps>

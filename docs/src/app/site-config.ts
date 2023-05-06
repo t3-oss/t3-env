@@ -19,25 +19,14 @@ export const siteConfig = {
           href: "/docs/introduction",
           items: [],
         },
-        {
-          title: "Installation",
-          href: "/docs/installation",
-          items: [],
-        },
-        {
-          title: "Recipes",
-          href: "/docs/recipes",
-          items: [],
-        },
       ],
     },
     {
-      title: "Guides",
+      title: "Framework Guides",
       items: [
         {
-          title: "Framework Agnostic",
+          title: "Agnostic Core",
           href: "/docs/core",
-          label: "New",
           items: [],
         },
         {
@@ -46,9 +35,24 @@ export const siteConfig = {
           items: [],
         },
         {
+          title: "Nuxt",
+          href: "/docs/nuxt",
+          label: "New",
+          items: [],
+        },
+      ],
+    },
+    {
+      title: "Further Reading",
+      items: [
+        {
+          title: "Recipes",
+          href: "/docs/recipes",
+          items: [],
+        },
+        {
           title: "Customization",
           href: "/docs/customization",
-          label: "New",
           items: [],
         },
       ],
