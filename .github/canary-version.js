@@ -4,6 +4,7 @@ import { exec } from "child_process";
 const pkgJsonPaths = [
   "packages/core/package.json",
   "packages/nextjs/package.json",
+  "packages/nuxt/package.json",
 ];
 
 try {
