@@ -73,4 +73,3 @@ export const GET = (req: Request) => {
 ## Roadmap
 
 - [ ] Bring your own validation library - currently only supports Zod.
-- [ ] Validate that all `_input` fields are strings to begin with, transforms may be applied on strings.
