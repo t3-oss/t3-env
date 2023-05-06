@@ -2,6 +2,11 @@ import z, { type ZodError, type ZodObject, type ZodType } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 
+export type Simplify<T> = {
+  [TKey in keyof T]: T[TKey];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
+
 export interface BaseOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
@@ -50,6 +55,7 @@ export interface BaseOptions<
 
   /**
    * Whether to skip validation of environment variables.
+   * @warning This should be used very carefully, as it means your types will lie to you and potential transforms are not run.
    * @default false
    */
   skipValidation?: boolean;
@@ -97,7 +103,7 @@ export function createEnv<
   opts:
     | LooseOptions<TPrefix, TServer, TClient>
     | StrictOptions<TPrefix, TServer, TClient>
-): z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>> {
+): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const skip = !!opts.skipValidation;
