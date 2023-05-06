@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nextjs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "keywords": [
     "create-t3-app",
     "environment variables",
@@ -40,7 +40,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "0.3.0"
+    "@t3-oss/env-core": "0.3.1"
   },
   "peerDependencies": {
     "typescript": ">=4.7.2",
