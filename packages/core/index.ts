@@ -6,33 +6,12 @@ export type Simplify<T> = {
   // eslint-disable-next-line @typescript-eslint/ban-types
 } & {};
 
-export interface BaseOptions<
-  TPrefix extends string,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
-> {
-  /**
-   * Client-side environment variables are exposed to the client by default. Set what prefix they have
-   */
-  clientPrefix: TPrefix;
-
+export interface BaseOptions<TServer extends Record<string, ZodType>> {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
   server: TServer;
-
-  /**
-   * Specify your client-side environment variables schema here. This way you can ensure the app isn't
-   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
-   */
-  client: {
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
-  };
 
   /**
    * How to determine whether the app is running on the server or the client.
@@ -59,24 +38,59 @@ export interface BaseOptions<
   skipValidation?: boolean;
 }
 
-export interface LooseOptions<
-  TPrefix extends string,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
-> extends BaseOptions<TPrefix, TServer, TClient> {
+export interface LooseOptionsWithoutCLient<
+  TServer extends Record<string, ZodType>
+> extends BaseOptions<TServer> {
   runtimeEnvStrict?: never;
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
    */
   runtimeEnv: Record<string, string | boolean | number | undefined>;
+  clientPrefix?: never;
+  client?: never;
+
+  // TODO
+  serverOnly: true;
 }
 
-export interface StrictOptions<
+export interface LooseOptionsWithClient<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
-> extends BaseOptions<TPrefix, TServer, TClient> {
+> extends BaseOptions<TServer> {
+  runtimeEnvStrict?: never;
+  /**
+   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
+   * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
+   */
+  runtimeEnv: Record<string, string | boolean | number | undefined>;
+
+  /**
+   * Client-side environment variables are exposed to the client by default. Set what prefix they have
+   */
+  clientPrefix: TPrefix;
+
+  /**
+   * Specify your client-side environment variables schema here. This way you can ensure the app isn't
+   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
+   */
+  client: {
+    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+      ? TClient[TKey]
+      : ErrorMessage<`${TKey extends string
+          ? TKey
+          : never} is not prefixed with ${TPrefix}.`>;
+  };
+
+  serverOnly?: never | false;
+}
+
+export interface StrictOptionsWithoutClient<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>,
+  TClient extends Record<string, ZodType>
+> extends BaseOptions<TServer> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -91,6 +105,50 @@ export interface StrictOptions<
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
+  clientPrefix?: never;
+  client?: never;
+
+  // TODO
+  serverOnly: true;
+}
+
+export interface StrictOptionsWithClient<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>,
+  TClient extends Record<string, ZodType>
+> extends BaseOptions<TServer> {
+  /**
+   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
+   * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
+   */
+  runtimeEnvStrict: Record<
+    | {
+        [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+          ? TKey
+          : never;
+      }[keyof TClient]
+    | keyof TServer,
+    string | boolean | number | undefined
+  >;
+  runtimeEnv?: never;
+  serverOnly?: never | false;
+
+  /**
+   * Client-side environment variables are exposed to the client by default. Set what prefix they have
+   */
+  clientPrefix: TPrefix;
+
+  /**
+   * Specify your client-side environment variables schema here. This way you can ensure the app isn't
+   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
+   */
+  client: {
+    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+      ? TClient[TKey]
+      : ErrorMessage<`${TKey extends string
+          ? TKey
+          : never} is not prefixed with ${TPrefix}.`>;
+  };
 }
 
 export function createEnv<
@@ -99,8 +157,10 @@ export function createEnv<
   TClient extends Record<string, ZodType> = NonNullable<unknown>
 >(
   opts:
-    | LooseOptions<TPrefix, TServer, TClient>
-    | StrictOptions<TPrefix, TServer, TClient>
+    | LooseOptionsWithoutCLient<TServer>
+    | LooseOptionsWithClient<TPrefix, TServer, TClient>
+    | StrictOptionsWithClient<TPrefix, TServer, TClient>
+    | StrictOptionsWithoutClient<TPrefix, TServer, TClient>
 ): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
@@ -143,7 +203,11 @@ export function createEnv<
   const env = new Proxy(parsed.data, {
     get(target, prop) {
       if (typeof prop !== "string") return undefined;
-      if (!isServer && !prop.startsWith(opts.clientPrefix)) {
+      if (
+        !isServer &&
+        !opts.serverOnly &&
+        !prop.startsWith(opts.clientPrefix)
+      ) {
         return onInvalidAccess(prop);
       }
       return target[prop as keyof typeof target];
