@@ -50,7 +50,9 @@ export interface LooseOptionsWithoutCLient<
   clientPrefix?: never;
   client?: never;
 
-  // TODO
+  /**
+   * Disables requirement of client fields and invalid access error if this flag is set to true.
+   */
   serverOnly: true;
 }
 
@@ -108,7 +110,9 @@ export interface StrictOptionsWithoutClient<
   clientPrefix?: never;
   client?: never;
 
-  // TODO
+  /**
+   * Disables requirement of client fields and invalid access error if this flag is set to true.
+   */
   serverOnly: true;
 }
 
