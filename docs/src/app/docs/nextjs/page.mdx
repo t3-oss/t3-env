@@ -68,7 +68,7 @@ export default config;
 Then, import the `env` object in your application and use it, taking advantage of type-safety and auto-completion:
 
 ```ts title="some-api-endpoint.ts"
-import { env } from "~/env"; // On server
+import { env } from "~/env.mjs"; // On server
 
 export const GET = async () => {
   // do fancy ai stuff
@@ -80,7 +80,7 @@ export const GET = async () => {
 ```
 
 ```ts title="some-component.tsx"
-import { env } from "~/env"; // On client - same import!
+import { env } from "~/env.mjs"; // On client - same import!
 
 export const SomeComponent = () => {
   return (
