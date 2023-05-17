@@ -6,13 +6,7 @@ export type Simplify<T> = {
   // eslint-disable-next-line @typescript-eslint/ban-types
 } & {};
 
-export interface BaseOptions<TServer extends Record<string, ZodType>> {
-  /**
-   * Specify your server-side environment variables schema here. This way you can ensure the app isn't
-   * built with invalid env vars.
-   */
-  server: TServer;
-
+export interface BaseOptions {
   /**
    * How to determine whether the app is running on the server or the client.
    * @default typeof window === "undefined"
@@ -38,36 +32,10 @@ export interface BaseOptions<TServer extends Record<string, ZodType>> {
   skipValidation?: boolean;
 }
 
-export interface LooseOptionsWithoutCLient<
-  TServer extends Record<string, ZodType>
-> extends BaseOptions<TServer> {
-  runtimeEnvStrict?: never;
-  /**
-   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
-   * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
-   */
-  runtimeEnv: Record<string, string | boolean | number | undefined>;
-  clientPrefix?: never;
-  client?: never;
-
-  /**
-   * Disables requirement of client fields and invalid access error if this flag is set to true.
-   */
-  serverOnly: true;
-}
-
-export interface LooseOptionsWithClient<
+export interface ClientOptions<
   TPrefix extends string,
-  TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
-> extends BaseOptions<TServer> {
-  runtimeEnvStrict?: never;
-  /**
-   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
-   * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
-   */
-  runtimeEnv: Record<string, string | boolean | number | undefined>;
-
+> {
   /**
    * Client-side environment variables are exposed to the client by default. Set what prefix they have
    */
@@ -88,39 +56,51 @@ export interface LooseOptionsWithClient<
   serverOnly?: never | false;
 }
 
-export interface StrictOptionsWithoutClient<
-  TPrefix extends string,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
-> extends BaseOptions<TServer> {
+export interface WithoutClientOptions {
   /**
-   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
-   * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
-   */
-  runtimeEnvStrict: Record<
-    | {
-        [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-          ? TKey
-          : never;
-      }[keyof TClient]
-    | keyof TServer,
-    string | boolean | number | undefined
-  >;
-  runtimeEnv?: never;
-  clientPrefix?: never;
-  client?: never;
-
-  /**
-   * Disables requirement of client fields and invalid access error if this flag is set to true.
+   * Disables requirement of client fields
    */
   serverOnly: true;
+
+  clientPrefix?: never;
+  client?: never;
+  clientOnly?: never;
 }
 
-export interface StrictOptionsWithClient<
+export interface ServerOptions<TServer extends Record<string, ZodType>> {
+  /**
+   * Specify your server-side environment variables schema here. This way you can ensure the app isn't
+   * built with invalid env vars.
+   */
+  server: TServer;
+
+  clientOnly?: never | false;
+}
+
+export interface WithoutServerOptions {
+  /**
+   * Disables requirement of server fields
+   */
+  clientOnly: true;
+
+  server?: never;
+  serverOnly?: never;
+}
+
+export interface LooseOptions extends BaseOptions {
+  runtimeEnvStrict?: never;
+  /**
+   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
+   * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
+   */
+  runtimeEnv: Record<string, string | boolean | number | undefined>;
+}
+
+export interface StrictOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
-> extends BaseOptions<TServer> {
+> extends BaseOptions {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -135,36 +115,32 @@ export interface StrictOptionsWithClient<
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
-  serverOnly?: never | false;
-
-  /**
-   * Client-side environment variables are exposed to the client by default. Set what prefix they have
-   */
-  clientPrefix: TPrefix;
-
-  /**
-   * Specify your client-side environment variables schema here. This way you can ensure the app isn't
-   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
-   */
-  client: {
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
-  };
 }
+
+export type ServerClientOptions<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>,
+  TClient extends Record<string, ZodType>
+> =
+  | (ClientOptions<TPrefix, TClient> & ServerOptions<TServer>)
+  | (WithoutClientOptions & ServerOptions<TServer>)
+  | (ClientOptions<TPrefix, TClient> & WithoutServerOptions);
+
+export type createEnvParams<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>,
+  TClient extends Record<string, ZodType>
+> =
+  | (LooseOptions & ServerClientOptions<TPrefix, TServer, TClient>)
+  | (StrictOptions<TPrefix, TServer, TClient> &
+      ServerClientOptions<TPrefix, TServer, TClient>);
 
 export function createEnv<
   TPrefix extends string,
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>
 >(
-  opts:
-    | LooseOptionsWithoutCLient<TServer>
-    | LooseOptionsWithClient<TPrefix, TServer, TClient>
-    | StrictOptionsWithClient<TPrefix, TServer, TClient>
-    | StrictOptionsWithoutClient<TPrefix, TServer, TClient>
+  opts: createEnvParams<TPrefix, TServer, TClient>
 ): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
@@ -172,9 +148,13 @@ export function createEnv<
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
 
-  const _client = typeof opts.client === "object" ? opts.client : {};
+  const _client =
+    "client" in opts && typeof opts.client === "object" ? opts.client : {};
+  const _server =
+    "server" in opts && typeof opts.server === "object" ? opts.server : {};
+
   const client = z.object(_client);
-  const server = z.object(opts.server);
+  const server = z.object(_server);
   const isServer = opts.isServer ?? typeof window === "undefined";
 
   const merged = server.merge(client);

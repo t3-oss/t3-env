@@ -58,3 +58,37 @@ export const env = createEnv({
   isServer: typeof window === "undefined",
 });
 ```
+
+## Server or Client only environment
+
+<Callout type="warning">
+
+Currently only works with the core module
+
+</Callout>
+
+For Server only environments
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const serverOnlyEnv = createEnv({
+  // ...
+  // Tell the library when we're in a server only context,
+  // which disables requirement of client fields
+  serverOnly: true,
+});
+```
+
+For Client only environments
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const serverOnlyEnv = createEnv({
+  // ...
+  // Tell the library when we're in a client only context,
+  // which disables requirement of server field
+  clientOnly: true,
+});
+```
