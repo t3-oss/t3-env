@@ -11,6 +11,21 @@ function ignoreErrors(cb: () => void) {
   }
 }
 
+test("server vars should not be prefixed", () => {
+  ignoreErrors(() => {
+    createEnv({
+      clientPrefix: "FOO_",
+      server: {
+        // @ts-expect-error - server should not have FOO_ prefix
+        FOO_BAR: z.string(),
+        BAR: z.string(),
+      },
+      client: {},
+      runtimeEnv: {},
+    });
+  });
+});
+
 test("client vars should be correctly prefixed", () => {
   ignoreErrors(() => {
     createEnv({
