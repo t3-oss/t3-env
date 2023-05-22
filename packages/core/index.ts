@@ -136,7 +136,7 @@ export function createEnv<
       );
     });
 
-  if (!parsed.success) {
+  if (parsed.success === false ) {
     return onValidationError(parsed.error);
   }
 
