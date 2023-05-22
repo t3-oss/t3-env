@@ -206,7 +206,7 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
       zod:
-        specifier: ^3.21.0
+        specifier: ^3.20.2
         version: 3.21.4
 
   packages/nextjs:
@@ -225,7 +225,7 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
       zod:
-        specifier: ^3.21.4
+        specifier: ^3.20.2
         version: 3.21.4
 
   packages/nuxt:
@@ -244,7 +244,7 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
       zod:
-        specifier: ^3.21.4
+        specifier: ^3.20.2
         version: 3.21.4
 
 packages:
