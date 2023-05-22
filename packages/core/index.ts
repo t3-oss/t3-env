@@ -20,7 +20,13 @@ export interface BaseOptions<
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  server: TServer;
+  server: {
+    [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
+      ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
+          ? TKey
+          : never} should not prefixed with ${TPrefix}.`>
+      : TServer[TKey];
+  };
 
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
@@ -87,7 +93,11 @@ export interface StrictOptions<
           ? TKey
           : never;
       }[keyof TClient]
-    | keyof TServer,
+    | {
+        [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
+          ? never
+          : TKey;
+      }[keyof TServer],
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
@@ -109,8 +119,9 @@ export function createEnv<
   if (skip) return runtimeEnv as any;
 
   const _client = typeof opts.client === "object" ? opts.client : {};
+  const _server = typeof opts.server === "object" ? opts.server : {};
   const client = z.object(_client);
-  const server = z.object(opts.server);
+  const server = z.object(_server);
   const isServer = opts.isServer ?? typeof window === "undefined";
 
   const merged = server.merge(client);
