@@ -1,4 +1,4 @@
-import z, { type ZodError, type ZodObject, type ZodType } from "zod";
+import { z,  type ZodError, type ZodObject, type ZodType } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
