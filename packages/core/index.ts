@@ -52,19 +52,11 @@ export interface ClientOptions<
           ? TKey
           : never} is not prefixed with ${TPrefix}.`>;
   };
-
-  serverOnly?: never | false;
 }
 
 export interface WithoutClientOptions {
-  /**
-   * Disables requirement of client fields
-   */
-  serverOnly: true;
-
   clientPrefix?: never;
   client?: never;
-  clientOnly?: never;
 }
 
 export interface ServerOptions<
@@ -82,18 +74,10 @@ export interface ServerOptions<
           : never} should not prefixed with ${TPrefix}.`>
       : TServer[TKey];
   };
-
-  clientOnly?: never | false;
 }
 
 export interface WithoutServerOptions {
-  /**
-   * Disables requirement of server fields
-   */
-  clientOnly: true;
-
   server?: never;
-  serverOnly?: never;
 }
 
 export interface LooseOptions extends BaseOptions {
@@ -199,7 +183,7 @@ export function createEnv<
       if (typeof prop !== "string") return undefined;
       if (
         !isServer &&
-        !opts.serverOnly &&
+        opts.clientPrefix &&
         !prop.startsWith(opts.clientPrefix)
       ) {
         return onInvalidAccess(prop);
