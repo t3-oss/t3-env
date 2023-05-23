@@ -7,7 +7,6 @@
     "build": "turbo build --filter @t3-oss/env*",
     "dev": "turbo dev --filter @t3-oss/env*",
     "lint": "turbo lint && manypkg check",
-    "lint:fix": "turbo lint -- --fix && manypkg fix",
     "test": "turbo test",
     "typecheck": "turbo typecheck"
   },
