@@ -67,12 +67,21 @@ export interface WithoutClientOptions {
   clientOnly?: never;
 }
 
-export interface ServerOptions<TServer extends Record<string, ZodType>> {
+export interface ServerOptions<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>
+> {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  server: TServer;
+  server: {
+    [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
+      ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
+          ? TKey
+          : never} should not prefixed with ${TPrefix}.`>
+      : TServer[TKey];
+  };
 
   clientOnly?: never | false;
 }
@@ -111,7 +120,11 @@ export interface StrictOptions<
           ? TKey
           : never;
       }[keyof TClient]
-    | keyof TServer,
+    | {
+        [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
+          ? never
+          : TKey;
+      }[keyof TServer],
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
@@ -122,8 +135,8 @@ export type ServerClientOptions<
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
 > =
-  | (ClientOptions<TPrefix, TClient> & ServerOptions<TServer>)
-  | (WithoutClientOptions & ServerOptions<TServer>)
+  | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
+  | (WithoutClientOptions & ServerOptions<TPrefix, TServer>)
   | (ClientOptions<TPrefix, TClient> & WithoutServerOptions);
 
 export type createEnvParams<
@@ -148,11 +161,8 @@ export function createEnv<
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
 
-  const _client =
-    "client" in opts && typeof opts.client === "object" ? opts.client : {};
-  const _server =
-    "server" in opts && typeof opts.server === "object" ? opts.server : {};
-
+  const _client = typeof opts.client === "object" ? opts.client : {};
+  const _server = typeof opts.server === "object" ? opts.server : {};
   const client = z.object(_client);
   const server = z.object(_server);
   const isServer = opts.isServer ?? typeof window === "undefined";
