@@ -61,34 +61,49 @@ export const env = createEnv({
 
 ## Server or Client only environment
 
+### For Server only environments
+
 <Callout type="warning">
 
-Currently only works with the core module
+Using t3-env in server only mode is not recommended because it adds unnecessary overhead to your application. You can instead use simple zod validation to validate your environment variables.
+
+```ts title="src/env.ts"
+import { z } from "zod";
+
+export const env = z
+  .object({
+    DATABASE_URL: z.string(),
+    CUSTOM_STUFF: z.string(),
+  })
+  .parse(process.env);
+```
 
 </Callout>
 
-For Server only environments
-
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
 
 export const serverOnlyEnv = createEnv({
   // ...
-  // Tell the library when we're in a server only context,
-  // which disables requirement of client fields
-  serverOnly: true,
+  // Omit the client fields
+  server: {
+    DATABASE_URL: z.string(),
+    CUSTOM_STUFF: z.string(),
+  },
 });
 ```
 
-For Client only environments
+### For Client only environments
 
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
 
-export const serverOnlyEnv = createEnv({
+export const clientOnlyEnv = createEnv({
   // ...
-  // Tell the library when we're in a client only context,
-  // which disables requirement of server field
-  clientOnly: true,
+  // Omit the server field
+  clientPrefix: "FOO_",
+  client: {
+    FOO_SOME_CLIENT_VARIABLE: z.string(),
+  },
 });
 ```
