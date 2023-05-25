@@ -269,3 +269,42 @@ describe("errors when server var is accessed on client", () => {
     );
   });
 });
+
+describe("errors regarding server/client only mode", () => {
+  test("server only", () => {
+    createEnv({
+      clientPrefix: "FOO_",
+      client: {},
+      runtimeEnv: {},
+    });
+  });
+
+  test("client only", () => {
+    createEnv({
+      server: {},
+      runtimeEnv: {},
+    });
+  });
+
+  test("config with missing client", () => {
+    ignoreErrors(() => {
+      // @ts-expect-error - incomplete client config - client not present
+      createEnv({
+        clientPrefix: "FOO_",
+        server: {},
+        runtimeEnv: {},
+      });
+    });
+  });
+
+  test("config with missing clientPrefix", () => {
+    ignoreErrors(() => {
+      // @ts-expect-error - incomplete client config - clientPrefix not present
+      createEnv({
+        client: {},
+        server: {},
+        runtimeEnv: {},
+      });
+    });
+  });
+});
