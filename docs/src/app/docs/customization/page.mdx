@@ -16,10 +16,7 @@ import { createEnv } from "@t3-oss/env-core";
 export const env = createEnv({
   // ...
   // Tell the library to skip validation if condition is true.
-  skipValidation:
-    !!process.env.SKIP_ENV_VALIDATION &&
-    process.env.SKIP_ENV_VALIDATION !== "false" &&
-    process.env.SKIP_ENV_VALIDATION !== "0",
+  skipValidation: false,
 });
 ```
 
