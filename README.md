@@ -38,7 +38,7 @@ export const env = createEnv({
   /*
    * Environment variables available on the client (and server).
    *
-   * 💡 You'll get typeerrors if these are not prefixed with NEXT_PUBLIC_.
+   * 💡 You'll get type errors if these are not prefixed with NEXT_PUBLIC_.
    */
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
@@ -47,7 +47,7 @@ export const env = createEnv({
    * Due to how Next.js bundles environment variables on Edge and Client,
    * we need to manually destructure them to make sure all are included in bundle.
    *
-   * 💡 You'll get typeerrors if not all variables from `server` & `client` are included here.
+   * 💡 You'll get type errors if not all variables from `server` & `client` are included here.
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -58,7 +58,7 @@ export const env = createEnv({
 });
 ```
 
-### Use said schema in your app with autocompletion and type inference
+### Use the schema in your app with autocompletion and type inference
 
 ```ts
 // src/app/hello/route.ts
