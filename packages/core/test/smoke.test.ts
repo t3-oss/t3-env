@@ -271,7 +271,7 @@ describe("errors when server var is accessed on client", () => {
 });
 
 describe("errors regarding server/client only mode", () => {
-  test("server only", () => {
+  test("client only", () => {
     createEnv({
       clientPrefix: "FOO_",
       client: {},
@@ -279,7 +279,7 @@ describe("errors regarding server/client only mode", () => {
     });
   });
 
-  test("client only", () => {
+  test("server only", () => {
     createEnv({
       server: {},
       runtimeEnv: {},
