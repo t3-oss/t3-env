@@ -53,6 +53,40 @@ export const env = createEnv({
 });
 ```
 
+<Callout type="warning">
+
+While defining both the client and server schemas in a single file provides the best developer experience,
+it also means that your validation schemas for the server variables will be shipped to the client.
+If you consider the **names** of your variables sensitive, you should split your schemas into two files.
+
+```ts title="src/env/server.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+    OPEN_AI_API_KEY: z.string().min(1),
+  },
+  runtimeEnv: process.env,
+});
+```
+
+```ts title="src/env/client.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
+export const env = createEnv({
+  clientPrefix: "PUBLIC_",
+  client: {
+    PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  runtimeEnv: process.env,
+});
+```
+
+</Callout>
+
 For all available options, see [Customization](/docs/customization).
 
 You'll notice that if your `clientPrefix` is `PUBLIC_`, you won't be allowed to enter any other keys in the `client` object without getting type-errors. Below you can see we get a descriptive error when we set `VITE_PUBLIC_API_URL` instead of `PUBLIC_API_URL`:

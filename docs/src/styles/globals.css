@@ -148,7 +148,7 @@
 
   [data-rehype-pretty-code-title] {
     padding: 0.75rem 0 0.75rem 2.5rem;
-    @apply mt-4 rounded-t-lg border border-b-0 bg-accent font-cal;
+    @apply mt-4 rounded-t-lg border border-b-0 bg-accent font-cal text-foreground;
   }
 
   [data-rehype-pretty-code-title]:has(+ [data-language-icon]) {
