@@ -269,3 +269,52 @@ describe("errors when server var is accessed on client", () => {
     );
   });
 });
+
+describe("client/server only mode", () => {
+  test("client only", () => {
+    const env = createEnv({
+      clientPrefix: "FOO_",
+      client: {
+        FOO_BAR: z.string(),
+      },
+      runtimeEnv: { FOO_BAR: "foo" },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{ FOO_BAR: string }>();
+    expect(env).toMatchObject({ FOO_BAR: "foo" });
+  });
+
+  test("server only", () => {
+    const env = createEnv({
+      server: {
+        BAR: z.string(),
+      },
+      runtimeEnv: { BAR: "bar" },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{ BAR: string }>();
+    expect(env).toMatchObject({ BAR: "bar" });
+  });
+
+  test("config with missing client", () => {
+    ignoreErrors(() => {
+      createEnv({
+        // @ts-expect-error - incomplete client config - client not present
+        clientPrefix: "FOO_",
+        server: {},
+        runtimeEnv: {},
+      });
+    });
+  });
+
+  test("config with missing clientPrefix", () => {
+    ignoreErrors(() => {
+      // @ts-expect-error - incomplete client config - clientPrefix not present
+      createEnv({
+        client: {},
+        server: {},
+        runtimeEnv: {},
+      });
+    });
+  });
+});

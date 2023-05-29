@@ -121,3 +121,33 @@ describe("return type is correctly inferred", () => {
     });
   });
 });
+
+test("can specify only server", () => {
+  const onlyServer = createEnv({
+    server: { BAR: z.string() },
+    runtimeEnv: { BAR: "FOO" },
+  });
+
+  expectTypeOf(onlyServer).toMatchTypeOf<{
+    BAR: string;
+  }>();
+
+  expect(onlyServer).toMatchObject({
+    BAR: "FOO",
+  });
+});
+
+test("can specify only client", () => {
+  const onlyClient = createEnv({
+    client: { NEXT_PUBLIC_BAR: z.string() },
+    runtimeEnv: { NEXT_PUBLIC_BAR: "FOO" },
+  });
+
+  expectTypeOf(onlyClient).toMatchTypeOf<{
+    NEXT_PUBLIC_BAR: string;
+  }>();
+
+  expect(onlyClient).toMatchObject({
+    NEXT_PUBLIC_BAR: "FOO",
+  });
+});
