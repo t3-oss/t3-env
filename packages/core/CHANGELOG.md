@@ -1,5 +1,15 @@
 # @t3-oss/env-core
 
+## 0.4.0
+
+### Minor Changes
+
+- [#64](https://github.com/t3-oss/t3-env/pull/64) [`fd7e659`](https://github.com/t3-oss/t3-env/commit/fd7e659fd31e5bbb07cbfc5bf1077d7177ee8ef3) Thanks [@parnavh](https://github.com/parnavh)! - allow for passing only server or client configuration without needing to fill them with "dummy options"
+
+### Patch Changes
+
+- [#68](https://github.com/t3-oss/t3-env/pull/68) [`b35b8e8`](https://github.com/t3-oss/t3-env/commit/b35b8e87e237ed32d4af3cef3d0d0783fe24f61a) Thanks [@chungweileong94](https://github.com/chungweileong94)! - Prevent client prefix on server
+
 ## 0.3.1
 
 ## 0.3.0
