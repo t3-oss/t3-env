@@ -1,4 +1,4 @@
-import { z,  type ZodError, type ZodObject, type ZodType } from "zod";
+import { z, type ZodError, type ZodObject, type ZodType } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
@@ -68,7 +68,9 @@ export interface ServerOptions<
    * built with invalid env vars.
    */
   server: {
-    [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
+    [TKey in keyof TServer]: TPrefix extends ""
+      ? TServer[TKey]
+      : TKey extends `${TPrefix}${string}`
       ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
           ? TKey
           : never} should not prefixed with ${TPrefix}.`>
@@ -133,7 +135,7 @@ export type createEnvParams<
       ServerClientOptions<TPrefix, TServer, TClient>);
 
 export function createEnv<
-  TPrefix extends string,
+  TPrefix extends string = "",
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>
 >(
