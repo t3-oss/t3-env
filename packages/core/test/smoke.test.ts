@@ -270,20 +270,30 @@ describe("errors when server var is accessed on client", () => {
   });
 });
 
-describe("errors regarding server/client only mode", () => {
+describe("client/server only mode", () => {
   test("client only", () => {
-    createEnv({
+    const env = createEnv({
       clientPrefix: "FOO_",
-      client: {},
-      runtimeEnv: {},
+      client: {
+        FOO_BAR: z.string(),
+      },
+      runtimeEnv: { FOO_BAR: "foo" },
     });
+
+    expectTypeOf(env).toEqualTypeOf<{ FOO_BAR: string }>();
+    expect(env).toMatchObject({ FOO_BAR: "foo" });
   });
 
   test("server only", () => {
-    createEnv({
-      server: {},
-      runtimeEnv: {},
+    const env = createEnv({
+      server: {
+        BAR: z.string(),
+      },
+      runtimeEnv: { BAR: "bar" },
     });
+
+    expectTypeOf(env).toEqualTypeOf<{ BAR: string }>();
+    expect(env).toMatchObject({ BAR: "bar" });
   });
 
   test("config with missing client", () => {
