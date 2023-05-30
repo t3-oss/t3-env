@@ -18,9 +18,13 @@ interface Options<
     "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
   > {
   /**
-   * Manual destruction of `process.env`. Required for Next.js.
+   * Manual destruction of `process.env`. Required for Next.js < 13.4.4.
    */
-  runtimeEnv: StrictOptions<ClientPrefix, TServer, TClient>["runtimeEnvStrict"];
+  runtimeEnv?: StrictOptions<
+    ClientPrefix,
+    TServer,
+    TClient
+  >["runtimeEnvStrict"];
 }
 
 export function createEnv<
@@ -56,6 +60,6 @@ export function createEnv<
     client,
     server,
     clientPrefix: CLIENT_PREFIX,
-    runtimeEnvStrict: runtimeEnv,
+    runtimeEnv: runtimeEnv ?? process.env,
   });
 }

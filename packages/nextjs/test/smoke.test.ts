@@ -78,6 +78,28 @@ test("runtimeEnv enforces all keys", () => {
   });
 });
 
+test("runtimeEnv is now optional", () => {
+  process.env = {
+    BAR: "bar",
+    NEXT_PUBLIC_BAR: "foo",
+  };
+
+  const env = createEnv({
+    server: { BAR: z.string() },
+    client: { NEXT_PUBLIC_BAR: z.string() },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<{
+    BAR: string;
+    NEXT_PUBLIC_BAR: string;
+  }>();
+
+  expect(env).toMatchObject({
+    BAR: "bar",
+    NEXT_PUBLIC_BAR: "foo",
+  });
+});
+
 describe("return type is correctly inferred", () => {
   test("simple", () => {
     const env = createEnv({
