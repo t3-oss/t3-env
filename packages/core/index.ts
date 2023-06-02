@@ -7,7 +7,9 @@ export type Simplify<T> = {
 } & {};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Impossible<T extends Record<string, any>> = Record<keyof T, never>;
+type Impossible<T extends Record<string, any>> = Partial<
+  Record<keyof T, never>
+>;
 
 export interface BaseOptions {
   /**
