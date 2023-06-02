@@ -84,13 +84,13 @@ export interface ClientOptions<
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
    */
-  client: {
+  client: Partial<{
     [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
       ? TClient[TKey]
       : ErrorMessage<`${TKey extends string
           ? TKey
           : never} is not prefixed with ${TPrefix}.`>;
-  };
+  }>;
 }
 
 export interface ServerOptions<
@@ -101,7 +101,7 @@ export interface ServerOptions<
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  server: {
+  server: Partial<{
     [TKey in keyof TServer]: TPrefix extends ""
       ? TServer[TKey]
       : TKey extends `${TPrefix}${string}`
@@ -109,7 +109,7 @@ export interface ServerOptions<
           ? TKey
           : never} should not prefixed with ${TPrefix}.`>
       : TServer[TKey];
-  };
+  }>;
 }
 
 export type ServerClientOptions<
