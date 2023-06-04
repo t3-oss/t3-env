@@ -42,7 +42,7 @@ it also means that your validation schemas for the server variables will be ship
 If you consider the **names** of your variables sensitive, you should split your schemas into two files.
 
 ```ts title="src/env/server.ts"
-import { createEnv } from "@t3-oss/env-nextjs";
+import { createEnv } from "@t3-oss/env-nuxt";
 import { z } from "zod";
 
 export const env = createEnv({
@@ -55,7 +55,7 @@ export const env = createEnv({
 ```
 
 ```ts title="src/env/client.ts"
-import { createEnv } from "@t3-oss/env-nextjs";
+import { createEnv } from "@t3-oss/env-nuxt";
 import { z } from "zod";
 
 export const env = createEnv({
