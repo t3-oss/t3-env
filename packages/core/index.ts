@@ -6,6 +6,11 @@ export type Simplify<T> = {
   // eslint-disable-next-line @typescript-eslint/ban-types
 } & {};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Impossible<T extends Record<string, any>> = Partial<
+  Record<keyof T, never>
+>;
+
 export interface BaseOptions {
   /**
    * How to determine whether the app is running on the server or the client.
@@ -30,56 +35,6 @@ export interface BaseOptions {
    * @default false
    */
   skipValidation?: boolean;
-}
-
-export interface ClientOptions<
-  TPrefix extends string,
-  TClient extends Record<string, ZodType>
-> {
-  /**
-   * Client-side environment variables are exposed to the client by default. Set what prefix they have
-   */
-  clientPrefix: TPrefix;
-
-  /**
-   * Specify your client-side environment variables schema here. This way you can ensure the app isn't
-   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
-   */
-  client: {
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
-  };
-}
-
-export interface WithoutClientOptions {
-  clientPrefix?: never;
-  client?: never;
-}
-
-export interface ServerOptions<
-  TPrefix extends string,
-  TServer extends Record<string, ZodType>
-> {
-  /**
-   * Specify your server-side environment variables schema here. This way you can ensure the app isn't
-   * built with invalid env vars.
-   */
-  server: {
-    [TKey in keyof TServer]: TPrefix extends ""
-      ? TServer[TKey]
-      : TKey extends `${TPrefix}${string}`
-      ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
-          ? TKey
-          : never} should not prefixed with ${TPrefix}.`>
-      : TServer[TKey];
-  };
-}
-
-export interface WithoutServerOptions {
-  server?: never;
 }
 
 export interface LooseOptions extends BaseOptions {
@@ -116,16 +71,57 @@ export interface StrictOptions<
   runtimeEnv?: never;
 }
 
+export interface ClientOptions<
+  TPrefix extends string,
+  TClient extends Record<string, ZodType>
+> {
+  /**
+   * Client-side environment variables are exposed to the client by default. Set what prefix they have
+   */
+  clientPrefix: TPrefix;
+
+  /**
+   * Specify your client-side environment variables schema here. This way you can ensure the app isn't
+   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
+   */
+  client: Partial<{
+    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+      ? TClient[TKey]
+      : ErrorMessage<`${TKey extends string
+          ? TKey
+          : never} is not prefixed with ${TPrefix}.`>;
+  }>;
+}
+
+export interface ServerOptions<
+  TPrefix extends string,
+  TServer extends Record<string, ZodType>
+> {
+  /**
+   * Specify your server-side environment variables schema here. This way you can ensure the app isn't
+   * built with invalid env vars.
+   */
+  server: Partial<{
+    [TKey in keyof TServer]: TPrefix extends ""
+      ? TServer[TKey]
+      : TKey extends `${TPrefix}${string}`
+      ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
+          ? TKey
+          : never} should not prefixed with ${TPrefix}.`>
+      : TServer[TKey];
+  }>;
+}
+
 export type ServerClientOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
 > =
   | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
-  | (WithoutClientOptions & ServerOptions<TPrefix, TServer>)
-  | (ClientOptions<TPrefix, TClient> & WithoutServerOptions);
+  | (ServerOptions<TPrefix, TServer> & Impossible<ClientOptions<never, never>>)
+  | (ClientOptions<TPrefix, TClient> & Impossible<ServerOptions<never, never>>);
 
-export type createEnvParams<
+export type EnvOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
@@ -139,7 +135,7 @@ export function createEnv<
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>
 >(
-  opts: createEnvParams<TPrefix, TServer, TClient>
+  opts: EnvOptions<TPrefix, TServer, TClient>
 ): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
