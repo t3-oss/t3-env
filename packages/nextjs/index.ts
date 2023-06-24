@@ -60,6 +60,6 @@ export function createEnv<
     client,
     server,
     clientPrefix: CLIENT_PREFIX,
-    runtimeEnv: runtimeEnv ?? process.env,
+    runtimeEnv: { ...process.env, ...runtimeEnv },
   });
 }

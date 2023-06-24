@@ -8,8 +8,13 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_GREETING: z.string(),
   },
+
   runtimeEnv: {
-    SECRET: process.env.SECRET,
     NEXT_PUBLIC_GREETING: process.env.NEXT_PUBLIC_GREETING,
+  },
+
+  onValidationError: (error) => {
+    console.error(error);
+    throw error;
   },
 });
