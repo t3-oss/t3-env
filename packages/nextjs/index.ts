@@ -70,9 +70,11 @@ export function createEnv<
         ...opts.experimental__runtimeEnv,
       };
 
-  return createEnvCore<ClientPrefix, TServer, TClient>({
+  return createEnvCore<ClientPrefix, TServer, TClient, TBuildEnv>({
     ...opts,
-    buildEnvs,
+    // FIXME: don't require this `as any` cast
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    buildEnvs: buildEnvs as any,
     client,
     server,
     clientPrefix: CLIENT_PREFIX,
