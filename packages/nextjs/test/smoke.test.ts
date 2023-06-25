@@ -78,6 +78,48 @@ test("runtimeEnv enforces all keys", () => {
   });
 });
 
+test("new experimental runtime option only requires client vars", () => {
+  ignoreErrors(() => {
+    createEnv({
+      server: { BAR: z.string() },
+      client: { NEXT_PUBLIC_BAR: z.string() },
+      // @ts-expect-error - NEXT_PUBLIC_BAR is missing
+      experimental__runtimeEnv: {},
+    });
+    createEnv({
+      server: { BAR: z.string() },
+      client: { NEXT_PUBLIC_BAR: z.string() },
+      experimental__runtimeEnv: {
+        // @ts-expect-error - BAR should not be specified
+        BAR: "bar",
+      },
+    });
+  });
+
+  process.env = {
+    BAR: "bar",
+    NEXT_PUBLIC_BAR: "foo",
+  };
+
+  const env = createEnv({
+    server: { BAR: z.string() },
+    client: { NEXT_PUBLIC_BAR: z.string() },
+    experimental__runtimeEnv: {
+      NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
+    },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<{
+    BAR: string;
+    NEXT_PUBLIC_BAR: string;
+  }>();
+
+  expect(env).toMatchObject({
+    BAR: "bar",
+    NEXT_PUBLIC_BAR: "foo",
+  });
+});
+
 describe("return type is correctly inferred", () => {
   test("simple", () => {
     const env = createEnv({
