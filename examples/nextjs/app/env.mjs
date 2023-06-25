@@ -9,7 +9,7 @@ export const env = createEnv({
     SECRET: z.string(),
   },
   shared: {
-    NODE_ENV: z.enum(["development", "production"]).optional(),
+    NODE_ENV: z.enum(["development", "production"]),
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
