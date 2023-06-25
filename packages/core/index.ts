@@ -11,12 +11,18 @@ type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-export interface BaseOptions {
+export interface BaseOptions<TShared extends Record<string, ZodType>> {
   /**
    * How to determine whether the app is running on the server or the client.
    * @default typeof window === "undefined"
    */
   isServer?: boolean;
+
+  /**
+   * Shared variables, often those that are provided by build tools and is available to both client and server,
+   * but isn't prefixed and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
+   */
+  shared?: TShared;
 
   /**
    * Called when validation fails. By default the error is logged,
@@ -37,7 +43,8 @@ export interface BaseOptions {
   skipValidation?: boolean;
 }
 
-export interface LooseOptions extends BaseOptions {
+export interface LooseOptions<TShared extends Record<string, ZodType>>
+  extends BaseOptions<TShared> {
   runtimeEnvStrict?: never;
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
@@ -49,8 +56,9 @@ export interface LooseOptions extends BaseOptions {
 export interface StrictOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
-> extends BaseOptions {
+  TClient extends Record<string, ZodType>,
+  TShared extends Record<string, ZodType>
+> extends BaseOptions<TShared> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -65,7 +73,10 @@ export interface StrictOptions<
         [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
           ? never
           : TKey;
-      }[keyof TServer],
+      }[keyof TServer]
+    | {
+        [TKey in keyof TShared]: TKey extends string ? TKey : never;
+      }[keyof TShared],
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
@@ -124,19 +135,25 @@ export type ServerClientOptions<
 export type EnvOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
+  TClient extends Record<string, ZodType>,
+  TShared extends Record<string, ZodType>
 > =
-  | (LooseOptions & ServerClientOptions<TPrefix, TServer, TClient>)
-  | (StrictOptions<TPrefix, TServer, TClient> &
+  | (LooseOptions<TShared> & ServerClientOptions<TPrefix, TServer, TClient>)
+  | (StrictOptions<TPrefix, TServer, TClient, TShared> &
       ServerClientOptions<TPrefix, TServer, TClient>);
 
 export function createEnv<
   TPrefix extends string = "",
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
-  TClient extends Record<string, ZodType> = NonNullable<unknown>
+  TClient extends Record<string, ZodType> = NonNullable<unknown>,
+  TShared extends Record<string, ZodType> = NonNullable<unknown>
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient>
-): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared>
+): Simplify<
+  z.infer<ZodObject<TServer>> &
+    z.infer<ZodObject<TClient>> &
+    z.infer<ZodObject<TShared>>
+> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const skip = !!opts.skipValidation;
@@ -145,14 +162,17 @@ export function createEnv<
 
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
+  const _shared = typeof opts.shared === "object" ? opts.shared : {};
   const client = z.object(_client);
   const server = z.object(_server);
+  const shared = z.object(_shared);
   const isServer = opts.isServer ?? typeof window === "undefined";
 
-  const merged = server.merge(client);
+  const allClient = client.merge(shared);
+  const allServer = server.merge(shared).merge(client);
   const parsed = isServer
-    ? merged.safeParse(runtimeEnv) // on server we can validate all env vars
-    : client.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
+    ? allServer.safeParse(runtimeEnv) // on server we can validate all env vars
+    : allClient.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
 
   const onValidationError =
     opts.onValidationError ??
@@ -182,7 +202,8 @@ export function createEnv<
       if (
         !isServer &&
         opts.clientPrefix &&
-        !prop.startsWith(opts.clientPrefix)
+        !prop.startsWith(opts.clientPrefix) &&
+        shared.shape[prop as keyof typeof shared.shape] === undefined
       ) {
         return onInvalidAccess(prop);
       }

@@ -99,12 +99,17 @@ test("new experimental runtime option only requires client vars", () => {
   process.env = {
     BAR: "bar",
     NEXT_PUBLIC_BAR: "foo",
+    NODE_ENV: "development",
   };
 
   const env = createEnv({
+    shared: {
+      NODE_ENV: z.enum(["development", "production"]),
+    },
     server: { BAR: z.string() },
     client: { NEXT_PUBLIC_BAR: z.string() },
     experimental__runtimeEnv: {
+      NODE_ENV: process.env.NODE_ENV,
       NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
     },
   });
@@ -112,11 +117,13 @@ test("new experimental runtime option only requires client vars", () => {
   expectTypeOf(env).toEqualTypeOf<{
     BAR: string;
     NEXT_PUBLIC_BAR: string;
+    NODE_ENV: "development" | "production";
   }>();
 
   expect(env).toMatchObject({
     BAR: "bar",
     NEXT_PUBLIC_BAR: "foo",
+    NODE_ENV: "development",
   });
 });
 
