@@ -38,11 +38,14 @@ type Options<
          * Only client side `process.env` is statically analyzed and needs to be manually destructured.
          */
         experimental__runtimeEnv: Record<
-          {
-            [TKey in keyof TClient]: TKey extends `${ClientPrefix}${string}`
-              ? TKey
-              : never;
-          }[keyof TClient],
+          | {
+              [TKey in keyof TClient]: TKey extends `${ClientPrefix}${string}`
+                ? TKey
+                : never;
+            }[keyof TClient]
+          | {
+              [TKey in keyof TBuildEnv]: TKey extends string ? TKey : never;
+            }[keyof TBuildEnv],
           string | boolean | number | undefined
         >;
       }
@@ -65,14 +68,11 @@ export function createEnv<
     : {
         ...process.env,
         ...opts.experimental__runtimeEnv,
-        NODE_ENV: process.env.NODE_ENV,
       };
 
   return createEnvCore<ClientPrefix, TServer, TClient>({
     ...opts,
-    // FIXME: don't require this `as any` cast
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-    buildEnvs: buildEnvs as any,
+    buildEnvs,
     client,
     server,
     clientPrefix: CLIENT_PREFIX,
