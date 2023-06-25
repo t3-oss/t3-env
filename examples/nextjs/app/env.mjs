@@ -12,9 +12,4 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     NEXT_PUBLIC_GREETING: process.env.NEXT_PUBLIC_GREETING,
   },
-
-  onValidationError: (error) => {
-    console.error(error);
-    throw error;
-  },
 });
