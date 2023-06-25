@@ -38,16 +38,16 @@ export const env = createEnv({
     OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
     NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
   },
+  // For Next.js >= 13.4.4, you only need to destructure client variables:
+  // experimental__runtimeEnv: {
+  //   NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
+  // }
 });
 ```
 
 <Callout type="info">
 
-In Next.js, the `runtimeEnv` is optional and will default to `process.env` if not provided. If you're using Next.js < 13.4.4,
-we advise you to specify the `runtimeEnv` manually, else some might be tree shaken away by Next.js's static analysis.
-
-When specifying it manually, `runtimeEnv` is strict by default, meaning you'll have to destructure all the keys manually.
-This is due to how Next.js used to bundle environment variables and only explicitly accessed variables are included in the bundle. Missing keys will result in a type-error:
+Unlike in the core package, `runtimeEnv` is strict by default, meaning you'll have to destructure all the keys manually. This is due to how Next.js bundles environment variables and only explicitly accessed variables are included in the bundle. Missing keys will result in a type-error:
 
 ![missing runtimeEnv](https://user-images.githubusercontent.com/51714798/234409775-fee3edbd-a73b-415a-829f-28f6f6092707.png)
 
