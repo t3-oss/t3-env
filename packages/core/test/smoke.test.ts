@@ -318,3 +318,54 @@ describe("client/server only mode", () => {
     });
   });
 });
+
+describe("buildEnvs can be accessed on both server and client", () => {
+  process.env = {
+    NODE_ENV: "development",
+    BAR: "bar",
+    FOO_BAR: "foo",
+  };
+
+  const env = createEnv({
+    buildEnvs: {
+      NODE_ENV: z.enum(["development", "production", "test"]),
+    },
+    clientPrefix: "FOO_",
+    server: { BAR: z.string() },
+    client: { FOO_BAR: z.string() },
+    runtimeEnv: process.env,
+  });
+
+  expectTypeOf(env).toEqualTypeOf<{
+    NODE_ENV: "development" | "production" | "test";
+    BAR: string;
+    FOO_BAR: string;
+  }>();
+
+  test("server", () => {
+    const { window } = globalThis;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    globalThis.window = undefined as any;
+
+    expect(env).toMatchObject({
+      NODE_ENV: "development",
+      BAR: "bar",
+      FOO_BAR: "foo",
+    });
+
+    globalThis.window = window;
+  });
+
+  test("client", () => {
+    const { window } = globalThis;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    globalThis.window = {} as any;
+
+    expect(env).toMatchObject({
+      NODE_ENV: "development",
+      FOO_BAR: "foo",
+    });
+
+    globalThis.window = window;
+  });
+});

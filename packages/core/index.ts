@@ -11,12 +11,18 @@ type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-export interface BaseOptions {
+export interface BaseOptions<TBuildEnv extends Record<string, ZodType>> {
   /**
    * How to determine whether the app is running on the server or the client.
    * @default typeof window === "undefined"
    */
   isServer?: boolean;
+
+  /**
+   * Variables that are provided by build tools and is available to both client and server,
+   * and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
+   */
+  buildEnvs?: TBuildEnv;
 
   /**
    * Called when validation fails. By default the error is logged,
@@ -37,7 +43,8 @@ export interface BaseOptions {
   skipValidation?: boolean;
 }
 
-export interface LooseOptions extends BaseOptions {
+export interface LooseOptions<TBuildEnv extends Record<string, ZodType>>
+  extends BaseOptions<TBuildEnv> {
   runtimeEnvStrict?: never;
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
@@ -49,8 +56,9 @@ export interface LooseOptions extends BaseOptions {
 export interface StrictOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
-> extends BaseOptions {
+  TClient extends Record<string, ZodType>,
+  TBuildEnv extends Record<string, ZodType>
+> extends BaseOptions<TBuildEnv> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -65,7 +73,10 @@ export interface StrictOptions<
         [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
           ? never
           : TKey;
-      }[keyof TServer],
+      }[keyof TServer]
+    | {
+        [TKey in keyof TBuildEnv]: TKey extends string ? TKey : never;
+      }[keyof TBuildEnv],
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
@@ -124,35 +135,44 @@ export type ServerClientOptions<
 export type EnvOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
+  TClient extends Record<string, ZodType>,
+  TBuildEnv extends Record<string, ZodType>
 > =
-  | (LooseOptions & ServerClientOptions<TPrefix, TServer, TClient>)
-  | (StrictOptions<TPrefix, TServer, TClient> &
+  | (LooseOptions<TBuildEnv> & ServerClientOptions<TPrefix, TServer, TClient>)
+  | (StrictOptions<TPrefix, TServer, TClient, TBuildEnv> &
       ServerClientOptions<TPrefix, TServer, TClient>);
 
 export function createEnv<
   TPrefix extends string = "",
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
-  TClient extends Record<string, ZodType> = NonNullable<unknown>
+  TClient extends Record<string, ZodType> = NonNullable<unknown>,
+  TBuildEnv extends Record<string, ZodType> = NonNullable<unknown>
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient>
-): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
+  opts: EnvOptions<TPrefix, TServer, TClient, TBuildEnv>
+): Simplify<
+  z.infer<ZodObject<TServer>> &
+    z.infer<ZodObject<TClient>> &
+    z.infer<ZodObject<TBuildEnv>>
+> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const skip = !!opts.skipValidation;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
 
+  const _buildEnvs = typeof opts.buildEnvs === "object" ? opts.buildEnvs : {};
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
+  const buildEnvs = z.object(_buildEnvs);
   const client = z.object(_client);
   const server = z.object(_server);
   const isServer = opts.isServer ?? typeof window === "undefined";
 
-  const merged = server.merge(client);
+  const allClient = client.merge(buildEnvs);
+  const allServer = server.merge(buildEnvs).merge(client);
   const parsed = isServer
-    ? merged.safeParse(runtimeEnv) // on server we can validate all env vars
-    : client.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
+    ? allServer.safeParse(runtimeEnv) // on server we can validate all env vars
+    : allClient.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
 
   const onValidationError =
     opts.onValidationError ??
@@ -182,7 +202,8 @@ export function createEnv<
       if (
         !isServer &&
         opts.clientPrefix &&
-        !prop.startsWith(opts.clientPrefix)
+        !prop.startsWith(opts.clientPrefix) &&
+        buildEnvs.shape[prop as keyof typeof buildEnvs.shape] === undefined
       ) {
         return onInvalidAccess(prop);
       }
