@@ -78,7 +78,16 @@ test("runtimeEnv enforces all keys", () => {
   });
 });
 
-test("runtimeEnv is now optional", () => {
+test("new experimental runtime option only requires client vars", () => {
+  ignoreErrors(() => {
+    createEnv({
+      server: { BAR: z.string() },
+      client: { NEXT_PUBLIC_BAR: z.string() },
+      // @ts-expect-error - NEXT_PUBLIC_BAR is missing
+      experimental__runtimeEnv: {},
+    });
+  });
+
   process.env = {
     BAR: "bar",
     NEXT_PUBLIC_BAR: "foo",
@@ -87,6 +96,9 @@ test("runtimeEnv is now optional", () => {
   const env = createEnv({
     server: { BAR: z.string() },
     client: { NEXT_PUBLIC_BAR: z.string() },
+    experimental__runtimeEnv: {
+      NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
+    },
   });
 
   expectTypeOf(env).toEqualTypeOf<{

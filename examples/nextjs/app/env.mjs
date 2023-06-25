@@ -9,7 +9,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GREETING: z.string(),
   },
 
-  runtimeEnv: {
+  experimental__runtimeEnv: {
     NEXT_PUBLIC_GREETING: process.env.NEXT_PUBLIC_GREETING,
   },
 
