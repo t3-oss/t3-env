@@ -34,26 +34,8 @@ export function createEnv<
     ZodType
   > = NonNullable<unknown>
 >({ runtimeEnv, ...opts }: Options<TServer, TClient>) {
-  const client =
-    typeof opts.client === "object"
-      ? opts.client
-      : ({} as {
-          [TKey in keyof TClient]: TKey extends `NEXT_PUBLIC_${string}`
-            ? TClient[TKey]
-            : `${TKey extends string
-                ? TKey
-                : never} is not prefixed with NEXT_PUBLIC_.`;
-        });
-  const server =
-    typeof opts.server === "object"
-      ? opts.server
-      : ({} as {
-          [TKey in keyof TServer]: TKey extends `NEXT_PUBLIC_${string}`
-            ? `${TKey extends `NEXT_PUBLIC_${string}`
-                ? TKey
-                : never} should not prefixed with NEXT_PUBLIC_.`
-            : TServer[TKey];
-        });
+  const client = typeof opts.client === "object" ? opts.client : {};
+  const server = typeof opts.server === "object" ? opts.server : {};
 
   return createEnvCore<ClientPrefix, TServer, TClient>({
     ...opts,

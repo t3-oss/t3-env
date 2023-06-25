@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.4.1
+
+### Patch Changes
+
+- [#78](https://github.com/t3-oss/t3-env/pull/78) [`245f6ad`](https://github.com/t3-oss/t3-env/commit/245f6ad1d763f9d5c260f093bd4dfb686333cc4f) Thanks [@chungweileong94](https://github.com/chungweileong94)! - Cleanup types
+
 ## 0.4.0
 
 ### Minor Changes
