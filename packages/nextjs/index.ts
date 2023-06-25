@@ -12,9 +12,9 @@ type ClientPrefix = typeof CLIENT_PREFIX;
 type Options<
   TServer extends Record<string, ZodType>,
   TClient extends Record<`${ClientPrefix}${string}`, ZodType>,
-  TBuildEnv extends Record<string, ZodType>
+  TShared extends Record<string, ZodType>
 > = Omit<
-  StrictOptions<ClientPrefix, TServer, TClient, TBuildEnv> &
+  StrictOptions<ClientPrefix, TServer, TClient, TShared> &
     ServerClientOptions<ClientPrefix, TServer, TClient>,
   "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
 > &
@@ -27,7 +27,7 @@ type Options<
           ClientPrefix,
           TServer,
           TClient,
-          TBuildEnv
+          TShared
         >["runtimeEnvStrict"];
         experimental__runtimeEnv?: never;
       }
@@ -44,8 +44,8 @@ type Options<
                 : never;
             }[keyof TClient]
           | {
-              [TKey in keyof TBuildEnv]: TKey extends string ? TKey : never;
-            }[keyof TBuildEnv],
+              [TKey in keyof TShared]: TKey extends string ? TKey : never;
+            }[keyof TShared],
           string | boolean | number | undefined
         >;
       }
@@ -57,11 +57,11 @@ export function createEnv<
     `${ClientPrefix}${string}`,
     ZodType
   > = NonNullable<unknown>,
-  TBuildEnv extends Record<string, ZodType> = NonNullable<unknown>
->(opts: Options<TServer, TClient, TBuildEnv>) {
-  const buildEnvs = typeof opts.buildEnvs === "object" ? opts.buildEnvs : {};
+  TShared extends Record<string, ZodType> = NonNullable<unknown>
+>(opts: Options<TServer, TClient, TShared>) {
   const client = typeof opts.client === "object" ? opts.client : {};
   const server = typeof opts.server === "object" ? opts.server : {};
+  const shared = typeof opts.shared === "object" ? opts.shared : {};
 
   const runtimeEnv = opts.runtimeEnv
     ? opts.runtimeEnv
@@ -70,11 +70,11 @@ export function createEnv<
         ...opts.experimental__runtimeEnv,
       };
 
-  return createEnvCore<ClientPrefix, TServer, TClient, TBuildEnv>({
+  return createEnvCore<ClientPrefix, TServer, TClient, TShared>({
     ...opts,
     // FIXME: don't require this `as any` cast
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-    buildEnvs: buildEnvs as any,
+    shared: shared as any,
     client,
     server,
     clientPrefix: CLIENT_PREFIX,

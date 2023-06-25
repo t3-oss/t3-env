@@ -319,7 +319,7 @@ describe("client/server only mode", () => {
   });
 });
 
-describe("buildEnvs can be accessed on both server and client", () => {
+describe("shared can be accessed on both server and client", () => {
   process.env = {
     NODE_ENV: "development",
     BAR: "bar",
@@ -327,7 +327,7 @@ describe("buildEnvs can be accessed on both server and client", () => {
   };
 
   const env = createEnv({
-    buildEnvs: {
+    shared: {
       NODE_ENV: z.enum(["development", "production", "test"]),
     },
     clientPrefix: "FOO_",

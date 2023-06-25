@@ -103,7 +103,7 @@ test("new experimental runtime option only requires client vars", () => {
   };
 
   const env = createEnv({
-    buildEnvs: {
+    shared: {
       NODE_ENV: z.enum(["development", "production"]),
     },
     server: { BAR: z.string() },

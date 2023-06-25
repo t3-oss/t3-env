@@ -11,7 +11,7 @@ type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-export interface BaseOptions<TBuildEnv extends Record<string, ZodType>> {
+export interface BaseOptions<TShared extends Record<string, ZodType>> {
   /**
    * How to determine whether the app is running on the server or the client.
    * @default typeof window === "undefined"
@@ -19,10 +19,10 @@ export interface BaseOptions<TBuildEnv extends Record<string, ZodType>> {
   isServer?: boolean;
 
   /**
-   * Variables that are provided by build tools and is available to both client and server,
-   * and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
+   * Shared variables, often those that are provided by build tools and is available to both client and server,
+   * but isn't prefixed and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
    */
-  buildEnvs?: TBuildEnv;
+  shared?: TShared;
 
   /**
    * Called when validation fails. By default the error is logged,
@@ -43,8 +43,8 @@ export interface BaseOptions<TBuildEnv extends Record<string, ZodType>> {
   skipValidation?: boolean;
 }
 
-export interface LooseOptions<TBuildEnv extends Record<string, ZodType>>
-  extends BaseOptions<TBuildEnv> {
+export interface LooseOptions<TShared extends Record<string, ZodType>>
+  extends BaseOptions<TShared> {
   runtimeEnvStrict?: never;
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
@@ -57,8 +57,8 @@ export interface StrictOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
-  TBuildEnv extends Record<string, ZodType>
-> extends BaseOptions<TBuildEnv> {
+  TShared extends Record<string, ZodType>
+> extends BaseOptions<TShared> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -75,8 +75,8 @@ export interface StrictOptions<
           : TKey;
       }[keyof TServer]
     | {
-        [TKey in keyof TBuildEnv]: TKey extends string ? TKey : never;
-      }[keyof TBuildEnv],
+        [TKey in keyof TShared]: TKey extends string ? TKey : never;
+      }[keyof TShared],
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
@@ -136,23 +136,23 @@ export type EnvOptions<
   TPrefix extends string,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
-  TBuildEnv extends Record<string, ZodType>
+  TShared extends Record<string, ZodType>
 > =
-  | (LooseOptions<TBuildEnv> & ServerClientOptions<TPrefix, TServer, TClient>)
-  | (StrictOptions<TPrefix, TServer, TClient, TBuildEnv> &
+  | (LooseOptions<TShared> & ServerClientOptions<TPrefix, TServer, TClient>)
+  | (StrictOptions<TPrefix, TServer, TClient, TShared> &
       ServerClientOptions<TPrefix, TServer, TClient>);
 
 export function createEnv<
   TPrefix extends string = "",
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
-  TBuildEnv extends Record<string, ZodType> = NonNullable<unknown>
+  TShared extends Record<string, ZodType> = NonNullable<unknown>
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient, TBuildEnv>
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared>
 ): Simplify<
   z.infer<ZodObject<TServer>> &
     z.infer<ZodObject<TClient>> &
-    z.infer<ZodObject<TBuildEnv>>
+    z.infer<ZodObject<TShared>>
 > {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
@@ -160,16 +160,16 @@ export function createEnv<
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   if (skip) return runtimeEnv as any;
 
-  const _buildEnvs = typeof opts.buildEnvs === "object" ? opts.buildEnvs : {};
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
-  const buildEnvs = z.object(_buildEnvs);
+  const _shared = typeof opts.shared === "object" ? opts.shared : {};
   const client = z.object(_client);
   const server = z.object(_server);
+  const shared = z.object(_shared);
   const isServer = opts.isServer ?? typeof window === "undefined";
 
-  const allClient = client.merge(buildEnvs);
-  const allServer = server.merge(buildEnvs).merge(client);
+  const allClient = client.merge(shared);
+  const allServer = server.merge(shared).merge(client);
   const parsed = isServer
     ? allServer.safeParse(runtimeEnv) // on server we can validate all env vars
     : allClient.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
@@ -203,7 +203,7 @@ export function createEnv<
         !isServer &&
         opts.clientPrefix &&
         !prop.startsWith(opts.clientPrefix) &&
-        buildEnvs.shape[prop as keyof typeof buildEnvs.shape] === undefined
+        shared.shape[prop as keyof typeof shared.shape] === undefined
       ) {
         return onInvalidAccess(prop);
       }
