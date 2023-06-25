@@ -65,6 +65,7 @@ export function createEnv<
     : {
         ...process.env,
         ...opts.experimental__runtimeEnv,
+        NODE_ENV: process.env.NODE_ENV,
       };
 
   return createEnvCore<ClientPrefix, TServer, TClient>({
