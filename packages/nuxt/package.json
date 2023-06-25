@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nuxt",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "keywords": [
     "create-t3-app",
     "environment variables",
@@ -39,7 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "0.5.1"
+    "@t3-oss/env-core": "0.6.0"
   },
   "peerDependencies": {
     "typescript": ">=4.7.2",

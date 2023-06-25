@@ -1,5 +1,13 @@
 # @t3-oss/env-core
 
+## 0.6.0
+
+### Minor Changes
+
+- [#90](https://github.com/t3-oss/t3-env/pull/90) [`1f6de0f`](https://github.com/t3-oss/t3-env/commit/1f6de0fca26160ee67bbb6179e5fc09404766940) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - feat: add `shared` section for shared variables
+
+  shared variables are variables that are available in all runtimes despite them not being prefixed by anything, and is not manually supplied by the user.
+
 ## 0.5.1
 
 ## 0.5.0
