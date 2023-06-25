@@ -1,5 +1,14 @@
 # @t3-oss/env-nextjs
 
+## 0.5.1
+
+### Patch Changes
+
+- [`c19acc0`](https://github.com/t3-oss/t3-env/commit/c19acc07f4396b90d3acc8a7fcc53f765e052ce3) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - fix: ensure NODE_ENV is present in build output
+
+- Updated dependencies []:
+  - @t3-oss/env-core@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes
