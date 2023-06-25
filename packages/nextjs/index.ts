@@ -9,25 +9,44 @@ import {
 const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
 type ClientPrefix = typeof CLIENT_PREFIX;
 
-interface Options<
+type Options<
   TServer extends Record<string, ZodType>,
   TClient extends Record<`${ClientPrefix}${string}`, ZodType>,
   TBuildEnv extends Record<string, ZodType>
-> extends Omit<
-    StrictOptions<ClientPrefix, TServer, TClient, TBuildEnv> &
-      ServerClientOptions<ClientPrefix, TServer, TClient>,
-    "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
-  > {
-  /**
-   * Manual destruction of `process.env`. Required for Next.js.
-   */
-  runtimeEnv: StrictOptions<
-    ClientPrefix,
-    TServer,
-    TClient,
-    TBuildEnv
-  >["runtimeEnvStrict"];
-}
+> = Omit<
+  StrictOptions<ClientPrefix, TServer, TClient, TBuildEnv> &
+    ServerClientOptions<ClientPrefix, TServer, TClient>,
+  "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
+> &
+  (
+    | {
+        /**
+         * Manual destruction of `process.env`. Required for Next.js < 13.4.4.
+         */
+        runtimeEnv: StrictOptions<
+          ClientPrefix,
+          TServer,
+          TClient,
+          TBuildEnv
+        >["runtimeEnvStrict"];
+        experimental__runtimeEnv?: never;
+      }
+    | {
+        runtimeEnv?: never;
+        /**
+         * Can be used for Next.js ^13.4.4 since they stopped static analysis of server side `process.env`.
+         * Only client side `process.env` is statically analyzed and needs to be manually destructured.
+         */
+        experimental__runtimeEnv: Record<
+          {
+            [TKey in keyof TClient]: TKey extends `${ClientPrefix}${string}`
+              ? TKey
+              : never;
+          }[keyof TClient],
+          string | boolean | number | undefined
+        >;
+      }
+  );
 
 export function createEnv<
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
@@ -36,12 +55,19 @@ export function createEnv<
     ZodType
   > = NonNullable<unknown>,
   TBuildEnv extends Record<string, ZodType> = NonNullable<unknown>
->({ runtimeEnv, ...opts }: Options<TServer, TClient, TBuildEnv>) {
+>(opts: Options<TServer, TClient, TBuildEnv>) {
   const buildEnvs = typeof opts.buildEnvs === "object" ? opts.buildEnvs : {};
   const client = typeof opts.client === "object" ? opts.client : {};
   const server = typeof opts.server === "object" ? opts.server : {};
 
-  return createEnvCore<ClientPrefix, TServer, TClient, TBuildEnv>({
+  const runtimeEnv = opts.runtimeEnv
+    ? opts.runtimeEnv
+    : {
+        ...process.env,
+        ...opts.experimental__runtimeEnv,
+      };
+
+  return createEnvCore<ClientPrefix, TServer, TClient>({
     ...opts,
     // FIXME: don't require this `as any` cast
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
@@ -49,6 +75,6 @@ export function createEnv<
     client,
     server,
     clientPrefix: CLIENT_PREFIX,
-    runtimeEnvStrict: runtimeEnv,
+    runtimeEnv,
   });
 }
