@@ -1,5 +1,5 @@
 import { expect, expectTypeOf, test, describe } from "vitest";
-
+import Joi from "joi";
 import { createEnv } from "..";
 import z from "zod";
 
@@ -14,6 +14,7 @@ function ignoreErrors(cb: () => void) {
 test("server vars should not be prefixed", () => {
   ignoreErrors(() => {
     createEnv({
+      validator: "joi",
       clientPrefix: "FOO_",
       server: {
         // @ts-expect-error - server should not have FOO_ prefix
@@ -29,6 +30,7 @@ test("server vars should not be prefixed", () => {
 test("client vars should be correctly prefixed", () => {
   ignoreErrors(() => {
     createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       server: {},
       client: {
@@ -43,6 +45,7 @@ test("client vars should be correctly prefixed", () => {
 
 test("runtimeEnvStrict enforces all keys", () => {
   createEnv({
+    validator: "zod",
     clientPrefix: "FOO_",
     server: {},
     client: {},
@@ -50,6 +53,7 @@ test("runtimeEnvStrict enforces all keys", () => {
   });
 
   createEnv({
+    validator: "zod",
     clientPrefix: "FOO_",
     server: {},
     client: { FOO_BAR: z.string() },
@@ -57,6 +61,7 @@ test("runtimeEnvStrict enforces all keys", () => {
   });
 
   createEnv({
+    validator: "zod",
     clientPrefix: "FOO_",
     server: { BAR: z.string() },
     client: {},
@@ -64,6 +69,7 @@ test("runtimeEnvStrict enforces all keys", () => {
   });
 
   createEnv({
+    validator: "zod",
     clientPrefix: "FOO_",
     server: { BAR: z.string() },
     client: { FOO_BAR: z.string() },
@@ -71,6 +77,7 @@ test("runtimeEnvStrict enforces all keys", () => {
   });
 
   createEnv({
+    validator: "zod",
     clientPrefix: "FOO_",
     server: {},
     client: { FOO_BAR: z.string() },
@@ -83,6 +90,7 @@ test("runtimeEnvStrict enforces all keys", () => {
 
   ignoreErrors(() => {
     createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       server: { BAR: z.string() },
       client: { FOO_BAR: z.string() },
@@ -97,6 +105,7 @@ test("runtimeEnvStrict enforces all keys", () => {
 describe("return type is correctly inferred", () => {
   test("simple", () => {
     const env = createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       server: { BAR: z.string() },
       client: { FOO_BAR: z.string() },
@@ -119,6 +128,7 @@ describe("return type is correctly inferred", () => {
 
   test("with transforms", () => {
     const env = createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       server: { BAR: z.string().transform(Number) },
       client: { FOO_BAR: z.string() },
@@ -141,6 +151,7 @@ describe("return type is correctly inferred", () => {
 
   test("without client vars", () => {
     const env = createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       server: { BAR: z.string() },
       client: {},
@@ -161,6 +172,7 @@ describe("return type is correctly inferred", () => {
 
 test("can pass number and booleans", () => {
   const env = createEnv({
+    validator: "zod",
     clientPrefix: "FOO_",
     server: {
       PORT: z.number(),
@@ -188,6 +200,7 @@ describe("errors when validation fails", () => {
   test("envs are missing", () => {
     expect(() =>
       createEnv({
+        validator: "zod",
         clientPrefix: "FOO_",
         server: { BAR: z.string() },
         client: { FOO_BAR: z.string() },
@@ -199,6 +212,7 @@ describe("errors when validation fails", () => {
   test("envs are invalid", () => {
     expect(() =>
       createEnv({
+        validator: "zod",
         clientPrefix: "FOO_",
         server: { BAR: z.string().transform(Number).pipe(z.number()) },
         client: { FOO_BAR: z.string() },
@@ -213,11 +227,12 @@ describe("errors when validation fails", () => {
   test("with custom error handler", () => {
     expect(() =>
       createEnv({
+        validator: "zod",
         clientPrefix: "FOO_",
         server: { BAR: z.string().transform(Number).pipe(z.number()) },
         client: { FOO_BAR: z.string() },
         runtimeEnv: {
-          BAR: "123abc",
+          BAR: 2,
           FOO_BAR: "foo",
         },
         onValidationError: (err) => {
@@ -234,6 +249,7 @@ describe("errors when validation fails", () => {
 describe("errors when server var is accessed on client", () => {
   test("with default handler", () => {
     const env = createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       server: { BAR: z.string() },
       client: { FOO_BAR: z.string() },
@@ -251,6 +267,7 @@ describe("errors when server var is accessed on client", () => {
 
   test("with custom handler", () => {
     const env = createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       server: { BAR: z.string() },
       client: { FOO_BAR: z.string() },
@@ -273,6 +290,7 @@ describe("errors when server var is accessed on client", () => {
 describe("client/server only mode", () => {
   test("client only", () => {
     const env = createEnv({
+      validator: "zod",
       clientPrefix: "FOO_",
       client: {
         FOO_BAR: z.string(),
@@ -286,6 +304,7 @@ describe("client/server only mode", () => {
 
   test("server only", () => {
     const env = createEnv({
+      validator: "zod",
       server: {
         BAR: z.string(),
       },
@@ -299,6 +318,7 @@ describe("client/server only mode", () => {
   test("config with missing client", () => {
     ignoreErrors(() => {
       createEnv({
+        validator: "zod",
         // @ts-expect-error - incomplete client config - client not present
         clientPrefix: "FOO_",
         server: {},
@@ -311,10 +331,447 @@ describe("client/server only mode", () => {
     ignoreErrors(() => {
       // @ts-expect-error - incomplete client config - clientPrefix not present
       createEnv({
+        validator: "zod",
         client: {},
         server: {},
         runtimeEnv: {},
       });
     });
+  });
+});
+
+describe("shared can be accessed on both server and client", () => {
+  process.env = {
+    NODE_ENV: "development",
+    BAR: "bar",
+    FOO_BAR: "foo",
+  };
+
+  const env = createEnv({
+    validator: "zod",
+    shared: {
+      NODE_ENV: z.enum(["development", "production", "test"]),
+    },
+    clientPrefix: "FOO_",
+    server: { BAR: z.string() },
+    client: { FOO_BAR: z.string() },
+    runtimeEnv: process.env,
+  });
+
+  expectTypeOf(env).toEqualTypeOf<{
+    NODE_ENV: "development" | "production" | "test";
+    BAR: string;
+    FOO_BAR: string;
+  }>();
+
+  test("server", () => {
+    const { window } = globalThis;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    globalThis.window = undefined as any;
+
+    expect(env).toMatchObject({
+      NODE_ENV: "development",
+      BAR: "bar",
+      FOO_BAR: "foo",
+    });
+
+    globalThis.window = window;
+  });
+
+  test("client", () => {
+    const { window } = globalThis;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    globalThis.window = {} as any;
+
+    expect(env).toMatchObject({
+      NODE_ENV: "development",
+      FOO_BAR: "foo",
+    });
+
+    globalThis.window = window;
+  });
+});
+
+// JOI tests
+test("server vars should not be prefixed", () => {
+  ignoreErrors(() => {
+    createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: {
+        // @ts-expect-error - server should not have FOO_ prefix
+        FOO_BAR: Joi.string(),
+        BAR: Joi.string(),
+      },
+      client: {},
+      runtimeEnv: {},
+    });
+  });
+});
+
+test("client vars should be correctly prefixed", () => {
+  ignoreErrors(() => {
+    createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: {},
+      client: {
+        FOO_BAR: Joi.string(),
+        // @ts-expect-error - no FOO_ prefix
+        BAR: Joi.string(),
+      },
+      runtimeEnv: {},
+    });
+  });
+});
+
+test("runtimeEnvStrict enforces all keys", () => {
+  createEnv({
+    validator: "joi",
+    clientPrefix: "FOO_",
+    server: {},
+    client: {},
+    runtimeEnvStrict: {},
+  });
+
+  createEnv({
+    validator: "joi",
+    clientPrefix: "FOO_",
+    server: {},
+    client: { FOO_BAR: Joi.string() },
+    runtimeEnvStrict: { FOO_BAR: "foo" },
+  });
+
+  createEnv({
+    validator: "joi",
+    clientPrefix: "FOO_",
+    server: { BAR: Joi.string() },
+    client: {},
+    runtimeEnvStrict: { BAR: "foo" },
+  });
+
+  createEnv({
+    validator: "joi",
+    clientPrefix: "FOO_",
+    server: { BAR: Joi.string() },
+    client: { FOO_BAR: Joi.string() },
+    runtimeEnvStrict: { BAR: "foo", FOO_BAR: "foo" },
+  });
+
+  createEnv({
+    validator: "joi",
+    clientPrefix: "FOO_",
+    server: {},
+    client: { FOO_BAR: Joi.string() },
+    runtimeEnvStrict: {
+      FOO_BAR: "foo",
+      // @ts-expect-error - FOO_BAZ is extraneous
+      FOO_BAZ: "baz",
+    },
+  });
+
+  ignoreErrors(() => {
+    createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: { BAR: Joi.string() },
+      client: { FOO_BAR: Joi.string() },
+      // @ts-expect-error - BAR is missing
+      runtimeEnvStrict: {
+        FOO_BAR: "foo",
+      },
+    });
+  });
+});
+
+describe("return type is correctly inferred", () => {
+  test("simple", () => {
+    const env = createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: { BAR: Joi.string() },
+      client: { FOO_BAR: Joi.string() },
+      runtimeEnvStrict: {
+        BAR: "bar",
+        FOO_BAR: "foo",
+      },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{
+      BAR: string;
+      FOO_BAR: string;
+    }>();
+
+    expect(env).toMatchObject({
+      BAR: "bar",
+      FOO_BAR: "foo",
+    });
+  });
+
+  test("with transforms", () => {
+    const env = createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: { BAR: Joi.number() },
+      client: { FOO_BAR: Joi.string() },
+      runtimeEnvStrict: {
+        BAR: "123",
+        FOO_BAR: "foo",
+      },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{
+      BAR: number;
+      FOO_BAR: string;
+    }>();
+
+    expect(env).toMatchObject({
+      BAR: 123,
+      FOO_BAR: "foo",
+    });
+  });
+
+  test("without client vars", () => {
+    const env = createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: { BAR: Joi.string() },
+      client: {},
+      runtimeEnvStrict: {
+        BAR: "bar",
+      },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{
+      BAR: string;
+    }>();
+
+    expect(env).toMatchObject({
+      BAR: "bar",
+    });
+  });
+});
+
+test("can pass number and booleans", () => {
+  const env = createEnv({
+    validator: "joi",
+    clientPrefix: "FOO_",
+    server: {
+      PORT: Joi.number(),
+      IS_DEV: Joi.boolean(),
+    },
+    client: {},
+    runtimeEnvStrict: {
+      PORT: 123,
+      IS_DEV: true,
+    },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<{
+    PORT: number;
+    IS_DEV: boolean;
+  }>();
+
+  expect(env).toMatchObject({
+    PORT: 123,
+    IS_DEV: true,
+  });
+});
+
+describe("errors when validation fails", () => {
+  test("envs are missing", () => {
+    expect(() =>
+      createEnv({
+        validator: "joi",
+        clientPrefix: "FOO_",
+        server: { BAR: Joi.string() },
+        client: { FOO_BAR: Joi.string() },
+        runtimeEnv: {},
+      })
+    ).toThrowErrorMatchingInlineSnapshot(`"Invalid environment variables"`);
+  });
+
+  test("envs are invalid", () => {
+    expect(() =>
+      createEnv({
+        validator: "joi",
+        clientPrefix: "FOO_",
+        server: { BAR: Joi.string() },
+        client: { FOO_BAR: Joi.string() },
+        runtimeEnv: {
+          BAR: "123abc",
+          FOO_BAR: "foo",
+        },
+      })
+    ).toThrowErrorMatchingInlineSnapshot(`"Invalid environment variables"`);
+  });
+
+  test("with custom error handler", () => {
+    expect(() =>
+      createEnv({
+        validator: "joi",
+        clientPrefix: "FOO_",
+        server: { BAR: Joi.string() },
+        client: { FOO_BAR: Joi.string() },
+        runtimeEnv: {
+          BAR: "123abc",
+          FOO_BAR: "foo",
+        },
+        onValidationError: (err) => {
+          const barError = err.issues.find((e) =>
+            e.path.includes("BAR")
+          )?.message;
+          throw new Error(`Invalid variable BAR: ${barError}`);
+        },
+      })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "Invalid variable BAR: \\"BAR\\" must be a number"
+    `);
+  });
+});
+
+describe("errors when server var is accessed on client", () => {
+  test("with default handler", () => {
+    const env = createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: { BAR: Joi.string() },
+      client: { FOO_BAR: Joi.string() },
+      runtimeEnvStrict: {
+        BAR: "bar",
+        FOO_BAR: "foo",
+      },
+      isServer: false,
+    });
+
+    expect(() => env.BAR).toThrowErrorMatchingInlineSnapshot(
+      "❌ Attempted to access a server-side environment variable on the client"
+    );
+  });
+
+  test("with custom handler", () => {
+    const env = createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      server: { BAR: Joi.string() },
+      client: { FOO_BAR: Joi.string() },
+      runtimeEnvStrict: {
+        BAR: "bar",
+        FOO_BAR: "foo",
+      },
+      isServer: false,
+      onInvalidAccess: (key) => {
+        throw new Error("Attempted to access ${key} on the client");
+      },
+    });
+
+    expect(() => env.BAR).toThrowErrorMatchingInlineSnapshot(
+      "Attempted to access BAR on the client"
+    );
+  });
+});
+
+describe("client/server only mode", () => {
+  test("client only", () => {
+    const env = createEnv({
+      validator: "joi",
+      clientPrefix: "FOO_",
+      client: {
+        FOO_BAR: Joi.string(),
+      },
+      runtimeEnv: { FOO_BAR: "foo" },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{ FOO_BAR: string }>();
+    expect(env).toMatchObject({ FOO_BAR: "foo" });
+  });
+
+  test("server only", () => {
+    const env = createEnv({
+      validator: "joi",
+      server: {
+        BAR: Joi.string(),
+      },
+      runtimeEnv: { BAR: "bar" },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<{ BAR: string }>();
+    expect(env).toMatchObject({ BAR: "bar" });
+  });
+
+  test("config with missing client", () => {
+    ignoreErrors(() => {
+      createEnv({
+        validator: "joi",
+        // @ts-expect-error - incomplete client config - client not present
+        clientPrefix: "FOO_",
+        server: {},
+        runtimeEnv: {},
+      });
+    });
+  });
+
+  test("config with missing clientPrefix", () => {
+    ignoreErrors(() => {
+      // @ts-expect-error - incomplete client config - clientPrefix not present
+      createEnv({
+        validator: "joi",
+        client: {},
+        server: {},
+        runtimeEnv: {},
+      });
+    });
+  });
+});
+
+describe("shared can be accessed on both server and client", () => {
+  process.env = {
+    NODE_ENV: "development",
+    BAR: "bar",
+    FOO_BAR: "foo",
+  };
+
+  const env = createEnv({
+    validator: "joi",
+    shared: {
+      NODE_ENV: Joi.string().valid("development", "production", "test"),
+    },
+    clientPrefix: "FOO_",
+    server: { BAR: Joi.string() },
+    client: { FOO_BAR: Joi.string() },
+    runtimeEnv: process.env,
+  });
+
+  expectTypeOf(env).toEqualTypeOf<{
+    NODE_ENV: "development" | "production" | "test";
+    BAR: string;
+    FOO_BAR: string;
+  }>();
+
+  test("server", () => {
+    const { window } = globalThis;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    globalThis.window = undefined as any;
+
+    expect(env).toMatchObject({
+      NODE_ENV: "development",
+      BAR: "bar",
+      FOO_BAR: "foo",
+    });
+
+    globalThis.window = window;
+  });
+
+  test("client", () => {
+    const { window } = globalThis;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    globalThis.window = {} as any;
+
+    expect(env).toMatchObject({
+      NODE_ENV: "development",
+      FOO_BAR: "foo",
+    });
+
+    globalThis.window = window;
   });
 });

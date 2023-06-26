@@ -5,12 +5,11 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "turbo build --filter env-nuxt && nuxt prepare"
+    "preview": "nuxt preview"
   },
   "devDependencies": {
-    "@types/node": "^18.15.13",
-    "nuxt": "^3.4.2"
+    "@types/node": "^18.16.18",
+    "nuxt": "^3.6.0"
   },
   "dependencies": {
     "@t3-oss/env-nuxt": "0.5.1",

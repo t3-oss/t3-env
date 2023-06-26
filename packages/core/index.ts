@@ -1,4 +1,5 @@
-import { z, type ZodError, type ZodObject, type ZodType } from "zod";
+import Joi, { AnySchema, ValidationError } from "joi";
+import { z, ZodType, ZodError } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
@@ -11,7 +12,9 @@ type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-export interface BaseOptions {
+export interface BaseOptions<
+  TShared extends Record<string, ZodType | AnySchema<any>>
+> {
   /**
    * How to determine whether the app is running on the server or the client.
    * @default typeof window === "undefined"
@@ -19,10 +22,16 @@ export interface BaseOptions {
   isServer?: boolean;
 
   /**
+   * Shared variables, often those that are provided by build tools and is available to both client and server,
+   * but isn't prefixed and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
+   */
+  shared?: TShared;
+
+  /**
    * Called when validation fails. By default the error is logged,
    * and an error is thrown telling what environment variables are invalid.
    */
-  onValidationError?: (error: ZodError) => never;
+  onValidationError?: (error: ZodError | ValidationError) => never;
 
   /**
    * Called when a server-side environment variable is accessed on the client.
@@ -35,9 +44,17 @@ export interface BaseOptions {
    * @default false
    */
   skipValidation?: boolean;
+
+  /**
+   * Validator
+   * @default zod
+   */
+  validator?: "zod" | "joi";
 }
 
-export interface LooseOptions extends BaseOptions {
+export interface LooseOptions<
+  TShared extends Record<string, ZodType | AnySchema<any>>
+> extends BaseOptions<TShared> {
   runtimeEnvStrict?: never;
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
@@ -48,9 +65,10 @@ export interface LooseOptions extends BaseOptions {
 
 export interface StrictOptions<
   TPrefix extends string,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
-> extends BaseOptions {
+  TServer extends Record<string, ZodType | AnySchema<any>>,
+  TClient extends Record<string, ZodType | AnySchema<any>>,
+  TShared extends Record<string, ZodType | AnySchema<any>>
+> extends BaseOptions<TShared> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -65,7 +83,10 @@ export interface StrictOptions<
         [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
           ? never
           : TKey;
-      }[keyof TServer],
+      }[keyof TServer]
+    | {
+        [TKey in keyof TShared]: TKey extends string ? TKey : never;
+      }[keyof TShared],
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
@@ -73,7 +94,7 @@ export interface StrictOptions<
 
 export interface ClientOptions<
   TPrefix extends string,
-  TClient extends Record<string, ZodType>
+  TClient extends Record<string, ZodType | AnySchema<any>>
 > {
   /**
    * Client-side environment variables are exposed to the client by default. Set what prefix they have
@@ -95,7 +116,7 @@ export interface ClientOptions<
 
 export interface ServerOptions<
   TPrefix extends string,
-  TServer extends Record<string, ZodType>
+  TServer extends Record<string, ZodType | AnySchema<any>>
 > {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
@@ -114,8 +135,8 @@ export interface ServerOptions<
 
 export type ServerClientOptions<
   TPrefix extends string,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
+  TServer extends Record<string, ZodType | AnySchema<any>>,
+  TClient extends Record<string, ZodType | AnySchema<any>>
 > =
   | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
   | (ServerOptions<TPrefix, TServer> & Impossible<ClientOptions<never, never>>)
@@ -123,20 +144,67 @@ export type ServerClientOptions<
 
 export type EnvOptions<
   TPrefix extends string,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
+  TServer extends Record<string, ZodType | AnySchema<any>>,
+  TClient extends Record<string, ZodType | AnySchema<any>>,
+  TShared extends Record<string, ZodType | AnySchema<any>>
 > =
-  | (LooseOptions & ServerClientOptions<TPrefix, TServer, TClient>)
-  | (StrictOptions<TPrefix, TServer, TClient> &
+  | (LooseOptions<TShared> & ServerClientOptions<TPrefix, TServer, TClient>)
+  | (StrictOptions<TPrefix, TServer, TClient, TShared> &
       ServerClientOptions<TPrefix, TServer, TClient>);
+
+export function validateWithZod(schema: z.ZodObject<any>, data: unknown) {
+  try {
+    return schema.parse(data);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      console.error(
+        "❌ Invalid environment variables:",
+        error.issues.map((issue) => `\n  - ${issue.message}`).join("")
+      );
+      throw new Error("Invalid environment variables");
+    }
+    throw error;
+  }
+}
+
+export function validateWithJoi<T>(
+  schema: Joi.Schema<T>,
+  data: unknown
+): Partial<T> {
+  const { error, value } = schema.validate(data, {
+    stripUnknown: true,
+  });
+
+  if (error) {
+    console.error(
+      "❌ Invalid environment variables: \n",
+      error.details.map((detail) => `  - ${detail.message}`).join(`\n`)
+    );
+    throw new Error("Invalid environment variables");
+  }
+
+  return value;
+}
 
 export function createEnv<
   TPrefix extends string = "",
-  TServer extends Record<string, ZodType> = NonNullable<unknown>,
-  TClient extends Record<string, ZodType> = NonNullable<unknown>
+  TServer extends Record<
+    string,
+    ZodType | AnySchema<any>
+  > = NonNullable<unknown>,
+  TClient extends Record<
+    string,
+    ZodType | AnySchema<any>
+  > = NonNullable<unknown>,
+  TShared extends Record<
+    string,
+    ZodType | AnySchema<any>
+  > = NonNullable<unknown>
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient>
-): Simplify<z.infer<ZodObject<TServer>> & z.infer<ZodObject<TClient>>> {
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared>
+): {
+  [key: string]: string | boolean | number | undefined;
+} {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const skip = !!opts.skipValidation;
@@ -145,24 +213,55 @@ export function createEnv<
 
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
-  const client = z.object(_client);
-  const server = z.object(_server);
+  const _shared = typeof opts.shared === "object" ? opts.shared : {};
+
+  const isZod = () => {
+    if (opts.validator === "joi") {
+      return false;
+    }
+    return true;
+  };
+
+  const returnObject = (obj: any) => {
+    return isZod() ? z.object(obj) : Joi.object(obj);
+  };
+
+  const client = returnObject(_client);
+  const server = returnObject(_server);
+  const shared = returnObject(_shared);
+
   const isServer = opts.isServer ?? typeof window === "undefined";
 
-  const merged = server.merge(client);
-  const parsed = isServer
-    ? merged.safeParse(runtimeEnv) // on server we can validate all env vars
-    : client.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
-
-  const onValidationError =
-    opts.onValidationError ??
-    ((error: ZodError) => {
-      console.error(
-        "❌ Invalid environment variables:",
-        error.flatten().fieldErrors
+  const merge = (
+    obj1: z.ZodObject<any> | Joi.AnySchema<any>,
+    ...rest: Array<z.ZodObject<any> | Joi.AnySchema<any>>
+  ): z.ZodObject<any> | Joi.AnySchema<any> => {
+    if (isZod()) {
+      const toMerge = obj1 as z.ZodObject<any>;
+      const merged = rest.reduce<z.ZodObject<any>>(
+        (acc, schema) => acc.merge(schema as z.ZodObject<any>),
+        toMerge
       );
-      throw new Error("Invalid environment variables");
-    });
+      return merged;
+    } else {
+      const toMerge = obj1 as Joi.AnySchema<any>;
+      const merged = rest.reduce<Joi.AnySchema<any>>(
+        (acc, schema) => acc.concat(schema as Joi.AnySchema<any>),
+        toMerge
+      );
+      return merged;
+    }
+  };
+
+  const allClient = merge(client, shared);
+  const allServer = merge(shared, client, server);
+  const parsed = isZod()
+    ? isServer
+      ? validateWithZod(allServer as z.ZodObject<any>, runtimeEnv)
+      : validateWithZod(allClient as z.ZodObject<any>, runtimeEnv)
+    : isServer
+    ? validateWithJoi(allServer as Joi.AnySchema<any>, runtimeEnv)
+    : validateWithJoi(allClient as Joi.AnySchema<any>, runtimeEnv);
 
   const onInvalidAccess =
     opts.onInvalidAccess ??
@@ -172,11 +271,7 @@ export function createEnv<
       );
     });
 
-  if (parsed.success === false) {
-    return onValidationError(parsed.error);
-  }
-
-  const env = new Proxy(parsed.data, {
+  const env = new Proxy(parsed, {
     get(target, prop) {
       if (typeof prop !== "string") return undefined;
       if (
@@ -190,6 +285,8 @@ export function createEnv<
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
-  return env as any;
+  // eslint-disable-next c-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+  return env as {
+    [key: string]: string | boolean | number | undefined;
+  };
 }
