@@ -47,3 +47,21 @@ export const env = createEnv({
   // ...
 });
 ```
+
+## Plasmo
+
+Since [plasmo](https://github.com/PlasmoHQ/plasmo) doesn't have it's own config file, like next.js, if you want to validate your env vars at build you have to find another file to put import your env.ts file so that it'll be validated when your extension is built. One such file is the tailwind config file, so if you make your tailwind.config.js: 
+
+```js
+import "./src/utils/env";
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  mode: "jit",
+  darkMode: "class",
+  content: ["./**/*.tsx"],
+  plugins: [],
+};
+```
+
+Your env vars are validated at build.
