@@ -36,7 +36,8 @@
     "lint": "eslint . --ext .ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pkg": "ts-node-dev ./index.ts"
   },
   "peerDependencies": {
     "typescript": ">=4.7.2",
@@ -47,5 +48,9 @@
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
     "zod": "^3.20.2"
+  },
+  "dependencies": {
+    "joi": "^17.9.2",
+    "ts-node-dev": "^2.0.0"
   }
 }

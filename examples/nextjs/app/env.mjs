@@ -1,18 +1,14 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { joiAdapter, zodAdapter } from "@t3-oss/env-nextjs";
+import Joi from "joi";
 
-export const env = createEnv({
+export const env = joiAdapter({
   client: {
-    NEXT_PUBLIC_GREETING: z.string(),
+    NEXT_PUBLIC_GREETING: Joi.string(),
   },
   server: {
-    SECRET: z.string(),
-  },
-  shared: {
-    NODE_ENV: z.enum(["development", "production"]),
+    SECRET: Joi.number(),
   },
   experimental__runtimeEnv: {
-    NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_GREETING: process.env.NEXT_PUBLIC_GREETING,
+    NEXT_PUBLIC_GREETING: "wads",
   },
 });
