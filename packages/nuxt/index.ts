@@ -1,33 +1,43 @@
-import type { ZodType } from "zod";
+import { ZodType } from "zod";
+
+import { CLIENT_PREFIX, ClientPrefix, ZodOptions, JoiOptions } from "./types";
 import {
-  createEnv as createEnvCore,
-  ServerClientOptions,
-  StrictOptions,
+  zodAdapter as createZodAdapter,
+  joiAdapter as createJoiAdapter,
 } from "../core";
+import { AnySchema } from "joi";
 
-const CLIENT_PREFIX = "NUXT_PUBLIC_" as const;
-type ClientPrefix = typeof CLIENT_PREFIX;
-
-type Options<
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<`${ClientPrefix}${string}`, ZodType>,
-  TShared extends Record<string, ZodType>
-> = Omit<
-  StrictOptions<ClientPrefix, TServer, TClient, TShared> &
-    ServerClientOptions<ClientPrefix, TServer, TClient>,
-  "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
->;
-
-export function createEnv<
+export function zodAdapter<
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
   TShared extends Record<string, ZodType> = NonNullable<unknown>
->(opts: Options<TServer, TClient, TShared>) {
+>(opts: ZodOptions<TServer, TClient, TShared>) {
   const client = typeof opts.client === "object" ? opts.client : {};
   const server = typeof opts.server === "object" ? opts.server : {};
   const shared = typeof opts.shared === "object" ? opts.shared : {};
 
-  return createEnvCore<ClientPrefix, TServer, TClient, TShared>({
+  return createZodAdapter<ClientPrefix, TServer, TClient, TShared>({
+    ...opts,
+    // FIXME: don't require this `as any` cast
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    shared: shared as any,
+    client,
+    server,
+    clientPrefix: CLIENT_PREFIX,
+    runtimeEnv: process.env,
+  });
+}
+
+export function joiAdapter<
+  TServer extends Record<string, AnySchema<any>> = NonNullable<unknown>,
+  TClient extends Record<string, AnySchema<any>> = NonNullable<unknown>,
+  TShared extends Record<string, AnySchema<any>> = NonNullable<unknown>
+>(opts: JoiOptions<TServer, TClient, TShared>) {
+  const client = typeof opts.client === "object" ? opts.client : {};
+  const server = typeof opts.server === "object" ? opts.server : {};
+  const shared = typeof opts.shared === "object" ? opts.shared : {};
+
+  return createJoiAdapter<ClientPrefix, TServer, TClient, TShared>({
     ...opts,
     // FIXME: don't require this `as any` cast
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
