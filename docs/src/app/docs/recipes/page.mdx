@@ -25,6 +25,10 @@ export const env = createEnv({
       .refine((s) => s === "true" || s === "false")
       // transform to boolean
       .transform((s) => s === "true"),
+
+    // Alternatively, use Zod's default primitives coercion
+    // https://zod.dev/?id=coercion-for-primitives
+    ZOD_BOOLEAN_COERCION: z.coerce.boolean(),
   },
   // ...
 });
@@ -43,6 +47,10 @@ export const env = createEnv({
       .transform((s) => parseInt(s, 10))
       // make sure transform worked
       .pipe(z.number()),
+
+    // Alternatively, use Zod's default primitives coercion
+    // https://zod.dev/?id=coercion-for-primitives
+    ZOD_NUMBER_COERCION: z.coerce.number(),
   },
   // ...
 });
