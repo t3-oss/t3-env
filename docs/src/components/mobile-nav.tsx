@@ -7,7 +7,6 @@ import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
 
-import { ThemeToggle } from "./theme-toggle";
 import { NavItem } from "./main-nav";
 import { NestedNavItem } from "./sidebar";
 import { PopoverClose } from "@radix-ui/react-popover";
@@ -72,9 +71,6 @@ export function MobileDropdown(props: {
             </div>
           ))}
         </ScrollArea>
-        <div className="border-t pt-4">
-          <ThemeToggle />
-        </div>
       </PopoverContent>
     </Popover>
   );
