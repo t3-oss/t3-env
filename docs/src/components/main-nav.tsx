@@ -30,7 +30,7 @@ export function MainNav(props: { items: NavItem[] }) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "text-muted-foreground text-sm font-medium transition-colors hover:text-accent-foreground",
+                    "text-foreground/60 text-sm font-medium transition-colors hover:text-foreground/80",
                     item.disabled && "cursor-not-allowed opacity-80",
                     item.href === pathname && "text-foreground"
                   )}
