@@ -9,28 +9,29 @@ import { MobileDropdown } from "@/components/mobile-nav";
 
 export function SiteHeader() {
   return (
-    <header className="bg-background sticky top-0 z-50 w-full border-b">
+    <header className="bg-background/90 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <Link href="/" className="items-center space-x-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring ring-offset-background flex h-9 mr-3 px-3">
+        <Link
+          href="/"
+          className="items-center space-x-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring ring-offset-background flex h-9 mr-6"
+        >
           <Icons.logo className="h-6 w-6" />
-          <span className="font-bold text-lg">
-            {siteConfig.name}
-          </span>
+          <span className="font-bold text-lg">{siteConfig.name}</span>
         </Link>
 
         <MainNav items={siteConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-1">
+          <nav className="flex items-center space-x-2">
             <Link
               href={siteConfig.links.github}
               target="_blank"
               rel="noreferrer"
               className={buttonVariants({
-                size: "sm",
+                size: "icon",
                 variant: "ghost",
               })}
             >
-              <Icons.gitHub className="h-5 w-5" />
+              <Icons.gitHub className="h-6 w-6" />
               <span className="sr-only">GitHub</span>
             </Link>
             {/* <Link
