@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/cn";
 import { Icons } from "@/components/icons";
-import { usePathname } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 export interface NavItem {
   title: string;
@@ -17,7 +17,7 @@ export interface NavItem {
 }
 
 export function MainNav(props: { items: NavItem[] }) {
-  const pathname = usePathname();
+  const segment = useSelectedLayoutSegment();
 
   return (
     <div className="flex gap-6 md:gap-10">
@@ -32,7 +32,7 @@ export function MainNav(props: { items: NavItem[] }) {
                   className={cn(
                     "text-foreground/60 text-sm font-medium transition-colors hover:text-foreground/80",
                     item.disabled && "cursor-not-allowed opacity-80",
-                    item.href === pathname && "text-foreground"
+                    item.href.startsWith(`/${segment}`) && "text-foreground"
                   )}
                 >
                   {item.title}
