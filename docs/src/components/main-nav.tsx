@@ -17,7 +17,7 @@ export interface NavItem {
 }
 
 export function MainNav(props: { items: NavItem[] }) {
-  const segment = useSelectedLayoutSegment();
+  const segment = useSelectedLayoutSegment() ?? "/";
 
   return (
     <div className="flex gap-6 md:gap-10">
