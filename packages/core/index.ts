@@ -186,9 +186,9 @@ export function createEnv<
 
   const onInvalidAccess =
     opts.onInvalidAccess ??
-    ((_variable: string) => {
+    ((variable: string) => {
       throw new Error(
-        "❌ Attempted to access a server-side environment variable on the client"
+        `❌ Attempted to access a server-side environment variable '${variable}' on the client`
       );
     });
 
