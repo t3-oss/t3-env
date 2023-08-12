@@ -49,7 +49,7 @@ By having an object you import and use throughout the application, you can use b
 
 By default, some frameworks (e.g. Next.js) treeshake away unused environment variables unless you explicitly access them on the `process.env` object. This means that the above implementation would fail even if you export and use the `envVariables` object in your application, as no environment will be included in the bundle for some environments / runtimes.
 
-Another pitfall is client side validation. Importing `envVariables` on the client will throw an error as the server side environment variables `DATABASE_URL` & `CUSTOM_STUFF` is not defined on the client. This library solves this issue by using a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) based implementation combined with Zod's `safeParse` method instead of `parse`.
+Another pitfall is client side validation. Importing `envVariables` on the client will throw an error as the server side environment variables `DATABASE_URL` & `CUSTOM_STUFF` is not defined on the client. This library solves this issue by using a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) based implementation combined with Zod's `safeParse` method instead of `parse`. If `NODE_ENV === 'development`, the error message will include the name of the variable that was accessed incorrectly.
 
 <Callout type="info">
 
