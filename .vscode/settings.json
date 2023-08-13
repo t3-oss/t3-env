@@ -13,6 +13,7 @@
   "tailwindCSS.experimental.classRegex": [
     ["clsx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
+  "mdx.experimentalLanguageServer": true,
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }

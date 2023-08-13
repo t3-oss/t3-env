@@ -27,6 +27,7 @@ const fontMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://env.t3.gg"),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,

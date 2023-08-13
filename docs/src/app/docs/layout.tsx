@@ -2,6 +2,14 @@ import { DocsSidebarNav } from "@/components/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { siteConfig } from "@/app/site-config";
 import { ReactNode } from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Docs ⋅ T3 Env",
+    template: "%s ⋅ T3 Env",
+  },
+};
 
 export default function DocsLayout(props: { children: ReactNode }) {
   return (
