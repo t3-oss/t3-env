@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/cn";
 import { Icons } from "@/components/icons";
-import { usePathname } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 export interface NavItem {
   title: string;
@@ -16,9 +16,13 @@ export interface NavItem {
   label?: string;
 }
 
-export function MainNav(props: { items: NavItem[] }) {
-  const pathname = usePathname();
+function isActive(href: string) {
+  const segment = useSelectedLayoutSegment();
+  if (!segment) return false;
+  return href.startsWith(`/${segment}`);
+}
 
+export function MainNav(props: { items: NavItem[] }) {
   return (
     <div className="flex gap-6 md:gap-10">
       {props.items?.length ? (
@@ -30,9 +34,9 @@ export function MainNav(props: { items: NavItem[] }) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "text-muted-foreground flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-9 px-3",
+                    "text-foreground/60 text-sm font-medium transition-colors hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background rounded-sm",
                     item.disabled && "cursor-not-allowed opacity-80",
-                    item.href === pathname && "text-foreground"
+                    isActive(item.href) && "text-foreground"
                   )}
                 >
                   {item.title}
