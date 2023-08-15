@@ -22,7 +22,7 @@ export default function IndexPage() {
           </Balancer>
         </h1>
         <p
-          className="animate-fade-up text-center text-muted-foreground/80 opacity-0 md:text-xl"
+          className="animate-fade-up text-center dark:text-muted-foreground/80 text-muted-foreground opacity-0 md:text-xl"
           style={{ animationDelay: "0.30s", animationFillMode: "forwards" }}
         >
           <Balancer>{siteConfig.description}</Balancer>
@@ -44,7 +44,7 @@ export default function IndexPage() {
             className={buttonVariants({ variant: "outline", size: "lg" })}
           >
             <Icons.gitHub className="mr-1 h-4 w-4" />
-            GitHub
+            <span>GitHub</span>
           </Link>
         </div>
       </div>
