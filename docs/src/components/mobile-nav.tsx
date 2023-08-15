@@ -34,7 +34,8 @@ export function MobileDropdown(props: {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="mr-2 px-0 hamburger space-x-2 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          size="icon"
+          className="hamburger focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
           <Icons.menu className={cn("h-6 w-6", isOpen && "open")} />
           <span className="sr-only">Menu</span>
