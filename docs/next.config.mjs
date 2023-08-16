@@ -7,7 +7,6 @@ import { getHighlighter } from "shiki";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  swcMinify: true,
   pageExtensions: ["ts", "tsx", "mdx"],
   redirects: () => [
     { source: "/docs", destination: "/docs/introduction", permanent: true },
