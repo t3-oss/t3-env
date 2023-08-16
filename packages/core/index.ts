@@ -149,10 +149,12 @@ export function createEnv<
   TShared extends Record<string, ZodType> = NonNullable<unknown>
 >(
   opts: EnvOptions<TPrefix, TServer, TClient, TShared>
-): Simplify<
-  z.infer<ZodObject<TServer>> &
-    z.infer<ZodObject<TClient>> &
-    z.infer<ZodObject<TShared>>
+): Readonly<
+  Simplify<
+    z.infer<ZodObject<TServer>> &
+      z.infer<ZodObject<TClient>> &
+      z.infer<ZodObject<TShared>>
+  >
 > {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
