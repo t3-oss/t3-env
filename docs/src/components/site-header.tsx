@@ -23,7 +23,7 @@ export function SiteHeader() {
           </Link>
           <MainNav items={siteConfig.mainNav} />
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 md:space-x-4">
           <Link
             href={siteConfig.links.github}
             target="_blank"
