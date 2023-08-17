@@ -211,14 +211,15 @@ export function createEnv<
       }
       return target[prop as keyof typeof target];
     },
-    set(_target, prop) {
-      // Readonly - this is the error message you get from assigning to a frozen object
-      throw new Error(
-        typeof prop === "string"
-          ? `Cannot assign to read only property ${prop} of object #<Object>`
-          : `Cannot assign to read only property of object #<Object>`
-      );
-    },
+    // Maybe reconsider this in the future
+    // set(_target, prop) {
+    //   // Readonly - this is the error message you get from assigning to a frozen object
+    //   throw new Error(
+    //     typeof prop === "string"
+    //       ? `Cannot assign to read only property ${prop} of object #<Object>`
+    //       : `Cannot assign to read only property of object #<Object>`
+    //   );
+    // },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any

@@ -386,12 +386,20 @@ test("envs are readonly", () => {
     runtimeEnv: { BAR: "bar" },
   });
 
-  expect(() => {
-    // @ts-expect-error - envs are readonly
-    env.BAR = "foo";
-  }).toThrowErrorMatchingInlineSnapshot(
-    '"Cannot assign to read only property BAR of object #<Object>"'
-  );
+  /**
+   * We currently don't enforce readonly during runtime
+   */
 
-  expect(env).toMatchObject({ BAR: "bar" });
+  // expect(() => {
+  //   // @ts-expect-error - envs are readonly
+  //   env.BAR = "foo";
+  // }).toThrowErrorMatchingInlineSnapshot(
+  //   '"Cannot assign to read only property BAR of object #<Object>"'
+  // );
+
+  // expect(env).toMatchObject({ BAR: "bar" });
+
+  // @ts-expect-error - envs are readonly
+  env.BAR = "foo";
+  expect(env).toMatchObject({ BAR: "foo" });
 });
