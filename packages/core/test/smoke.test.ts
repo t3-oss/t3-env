@@ -387,7 +387,8 @@ test("envs are readonly", () => {
   });
 
   /**
-   * We currently don't enforce readonly during runtime
+   * We currently don't enforce readonly during runtime:
+   * https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
    */
 
   // expect(() => {

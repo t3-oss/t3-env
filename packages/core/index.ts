@@ -211,7 +211,8 @@ export function createEnv<
       }
       return target[prop as keyof typeof target];
     },
-    // Maybe reconsider this in the future
+    // Maybe reconsider this in the future:
+    // https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
     // set(_target, prop) {
     //   // Readonly - this is the error message you get from assigning to a frozen object
     //   throw new Error(
