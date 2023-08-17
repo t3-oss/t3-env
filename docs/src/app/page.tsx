@@ -7,7 +7,7 @@ import { Icons } from "@/components/icons";
 
 export default function IndexPage() {
   return (
-    <section className="container flex flex-col justify-center overflow-hidden items-center min-h-[calc(100vh-4rem)] gap-6 pb-8 pt-6 md:py-10">
+    <section className="container flex flex-col justify-center overflow-hidden items-center min-h-[calc(100vh-4.0625rem)] gap-6 pb-8 pt-6 md:py-10">
       <div className="max-w-5xl space-y-8">
         <h1
           className="font-cal animate-fade-up bg-gradient-to-br from-indigo-700 via-accent-foreground to-fuchsia-500 bg-clip-text text-center text-5xl/[3rem] font-bold text-transparent opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
@@ -22,7 +22,7 @@ export default function IndexPage() {
           </Balancer>
         </h1>
         <p
-          className="animate-fade-up text-center text-muted-foreground/80 opacity-0 md:text-xl"
+          className="animate-fade-up text-center dark:text-muted-foreground/80 text-muted-foreground opacity-0 md:text-xl"
           style={{ animationDelay: "0.30s", animationFillMode: "forwards" }}
         >
           <Balancer>{siteConfig.description}</Balancer>
@@ -44,7 +44,7 @@ export default function IndexPage() {
             className={buttonVariants({ variant: "outline", size: "lg" })}
           >
             <Icons.gitHub className="mr-1 h-4 w-4" />
-            GitHub
+            <span>GitHub</span>
           </Link>
         </div>
       </div>

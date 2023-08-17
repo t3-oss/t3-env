@@ -34,12 +34,14 @@ export function MobileDropdown(props: {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="mr-2 px-0 hamburger space-x-2 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          size="icon"
+          className="hamburger focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
           <Icons.menu className={cn("h-6 w-6", isOpen && "open")} />
+          <span className="sr-only">Menu</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen bg-background animate-none rounded-none border-none transition-transform md:hidden">
+      <PopoverContent className="z-40 mt-2 h-[calc(100vh-4.0625rem)] w-screen bg-background animate-none rounded-none border-none transition-transform md:hidden">
         <ScrollArea className="pb-8">
           {props.items.docs.map((item, index) => (
             <div key={index} className="flex flex-col space-y-3 pt-6">

@@ -43,10 +43,23 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    images: [{ url: "/opengraph-image.png" }],
+    type: "website",
+    locale: "en_US",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 910,
+        height: 455,
+        alt: siteConfig.name,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
     images: [{ url: "/opengraph-image.png" }],
   },
 };
