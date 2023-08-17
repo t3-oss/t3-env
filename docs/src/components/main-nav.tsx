@@ -16,13 +16,14 @@ export interface NavItem {
   label?: string;
 }
 
-function isActive(href: string) {
-  const segment = useSelectedLayoutSegment();
-  if (!segment) return false;
-  return href.startsWith(`/${segment}`);
-}
-
 export function MainNav(props: { items: NavItem[] }) {
+  const segment = useSelectedLayoutSegment();
+
+  const isActive = (href: string) => {
+    if (!segment) return false;
+    return href.startsWith(`/${segment}`);
+  };
+
   return (
     <nav className="hidden md:flex md:items-center md:space-x-6">
       {props.items?.map(
