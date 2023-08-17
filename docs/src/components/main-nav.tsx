@@ -30,7 +30,7 @@ export function MainNav(props: { items: NavItem[] }) {
         (item, index) =>
           item.href && (
             <Link
-              key={index}
+              key={item.href}
               href={item.href}
               className={cn(
                 "text-foreground/60 text-sm font-medium transition-colors hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background rounded-md",
