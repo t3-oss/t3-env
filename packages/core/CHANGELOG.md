@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.6.1
+
+### Patch Changes
+
+- [#111](https://github.com/t3-oss/t3-env/pull/111) [`6890765`](https://github.com/t3-oss/t3-env/commit/68907651b6a04dcc459cd21fda2edb20f018ea0f) Thanks [@Zamiell](https://github.com/Zamiell)! - fix: mark type as readonly
+
 ## 0.6.0
 
 ### Minor Changes
