@@ -379,3 +379,15 @@ describe("shared can be accessed on both server and client", () => {
     globalThis.window = window;
   });
 });
+
+test("envs are readonly", () => {
+  const env = createEnv({
+    server: { BAR: z.string() },
+    runtimeEnv: { BAR: "bar" },
+  });
+
+  // @ts-expect-error - envs are readonly
+  env.BAR = "foo";
+
+  expect(env).toMatchObject({ BAR: "bar" });
+});
