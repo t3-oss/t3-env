@@ -27,7 +27,7 @@ export function MainNav(props: { items: NavItem[] }) {
   return (
     <nav className="hidden md:flex md:items-center md:space-x-6">
       {props.items?.map(
-        (item, index) =>
+        (item) =>
           item.href && (
             <Link
               key={item.href}
