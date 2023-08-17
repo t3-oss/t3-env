@@ -9,5 +9,6 @@ dist
 .vercel
 .DS_Store
 
+env.d.ts
 next-env.d.ts
 **/.vscode

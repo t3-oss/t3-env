@@ -114,11 +114,13 @@ test("new experimental runtime option only requires client vars", () => {
     },
   });
 
-  expectTypeOf(env).toEqualTypeOf<{
-    BAR: string;
-    NEXT_PUBLIC_BAR: string;
-    NODE_ENV: "development" | "production";
-  }>();
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      BAR: string;
+      NEXT_PUBLIC_BAR: string;
+      NODE_ENV: "development" | "production";
+    }>
+  >();
 
   expect(env).toMatchObject({
     BAR: "bar",
@@ -138,10 +140,12 @@ describe("return type is correctly inferred", () => {
       },
     });
 
-    expectTypeOf(env).toEqualTypeOf<{
-      BAR: string;
-      NEXT_PUBLIC_BAR: string;
-    }>();
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        BAR: string;
+        NEXT_PUBLIC_BAR: string;
+      }>
+    >();
 
     expect(env).toMatchObject({
       BAR: "bar",
@@ -159,10 +163,12 @@ describe("return type is correctly inferred", () => {
       },
     });
 
-    expectTypeOf(env).toEqualTypeOf<{
-      BAR: number;
-      NEXT_PUBLIC_BAR: string;
-    }>();
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        BAR: number;
+        NEXT_PUBLIC_BAR: string;
+      }>
+    >();
 
     expect(env).toMatchObject({
       BAR: 123,

@@ -149,10 +149,12 @@ export function createEnv<
   TShared extends Record<string, ZodType> = NonNullable<unknown>
 >(
   opts: EnvOptions<TPrefix, TServer, TClient, TShared>
-): Simplify<
-  z.infer<ZodObject<TServer>> &
-    z.infer<ZodObject<TClient>> &
-    z.infer<ZodObject<TShared>>
+): Readonly<
+  Simplify<
+    z.infer<ZodObject<TServer>> &
+      z.infer<ZodObject<TClient>> &
+      z.infer<ZodObject<TShared>>
+  >
 > {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
@@ -209,6 +211,16 @@ export function createEnv<
       }
       return target[prop as keyof typeof target];
     },
+    // Maybe reconsider this in the future:
+    // https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
+    // set(_target, prop) {
+    //   // Readonly - this is the error message you get from assigning to a frozen object
+    //   throw new Error(
+    //     typeof prop === "string"
+    //       ? `Cannot assign to read only property ${prop} of object #<Object>`
+    //       : `Cannot assign to read only property of object #<Object>`
+    //   );
+    // },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any

@@ -106,10 +106,12 @@ describe("return type is correctly inferred", () => {
       },
     });
 
-    expectTypeOf(env).toEqualTypeOf<{
-      BAR: string;
-      FOO_BAR: string;
-    }>();
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        BAR: string;
+        FOO_BAR: string;
+      }>
+    >();
 
     expect(env).toMatchObject({
       BAR: "bar",
@@ -128,10 +130,12 @@ describe("return type is correctly inferred", () => {
       },
     });
 
-    expectTypeOf(env).toEqualTypeOf<{
-      BAR: number;
-      FOO_BAR: string;
-    }>();
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        BAR: number;
+        FOO_BAR: string;
+      }>
+    >();
 
     expect(env).toMatchObject({
       BAR: 123,
@@ -149,9 +153,11 @@ describe("return type is correctly inferred", () => {
       },
     });
 
-    expectTypeOf(env).toEqualTypeOf<{
-      BAR: string;
-    }>();
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        BAR: string;
+      }>
+    >();
 
     expect(env).toMatchObject({
       BAR: "bar",
@@ -173,10 +179,12 @@ test("can pass number and booleans", () => {
     },
   });
 
-  expectTypeOf(env).toEqualTypeOf<{
-    PORT: number;
-    IS_DEV: boolean;
-  }>();
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      PORT: number;
+      IS_DEV: boolean;
+    }>
+  >();
 
   expect(env).toMatchObject({
     PORT: 123,
@@ -280,7 +288,7 @@ describe("client/server only mode", () => {
       runtimeEnv: { FOO_BAR: "foo" },
     });
 
-    expectTypeOf(env).toEqualTypeOf<{ FOO_BAR: string }>();
+    expectTypeOf(env).toEqualTypeOf<Readonly<{ FOO_BAR: string }>>();
     expect(env).toMatchObject({ FOO_BAR: "foo" });
   });
 
@@ -292,7 +300,7 @@ describe("client/server only mode", () => {
       runtimeEnv: { BAR: "bar" },
     });
 
-    expectTypeOf(env).toEqualTypeOf<{ BAR: string }>();
+    expectTypeOf(env).toEqualTypeOf<Readonly<{ BAR: string }>>();
     expect(env).toMatchObject({ BAR: "bar" });
   });
 
@@ -336,11 +344,13 @@ describe("shared can be accessed on both server and client", () => {
     runtimeEnv: process.env,
   });
 
-  expectTypeOf(env).toEqualTypeOf<{
-    NODE_ENV: "development" | "production" | "test";
-    BAR: string;
-    FOO_BAR: string;
-  }>();
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      NODE_ENV: "development" | "production" | "test";
+      BAR: string;
+      FOO_BAR: string;
+    }>
+  >();
 
   test("server", () => {
     const { window } = globalThis;
@@ -368,4 +378,29 @@ describe("shared can be accessed on both server and client", () => {
 
     globalThis.window = window;
   });
+});
+
+test("envs are readonly", () => {
+  const env = createEnv({
+    server: { BAR: z.string() },
+    runtimeEnv: { BAR: "bar" },
+  });
+
+  /**
+   * We currently don't enforce readonly during runtime:
+   * https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
+   */
+
+  // expect(() => {
+  //   // @ts-expect-error - envs are readonly
+  //   env.BAR = "foo";
+  // }).toThrowErrorMatchingInlineSnapshot(
+  //   '"Cannot assign to read only property BAR of object #<Object>"'
+  // );
+
+  // expect(env).toMatchObject({ BAR: "bar" });
+
+  // @ts-expect-error - envs are readonly
+  env.BAR = "foo";
+  expect(env).toMatchObject({ BAR: "foo" });
 });
