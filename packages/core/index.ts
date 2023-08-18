@@ -48,9 +48,10 @@ export interface LooseOptions<TShared extends Record<string, ZodType>>
   runtimeEnvStrict?: never;
 
   /**
-   * Runtime environment variables to use for validation - `process.env`, `import.meta.env` or similar.
-   * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
+   * What object holds the environment variables at runtime. This is usually
+   * `process.env` or `import.meta.env`.
    */
+  // Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
   runtimeEnv: Record<string, string | boolean | number | undefined>;
 }
 
@@ -88,13 +89,14 @@ export interface ClientOptions<
   TClient extends Record<string, ZodType>
 > {
   /**
-   * Client-side environment variables are exposed to the client by default. Set what prefix they have
+   * The prefix that client-side variables must have. This is enforced both at
+   * a type-level and at runtime.
    */
   clientPrefix: TPrefix;
 
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
-   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
+   * built with invalid env vars.
    */
   client: Partial<{
     [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
@@ -131,7 +133,7 @@ export interface ServerOptions<
    * to be a number (e.g. `PORT=` in a ".env" file), Zod will incorrectly flag
    * it as a type mismatch violation. Additionally, if you have an empty string
    * for a value that is supposed to be a string with a default value (e.g.
-   * `DOMAIN=`), the default value will never be applied.
+   * `DOMAIN=` in an ".env" file), the default value will never be applied.
    *
    * In order to solve these issues, we recommend that all new projects
    * explicitly specify this option as true.

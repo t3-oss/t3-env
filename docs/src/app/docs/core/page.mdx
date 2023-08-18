@@ -30,7 +30,7 @@ Then, you can create your schema like so:
 
 <Callout>
 
-The file below is named `env.ts`, but you can name it whatever you want. Some frameworks even generate a `env.d.ts` file that will collide with `env.ts` which means you'll have to name it something else.
+The file below is named `env.ts`, but you can name it whatever you want. Some frameworks even generate a `env.d.ts` file that will collide with `env.ts`, which means you will have to name it something else.
 
 </Callout>
 
@@ -50,10 +50,6 @@ export const env = createEnv({
    */
   clientPrefix: "PUBLIC_",
 
-  /**
-   * Remove the `client` and `clientPrefix` properties if you only want the
-   * environment variables to exist on the server.
-   */
   client: {
     PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
@@ -65,13 +61,23 @@ export const env = createEnv({
   runtimeEnv: process.env,
 
   /**
-   * Treat empty strings as undefined, which is useful when validating
-   * and assigning default values to environment variables that come from a
-   * ".env" file. (This is set to `false` by default.)
+   * By default, this library will feed the environment variables directly to
+   * the Zod validator.
+   *
+   * This means that if you have an empty string for a value that is supposed
+   * to be a number (e.g. `PORT=` in a ".env" file), Zod will incorrectly flag
+   * it as a type mismatch violation. Additionally, if you have an empty string
+   * for a value that is supposed to be a string with a default value (e.g.
+   * `DOMAIN=` in an ".env" file), the default value will never be applied.
+   *
+   * In order to solve these issues, we recommend that all new projects
+   * explicitly specify this option as true.
    */
   emptyStringAsUndefined: true,
 });
 ```
+
+Remove the `clientPrefix` and `client` properties if you only want the environment variables to exist on the server.
 
 <Callout type="warning">
 
