@@ -39,23 +39,37 @@ import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 
 export const env = createEnv({
-  /**
-   * Specify what prefix the client-side variables must have.
-   * This is enforced both on type-level and at runtime.
-   */
-  clientPrefix: "PUBLIC_",
   server: {
     DATABASE_URL: z.string().url(),
     OPEN_AI_API_KEY: z.string().min(1),
   },
+
+  /**
+   * The prefix that client-side variables must have. This is enforced both at
+   * a type-level and at runtime.
+   */
+  clientPrefix: "PUBLIC_",
+
+  /**
+   * Remove the `client` and `clientPrefix` properties if you only want the
+   * environment variables to exist on the server.
+   */
   client: {
     PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
+
   /**
-   * What object holds the environment variables at runtime.
-   * Often `process.env` or `import.meta.env`
+   * What object holds the environment variables at runtime. This is usually
+   * `process.env` or `import.meta.env`.
    */
   runtimeEnv: process.env,
+
+  /**
+   * Treat empty strings as undefined, which is useful when validating
+   * and assigning default values to environment variables that come from a
+   * ".env" file. (This is set to `false` by default.)
+   */
+  emptyStringAsUndefined: true,
 });
 ```
 

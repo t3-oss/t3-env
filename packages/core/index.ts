@@ -46,8 +46,9 @@ export interface BaseOptions<TShared extends Record<string, ZodType>> {
 export interface LooseOptions<TShared extends Record<string, ZodType>>
   extends BaseOptions<TShared> {
   runtimeEnvStrict?: never;
+
   /**
-   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
+   * Runtime environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
    */
   runtimeEnv: Record<string, string | boolean | number | undefined>;
@@ -121,6 +122,21 @@ export interface ServerOptions<
           : never} should not prefixed with ${TPrefix}.`>
       : TServer[TKey];
   }>;
+
+  /**
+   * By default, this library will feed the environment variables directly to
+   * the Zod validator.
+   *
+   * This means that if you have an empty string for a value that is supposed
+   * to be a number (e.g. `PORT=` in a ".env" file), Zod will incorrectly flag
+   * it as a type mismatch violation. Additionally, if you have an empty string
+   * for a value that is supposed to be a string with a default value (e.g.
+   * `DOMAIN=`), the default value will never be applied.
+   *
+   * In order to solve these issues, we recommend that all new projects
+   * explicitly specify this option as true.
+   */
+  emptyStringAsUndefined?: boolean;
 }
 
 export type ServerClientOptions<
@@ -157,6 +173,15 @@ export function createEnv<
   >
 > {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
+
+  const emptyStringAsUndefined = opts.emptyStringAsUndefined ?? false;
+  if (emptyStringAsUndefined) {
+    for (const [key, value] of Object.entries(runtimeEnv)) {
+      if (value === "") {
+        delete runtimeEnv[key];
+      }
+    }
+  }
 
   const skip = !!opts.skipValidation;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
