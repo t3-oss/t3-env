@@ -11,7 +11,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     // Allows customizing built-in components, e.g. to add styling.
     h1: ({children, ...props}) => (
       <h1 
-        className="scroll-m-20 font-cal text-4xl mt-10"
+        className="scroll-m-20 font-cal text-4xl mt-10 hover:underline"
         {...props}
       >
         <a href={"#" + slugify(children)}>{children}</a>
@@ -19,7 +19,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     h2: ({children, ...props}) => (
       <h2
-        className="mt-10 scroll-m-20 border-b pb-2 font-cal text-3xl first:mt-0"
+        className="mt-10 scroll-m-20 border-b pb-2 font-cal text-3xl first:mt-0 hover:underline"
         id={slugify(children)}
         {...props}
       >
@@ -29,7 +29,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     h3: ({children, ...props}) => (
       <h3 
-        className="mt-8 scroll-m-20 font-cal text-2xl"
+        className="mt-8 scroll-m-20 font-cal text-2xl hover:underline"
         id={slugify(children)} 
         {...props}
       >
@@ -37,7 +37,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h3>
     ),
     h4: ({children, ...props}) => (
-      <h4 className="mt-6 -mb-4 scroll-m-20 font-cal text-2xl"
+      <h4 className="mt-6 -mb-4 scroll-m-20 font-cal text-2xl hover:underline"
         id={slugify(children)} 
         {...props}
       >
