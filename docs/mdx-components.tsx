@@ -86,7 +86,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 function slugify(input: unknown) {
   if (typeof input !== "string") {
-    console.error("slugify",input)
     return ""
   }
   return input.replaceAll(" ", "-").toLowerCase().trim()
