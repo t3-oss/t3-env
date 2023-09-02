@@ -1,4 +1,5 @@
 import {
+  Link,
   LucideProps,
   Moon,
   SunMedium,
@@ -121,4 +122,5 @@ export const Icons = {
       </g>
     </svg>
   ),
+  link: Link,
 };
