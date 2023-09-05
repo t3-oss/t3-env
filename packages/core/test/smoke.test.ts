@@ -306,12 +306,14 @@ describe("client/server only mode", () => {
 
   test("config with missing client", () => {
     ignoreErrors(() => {
-      createEnv({
+      createEnv(
         // @ts-expect-error - incomplete client config - client not present
-        clientPrefix: "FOO_",
-        server: {},
-        runtimeEnv: {},
-      });
+        {
+          clientPrefix: "FOO_",
+          server: {},
+          runtimeEnv: {},
+        }
+      );
     });
   });
 

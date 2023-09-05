@@ -54,7 +54,7 @@ export interface LooseOptions<TShared extends Record<string, ZodType>>
 }
 
 export interface StrictOptions<
-  TPrefix extends string,
+  TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
   TShared extends Record<string, ZodType>
@@ -65,12 +65,16 @@ export interface StrictOptions<
    */
   runtimeEnvStrict: Record<
     | {
-        [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+        [TKey in keyof TClient]: TPrefix extends undefined
+          ? never
+          : TKey extends `${TPrefix}${string}`
           ? TKey
           : never;
       }[keyof TClient]
     | {
-        [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
+        [TKey in keyof TServer]: TPrefix extends undefined
+          ? TKey
+          : TKey extends `${TPrefix}${string}`
           ? never
           : TKey;
       }[keyof TServer]
@@ -83,7 +87,7 @@ export interface StrictOptions<
 }
 
 export interface ClientOptions<
-  TPrefix extends string,
+  TPrefix extends string | undefined,
   TClient extends Record<string, ZodType>
 > {
   /**
@@ -105,7 +109,7 @@ export interface ClientOptions<
 }
 
 export interface ServerOptions<
-  TPrefix extends string,
+  TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>
 > {
   /**
@@ -124,7 +128,7 @@ export interface ServerOptions<
 }
 
 export type ServerClientOptions<
-  TPrefix extends string,
+  TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>
 > =
@@ -133,7 +137,7 @@ export type ServerClientOptions<
   | (ClientOptions<TPrefix, TClient> & Impossible<ServerOptions<never, never>>);
 
 export type EnvOptions<
-  TPrefix extends string,
+  TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
   TShared extends Record<string, ZodType>
@@ -143,7 +147,7 @@ export type EnvOptions<
       ServerClientOptions<TPrefix, TServer, TClient>);
 
 export function createEnv<
-  TPrefix extends string = "",
+  TPrefix extends string | undefined,
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
   TShared extends Record<string, ZodType> = NonNullable<unknown>
