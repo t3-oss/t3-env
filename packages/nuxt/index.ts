@@ -25,13 +25,11 @@ export function createEnv<
 >(opts: Options<TServer, TClient, TShared>) {
   const client = typeof opts.client === "object" ? opts.client : {};
   const server = typeof opts.server === "object" ? opts.server : {};
-  const shared = typeof opts.shared === "object" ? opts.shared : {};
+  const shared = opts.shared;
 
   return createEnvCore<ClientPrefix, TServer, TClient, TShared>({
     ...opts,
-    // FIXME: don't require this `as any` cast
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-    shared: shared as any,
+    shared,
     client,
     server,
     clientPrefix: CLIENT_PREFIX,
