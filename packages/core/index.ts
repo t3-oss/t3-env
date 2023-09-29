@@ -46,10 +46,12 @@ export interface BaseOptions<TShared extends Record<string, ZodType>> {
 export interface LooseOptions<TShared extends Record<string, ZodType>>
   extends BaseOptions<TShared> {
   runtimeEnvStrict?: never;
+
   /**
-   * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
-   * Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
+   * What object holds the environment variables at runtime. This is usually
+   * `process.env` or `import.meta.env`.
    */
+  // Unlike `runtimeEnvStrict`, this doesn't enforce that all environment variables are set.
   runtimeEnv: Record<string, string | boolean | number | undefined>;
 }
 
@@ -87,13 +89,14 @@ export interface ClientOptions<
   TClient extends Record<string, ZodType>
 > {
   /**
-   * Client-side environment variables are exposed to the client by default. Set what prefix they have
+   * The prefix that client-side variables must have. This is enforced both at
+   * a type-level and at runtime.
    */
   clientPrefix: TPrefix;
 
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
-   * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
+   * built with invalid env vars.
    */
   client: Partial<{
     [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
@@ -121,6 +124,21 @@ export interface ServerOptions<
           : never} should not prefixed with ${TPrefix}.`>
       : TServer[TKey];
   }>;
+
+  /**
+   * By default, this library will feed the environment variables directly to
+   * the Zod validator.
+   *
+   * This means that if you have an empty string for a value that is supposed
+   * to be a number (e.g. `PORT=` in a ".env" file), Zod will incorrectly flag
+   * it as a type mismatch violation. Additionally, if you have an empty string
+   * for a value that is supposed to be a string with a default value (e.g.
+   * `DOMAIN=` in an ".env" file), the default value will never be applied.
+   *
+   * In order to solve these issues, we recommend that all new projects
+   * explicitly specify this option as true.
+   */
+  emptyStringAsUndefined?: boolean;
 }
 
 export type ServerClientOptions<
@@ -157,6 +175,15 @@ export function createEnv<
   >
 > {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
+
+  const emptyStringAsUndefined = opts.emptyStringAsUndefined ?? false;
+  if (emptyStringAsUndefined) {
+    for (const [key, value] of Object.entries(runtimeEnv)) {
+      if (value === "") {
+        delete runtimeEnv[key];
+      }
+    }
+  }
 
   const skip = !!opts.skipValidation;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
