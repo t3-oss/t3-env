@@ -227,7 +227,12 @@ export function createEnv<
 
   const env = new Proxy(parsed.data, {
     get(target, prop) {
-      if (typeof prop !== "string" || prop === "__esModule") return undefined;
+      if (
+        typeof prop !== "string" ||
+        prop === "__esModule" ||
+        prop === "$$typeof"
+      )
+        return undefined;
       if (
         !isServer &&
         opts.clientPrefix &&
