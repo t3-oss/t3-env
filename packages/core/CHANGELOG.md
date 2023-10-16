@@ -1,5 +1,17 @@
 # @t3-oss/env-core
 
+## 0.7.0
+
+### Minor Changes
+
+- [#113](https://github.com/t3-oss/t3-env/pull/113) [`4754db7`](https://github.com/t3-oss/t3-env/commit/4754db7160ad8372dd67c445b16d984c708d9699) Thanks [@Zamiell](https://github.com/Zamiell)! - feat: add option `emptyStringAsUndefined`
+
+### Patch Changes
+
+- [#121](https://github.com/t3-oss/t3-env/pull/121) [`c77c240`](https://github.com/t3-oss/t3-env/commit/c77c24009ce34aeedef0e04f1ce47be2e05610d1) Thanks [@chungweileong94](https://github.com/chungweileong94)! - Fixed type infer for empty client config
+
+- [#131](https://github.com/t3-oss/t3-env/pull/131) [`86ea798`](https://github.com/t3-oss/t3-env/commit/86ea798ddd347c6e645b2ec827922acccfe2c78c) Thanks [@chungweileong94](https://github.com/chungweileong94)! - Support React Native Expo
+
 ## 0.6.1
 
 ### Patch Changes
