@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.7.1
+
+### Patch Changes
+
+- [#138](https://github.com/t3-oss/t3-env/pull/138) [`cb72fa9`](https://github.com/t3-oss/t3-env/commit/cb72fa9b4efa19428f33824ac8fccdf803c85c8c) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - move emptyStringAsOptional to base options
+
 ## 0.7.0
 
 ### Minor Changes
