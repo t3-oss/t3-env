@@ -133,7 +133,7 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(@babel/core@7.21.8)(solid-js@1.4.3)(vite@4.3.1)
       '@t3-oss/env-core':
-        specifier: 0.7.0
+        specifier: 0.7.1
         version: link:../../packages/core
       astro:
         specifier: ^2.3.0
@@ -152,7 +152,7 @@ importers:
   examples/nextjs:
     dependencies:
       '@t3-oss/env-nextjs':
-        specifier: 0.7.0
+        specifier: 0.7.1
         version: link:../../packages/nextjs
       '@types/node':
         specifier: ^18.15.13
@@ -185,7 +185,7 @@ importers:
   examples/nuxt:
     dependencies:
       '@t3-oss/env-nuxt':
-        specifier: 0.7.0
+        specifier: 0.7.1
         version: link:../../packages/nuxt
       zod:
         specifier: ^3.20.2
@@ -216,7 +216,7 @@ importers:
   packages/nextjs:
     dependencies:
       '@t3-oss/env-core':
-        specifier: 0.7.0
+        specifier: 0.7.1
         version: link:../core
     devDependencies:
       eslint:
@@ -235,7 +235,7 @@ importers:
   packages/nuxt:
     dependencies:
       '@t3-oss/env-core':
-        specifier: 0.7.0
+        specifier: 0.7.1
         version: link:../core
     devDependencies:
       eslint:

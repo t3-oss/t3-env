@@ -1,5 +1,14 @@
 # @t3-oss/env-nextjs
 
+## 0.7.1
+
+### Patch Changes
+
+- [#122](https://github.com/t3-oss/t3-env/pull/122) [`632d183`](https://github.com/t3-oss/t3-env/commit/632d1831dca827bf76a82d9a50a0b11125bd21a6) Thanks [@chungweileong94](https://github.com/chungweileong94)! - Remove `any` type
+
+- Updated dependencies [[`cb72fa9`](https://github.com/t3-oss/t3-env/commit/cb72fa9b4efa19428f33824ac8fccdf803c85c8c)]:
+  - @t3-oss/env-core@0.7.1
+
 ## 0.7.0
 
 ### Patch Changes
