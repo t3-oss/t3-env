@@ -60,3 +60,27 @@ export const env = createEnv({
   // ...
 });
 ```
+
+## Storybook
+
+[Storybook](https://storybook.js.org/) uses its own bundler, which is otherwise 
+unaware of `t3-env` and won't call into `runtimeEnv` to ensure that the environment 
+variables are present. You can use Storybook's support for defining environment 
+variables separately to ensure that all environment variables are actually 
+available for Storybook:
+
+```ts
+// .storybook/main.ts
+
+import { env as t3Env } from "~/env/client.mjs";
+
+const config: StorybookConfig = {
+  // other Storybook config...
+  env: (config1) => ({
+    ...config1,
+    ...t3Env,
+  })
+};
+
+export default config;
+```
