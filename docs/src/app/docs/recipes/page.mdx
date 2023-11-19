@@ -16,6 +16,8 @@ export const metadata = {
 
 Coercing booleans from strings is a common use case. Below are 2 examples of how to do this, but you can choose any coercian logic you want.
 
+Zod's default primitives coercion should not be used for booleans, since every string gets coerced to true.
+
 ```ts
 export const env = createEnv({
   server: {
@@ -30,10 +32,6 @@ export const env = createEnv({
       .refine((s) => s === "true" || s === "false")
       // transform to boolean
       .transform((s) => s === "true"),
-
-    // Alternatively, use Zod's default primitives coercion
-    // https://zod.dev/?id=coercion-for-primitives
-    ZOD_BOOLEAN_COERCION: z.coerce.boolean(),
   },
   // ...
 });
