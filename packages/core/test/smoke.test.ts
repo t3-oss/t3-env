@@ -1,4 +1,4 @@
-import { expect, expectTypeOf, test, describe, vi } from "vitest";
+import { expect, expectTypeOf, test, describe } from "vitest";
 
 import { createEnv } from "..";
 import z from "zod";
