@@ -1,6 +1,7 @@
 import { expect, expectTypeOf, test, describe } from "vitest";
 
 import { createEnv } from "..";
+import { createEnv as createEnvCore } from "../../core";
 import z from "zod";
 
 function ignoreErrors(cb: () => void) {
@@ -122,7 +123,7 @@ test("new experimental runtime option only requires client vars", () => {
     }>
   >();
 
-  expect(env).toMatchObject({
+  expect(env).toEqual({
     BAR: "bar",
     NEXT_PUBLIC_BAR: "foo",
     NODE_ENV: "development",
@@ -147,7 +148,7 @@ describe("return type is correctly inferred", () => {
       }>
     >();
 
-    expect(env).toMatchObject({
+    expect(env).toEqual({
       BAR: "bar",
       NEXT_PUBLIC_BAR: "foo",
     });
@@ -170,7 +171,7 @@ describe("return type is correctly inferred", () => {
       }>
     >();
 
-    expect(env).toMatchObject({
+    expect(env).toEqual({
       BAR: 123,
       NEXT_PUBLIC_BAR: "foo",
     });
@@ -187,7 +188,7 @@ test("can specify only server", () => {
     BAR: string;
   }>();
 
-  expect(onlyServer).toMatchObject({
+  expect(onlyServer).toEqual({
     BAR: "FOO",
   });
 });
@@ -202,7 +203,151 @@ test("can specify only client", () => {
     NEXT_PUBLIC_BAR: string;
   }>();
 
-  expect(onlyClient).toMatchObject({
+  expect(onlyClient).toEqual({
     NEXT_PUBLIC_BAR: "FOO",
+  });
+});
+
+describe("extending envs", () => {
+  test("extending a core env", () => {
+    const base = createEnvCore({
+      shared: { BAZ: z.string() },
+      server: { BAR: z.string() },
+      client: { NEXT_PUBLIC_BAR: z.string() },
+      clientPrefix: "NEXT_PUBLIC_",
+      runtimeEnv: { BAR: "FOO", NEXT_PUBLIC_BAR: "FOO", BAZ: "BAZ" },
+    });
+
+    const extended = createEnv({
+      shared: { LOREM: z.string() },
+      server: { FOO: z.string() },
+      client: { NEXT_PUBLIC_FOO: z.string() },
+      runtimeEnv: { FOO: "BAR", NEXT_PUBLIC_FOO: "BAR", LOREM: "LOREM" },
+      extends: base,
+    });
+
+    expectTypeOf(extended).toMatchTypeOf<{
+      BAR: string;
+      NEXT_PUBLIC_BAR: string;
+      BAZ: string;
+      FOO: string;
+      NEXT_PUBLIC_FOO: string;
+      LOREM: string;
+    }>();
+
+    expect(extended).toEqual({
+      BAR: "FOO",
+      NEXT_PUBLIC_BAR: "FOO",
+      BAZ: "BAZ",
+      FOO: "BAR",
+      NEXT_PUBLIC_FOO: "BAR",
+      LOREM: "LOREM",
+    });
+  });
+
+  test("extending a core env (client)", () => {
+    const base = createEnvCore({
+      shared: { BAZ: z.string() },
+      server: { BAR: z.string() },
+      client: { NEXT_PUBLIC_BAR: z.string() },
+      clientPrefix: "NEXT_PUBLIC_",
+      runtimeEnv: { BAR: "FOO", NEXT_PUBLIC_BAR: "FOO", BAZ: "BAZ" },
+    });
+
+    const extended = createEnv({
+      shared: { LOREM: z.string() },
+      server: { FOO: z.string() },
+      client: { NEXT_PUBLIC_FOO: z.string() },
+      runtimeEnv: { FOO: "BAR", NEXT_PUBLIC_FOO: "BAR", LOREM: "LOREM" },
+      extends: base,
+    });
+
+    expectTypeOf(extended).toMatchTypeOf<{
+      BAR: string;
+      NEXT_PUBLIC_BAR: string;
+      BAZ: string;
+      FOO: string;
+      NEXT_PUBLIC_FOO: string;
+      LOREM: string;
+    }>();
+
+    expect(extended).toEqual({
+      BAR: "FOO",
+      NEXT_PUBLIC_BAR: "FOO",
+      BAZ: "BAZ",
+      FOO: "BAR",
+      NEXT_PUBLIC_FOO: "BAR",
+      LOREM: "LOREM",
+    });
+  });
+
+  test("extending a Next.js env", () => {
+    const base = createEnv({
+      shared: { BAZ: z.string() },
+      server: { BAR: z.string() },
+      client: { NEXT_PUBLIC_BAR: z.string() },
+      runtimeEnv: { BAR: "FOO", NEXT_PUBLIC_BAR: "FOO", BAZ: "BAZ" },
+    });
+
+    const extended = createEnv({
+      shared: { LOREM: z.string() },
+      server: { FOO: z.string() },
+      client: { NEXT_PUBLIC_FOO: z.string() },
+      runtimeEnv: { FOO: "BAR", NEXT_PUBLIC_FOO: "BAR", LOREM: "LOREM" },
+      extends: base,
+    });
+
+    expectTypeOf(extended).toMatchTypeOf<{
+      BAR: string;
+      NEXT_PUBLIC_BAR: string;
+      BAZ: string;
+      FOO: string;
+      NEXT_PUBLIC_FOO: string;
+      LOREM: string;
+    }>();
+
+    expect(extended).toEqual({
+      BAR: "FOO",
+      NEXT_PUBLIC_BAR: "FOO",
+      BAZ: "BAZ",
+      FOO: "BAR",
+      NEXT_PUBLIC_FOO: "BAR",
+      LOREM: "LOREM",
+    });
+  });
+
+  test("extending a Next.js env (client)", () => {
+    const base = createEnv({
+      shared: { BAZ: z.string() },
+      server: { BAR: z.string() },
+      client: { NEXT_PUBLIC_BAR: z.string() },
+      runtimeEnv: { BAR: "FOO", NEXT_PUBLIC_BAR: "FOO", BAZ: "BAZ" },
+    });
+
+    const extended = createEnv({
+      shared: { LOREM: z.string() },
+      server: { FOO: z.string() },
+      client: { NEXT_PUBLIC_FOO: z.string() },
+      runtimeEnv: { FOO: "BAR", NEXT_PUBLIC_FOO: "BAR", LOREM: "LOREM" },
+      extends: base,
+    });
+
+    expectTypeOf(extended).toMatchTypeOf<{
+      BAR: string;
+      NEXT_PUBLIC_BAR: string;
+      BAZ: string;
+      FOO: string;
+      NEXT_PUBLIC_FOO: string;
+      LOREM: string;
+    }>();
+
+    expect(extended).toEqual({
+      BAR: "FOO",
+      NEXT_PUBLIC_BAR: "FOO",
+      BAZ: "BAZ",
+      FOO: "BAR",
+      NEXT_PUBLIC_FOO: "BAR",
+      LOREM: "LOREM",
+    });
   });
 });

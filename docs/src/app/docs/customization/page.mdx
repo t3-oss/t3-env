@@ -61,3 +61,38 @@ export const env = createEnv({
   isServer: typeof window === "undefined",
 });
 ```
+
+## Extending Other Envs
+
+In some case, different parts of your application may depend on different environment variables. This is especially common in monorepos. Using the `extends` property, you can extend another `t3-env` instance with additional variables:
+
+```ts title="packages/env/baseEnv.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  shared: {
+    DEBUG: z.enum(["true", "false"]).transform((value) => value === "true"),
+  },
+  server: {
+    NODE_ENV: z.enum(["development", "production"]),
+  },
+});
+```
+
+```ts title="packages/db/src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { env as baseEnv } from "my-monorepo/env/baseEnv";
+
+export const env = createEnv({
+  extends: baseEnv,
+  server: {
+    DB_HOST: z.string(),
+    DB_PORT: z.number(),
+  },
+});
+
+// Access variables from the extended env just like you would otherwise:
+if (env.DEBUG) {
+  console.log(`NODE_ENV: ${env.NODE_ENV}, DB_HOST: ${env.DB_HOST}`);
+}
+```

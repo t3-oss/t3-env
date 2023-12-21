@@ -11,7 +11,10 @@ type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-export interface BaseOptions<TShared extends Record<string, ZodType>> {
+export interface BaseOptions<
+  TShared extends Record<string, ZodType>,
+  TExtends extends Record<string, unknown> | undefined
+> {
   /**
    * How to determine whether the app is running on the server or the client.
    * @default typeof window === "undefined"
@@ -19,10 +22,24 @@ export interface BaseOptions<TShared extends Record<string, ZodType>> {
   isServer?: boolean;
 
   /**
+   * Another env that this env extends. This is useful for example when you have a "shared" env
+   * that is used by multiple apps and then app-specific envs for each app.
+   * This env must not have any conflicting keys with the extended env.
+   */
+  extends?: TExtends;
+
+  /**
    * Shared variables, often those that are provided by build tools and is available to both client and server,
    * but isn't prefixed and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
+   * Cannot overlap with extended env.
    */
-  shared?: TShared;
+  shared?: {
+    [TKey in keyof TShared]: TKey extends string
+      ? TKey extends keyof TExtends
+        ? ErrorMessage<`Duplicate key ${TKey}, already defined in the extended env.`>
+        : TShared[TKey]
+      : never;
+  };
 
   /**
    * Called when validation fails. By default the error is logged,
@@ -58,8 +75,10 @@ export interface BaseOptions<TShared extends Record<string, ZodType>> {
   emptyStringAsUndefined?: boolean;
 }
 
-export interface LooseOptions<TShared extends Record<string, ZodType>>
-  extends BaseOptions<TShared> {
+export interface LooseOptions<
+  TShared extends Record<string, ZodType>,
+  TExtends extends Record<string, unknown> | undefined
+> extends BaseOptions<TShared, TExtends> {
   runtimeEnvStrict?: never;
 
   /**
@@ -74,8 +93,9 @@ export interface StrictOptions<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>
-> extends BaseOptions<TShared> {
+  TShared extends Record<string, ZodType>,
+  TExtends extends Record<string, unknown> | undefined
+> extends BaseOptions<TShared, TExtends> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -105,7 +125,8 @@ export interface StrictOptions<
 
 export interface ClientOptions<
   TPrefix extends string | undefined,
-  TClient extends Record<string, ZodType>
+  TClient extends Record<string, ZodType>,
+  TExtends extends Record<string, unknown> | undefined
 > {
   /**
    * The prefix that client-side variables must have. This is enforced both at
@@ -117,65 +138,79 @@ export interface ClientOptions<
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  client: Partial<{
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
-  }>;
+  client: {
+    [TKey in keyof TClient]?: TKey extends string
+      ? TKey extends keyof TExtends
+        ? ErrorMessage<`Duplicate key ${TKey}, already defined in the extended env.`>
+        : TKey extends `${TPrefix}${string}`
+        ? TClient[TKey]
+        : ErrorMessage<`${TKey} is not prefixed with ${TPrefix}.`>
+      : never;
+  };
 }
 
 export interface ServerOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>
+  TServer extends Record<string, ZodType>,
+  TExtends extends Record<string, unknown> | undefined
 > {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  server: Partial<{
-    [TKey in keyof TServer]: TPrefix extends ""
-      ? TServer[TKey]
-      : TKey extends `${TPrefix}${string}`
-      ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
-          ? TKey
-          : never} should not prefixed with ${TPrefix}.`>
-      : TServer[TKey];
-  }>;
+  server: {
+    [TKey in keyof TServer]?: TKey extends string
+      ? TKey extends keyof TExtends
+        ? ErrorMessage<`Duplicate key ${TKey}, already defined in the extended env.`>
+        : TPrefix extends ""
+        ? TServer[TKey]
+        : TKey extends `${TPrefix}${string}`
+        ? ErrorMessage<`${TKey} should not prefixed with ${TPrefix}.`>
+        : TServer[TKey]
+      : never;
+  };
 }
 
 export type ServerClientOptions<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
+  TClient extends Record<string, ZodType>,
+  TExtends extends Record<string, unknown> | undefined
 > =
-  | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
-  | (ServerOptions<TPrefix, TServer> & Impossible<ClientOptions<never, never>>)
-  | (ClientOptions<TPrefix, TClient> & Impossible<ServerOptions<never, never>>);
+  | (ClientOptions<TPrefix, TClient, TExtends> &
+      ServerOptions<TPrefix, TServer, TExtends>)
+  | (ServerOptions<TPrefix, TServer, TExtends> &
+      Impossible<ClientOptions<never, never, never>>)
+  | (ClientOptions<TPrefix, TClient, TExtends> &
+      Impossible<ServerOptions<never, never, never>>);
 
 export type EnvOptions<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>
+  TShared extends Record<string, ZodType>,
+  TExtends extends Record<string, unknown> | undefined
 > =
-  | (LooseOptions<TShared> & ServerClientOptions<TPrefix, TServer, TClient>)
-  | (StrictOptions<TPrefix, TServer, TClient, TShared> &
-      ServerClientOptions<TPrefix, TServer, TClient>);
+  | (LooseOptions<TShared, TExtends> &
+      ServerClientOptions<TPrefix, TServer, TClient, TExtends>)
+  | (StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
+      ServerClientOptions<TPrefix, TServer, TClient, TExtends>);
 
 export function createEnv<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
-  TShared extends Record<string, ZodType> = NonNullable<unknown>
+  TShared extends Record<string, ZodType> = NonNullable<unknown>,
+  TExtends extends Record<string, unknown> | undefined = undefined
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient, TShared>
-): Readonly<
-  Simplify<
-    z.infer<ZodObject<TServer>> &
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>
+): Simplify<
+  Readonly<
+    z.infer<ZodObject<TShared>> &
       z.infer<ZodObject<TClient>> &
-      z.infer<ZodObject<TShared>>
+      z.infer<ZodObject<TServer>> &
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      (TExtends extends undefined ? {} : TExtends)
   >
 > {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
@@ -196,6 +231,18 @@ export function createEnv<
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
   const _shared = typeof opts.shared === "object" ? opts.shared : {};
+
+  if (opts.extends) {
+    const duplicateKeys = Object.keys(opts.extends).filter(
+      (key) => key in _client || key in _server || key in _shared
+    );
+    if (duplicateKeys.length > 0) {
+      throw new Error(
+        `Cannot extend env with duplicate keys: ${duplicateKeys.join(", ")}`
+      );
+    }
+  }
+
   const client = z.object(_client);
   const server = z.object(_server);
   const shared = z.object(_shared);
@@ -229,35 +276,53 @@ export function createEnv<
     return onValidationError(parsed.error);
   }
 
-  const env = new Proxy(parsed.data, {
-    get(target, prop) {
-      if (
-        typeof prop !== "string" ||
-        prop === "__esModule" ||
-        prop === "$$typeof"
-      )
-        return undefined;
-      if (
-        !isServer &&
-        opts.clientPrefix &&
-        !prop.startsWith(opts.clientPrefix) &&
-        shared.shape[prop as keyof typeof shared.shape] === undefined
-      ) {
-        return onInvalidAccess(prop);
-      }
-      return target[prop as keyof typeof target];
+  const ignoreProp = (prop: string) =>
+    prop === "__esModule" ||
+    prop === "$$typeof" ||
+    ("__vitest_environment__" in globalThis && prop === "nodeType");
+
+  const isServerAccess = (prop: string) =>
+    !opts.clientPrefix ||
+    (!prop.startsWith(opts.clientPrefix) && !(prop in shared.shape));
+
+  const isValidServerAccess = (prop: string) =>
+    isServer || !isServerAccess(prop);
+
+  const isExtendedProp = (prop: string) =>
+    opts.extends && Reflect.has(opts.extends, prop);
+
+  const env = new Proxy(
+    {
+      ...(opts.extends ?? {}),
+      ...parsed.data,
     },
-    // Maybe reconsider this in the future:
-    // https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
-    // set(_target, prop) {
-    //   // Readonly - this is the error message you get from assigning to a frozen object
-    //   throw new Error(
-    //     typeof prop === "string"
-    //       ? `Cannot assign to read only property ${prop} of object #<Object>`
-    //       : `Cannot assign to read only property of object #<Object>`
-    //   );
-    // },
-  });
+    {
+      has(target: Record<string, unknown>, prop: string | symbol) {
+        if (typeof prop !== "string") return false;
+        if (ignoreProp(prop)) return false;
+        if (isExtendedProp(prop)) return true;
+        if (!isValidServerAccess(prop)) return false;
+        return prop in target;
+      },
+      get(target, prop) {
+        if (typeof prop !== "string") return undefined;
+        if (ignoreProp(prop)) return undefined;
+        if (opts.extends && prop in opts.extends) return opts.extends[prop];
+        if (!isValidServerAccess(prop)) return onInvalidAccess(prop);
+        return target[prop];
+      },
+      // Maybe reconsider this in the future:
+      // https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
+      // set(_target, prop) {
+      //   // Readonly - this is the error message you get from assigning to a frozen object
+      //   throw new Error(
+      //     typeof prop === "string"
+      //       ? `Cannot assign to read only property ${prop} of object #<Object>`
+      //       : `Cannot assign to read only property of object #<Object>`
+      //   );
+      // },
+    }
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   return env as any;
