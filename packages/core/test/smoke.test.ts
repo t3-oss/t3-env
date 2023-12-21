@@ -904,6 +904,48 @@ describe("extending envs", () => {
     expect(env1.FOO).toBe(undefined);
   });
 
+  test("multiple levels of extends", () => {
+    const env1 = createEnv({
+      server: { BAR: z.string() },
+      runtimeEnv: { BAR: "bar" },
+    });
+
+    const env2 = createEnv({
+      server: { FOO: z.string() },
+      runtimeEnv: { FOO: "foo" },
+      extends: env1,
+    });
+
+    const env3 = createEnv({
+      server: { BAZ: z.string() },
+      runtimeEnv: { BAZ: "baz" },
+      extends: env2,
+    });
+
+    expectTypeOf(env3).toEqualTypeOf<
+      Readonly<{
+        BAR: string;
+        FOO: string;
+        BAZ: string;
+      }>
+    >();
+
+    expect(env1).toEqual({
+      BAR: "bar",
+    });
+
+    expect(env2).toEqual({
+      BAR: "bar",
+      FOO: "foo",
+    });
+
+    expect(env3).toEqual({
+      BAR: "bar",
+      FOO: "foo",
+      BAZ: "baz",
+    });
+  });
+
   test("is an error to duplicate keys from the extended env", () => {
     const env1 = createEnv({
       server: { BAR: z.string() },
