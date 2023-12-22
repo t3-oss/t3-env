@@ -11,6 +11,26 @@ type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
+type DisallowDuplicateKeys<
+  T extends Record<string, unknown>,
+  TExtends extends Record<string, unknown> | undefined
+> = {
+  [TKey in keyof T]: TKey extends string
+    ? TKey extends keyof TExtends
+      ? ErrorMessage<`Duplicate key '${TKey}', already defined in the extended env.`>
+      : T[TKey]
+    : never;
+};
+
+type HasClientPrefix<
+  TPrefix extends string | undefined,
+  TKey extends string
+> = TPrefix extends "" | undefined
+  ? false
+  : TKey extends `${TPrefix}${string}`
+  ? true
+  : false;
+
 export interface BaseOptions<
   TShared extends Record<string, ZodType>,
   TExtends extends Record<string, unknown> | undefined
@@ -33,13 +53,7 @@ export interface BaseOptions<
    * but isn't prefixed and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
    * Cannot overlap with extended env.
    */
-  shared?: {
-    [TKey in keyof TShared]: TKey extends string
-      ? TKey extends keyof TExtends
-        ? ErrorMessage<`Duplicate key ${TKey}, already defined in the extended env.`>
-        : TShared[TKey]
-      : never;
-  };
+  shared?: DisallowDuplicateKeys<TShared, TExtends>;
 
   /**
    * Called when validation fails. By default the error is logged,
@@ -141,10 +155,10 @@ export interface ClientOptions<
   client: {
     [TKey in keyof TClient]?: TKey extends string
       ? TKey extends keyof TExtends
-        ? ErrorMessage<`Duplicate key ${TKey}, already defined in the extended env.`>
-        : TKey extends `${TPrefix}${string}`
+        ? ErrorMessage<`Duplicate key '${TKey}', already defined in the extended env.`>
+        : HasClientPrefix<TPrefix, TKey> extends true
         ? TClient[TKey]
-        : ErrorMessage<`${TKey} is not prefixed with ${TPrefix}.`>
+        : ErrorMessage<`'${TKey}' should be prefixed with '${TPrefix}'.`>
       : never;
   };
 }
@@ -161,11 +175,9 @@ export interface ServerOptions<
   server: {
     [TKey in keyof TServer]?: TKey extends string
       ? TKey extends keyof TExtends
-        ? ErrorMessage<`Duplicate key ${TKey}, already defined in the extended env.`>
-        : TPrefix extends ""
-        ? TServer[TKey]
-        : TKey extends `${TPrefix}${string}`
-        ? ErrorMessage<`${TKey} should not prefixed with ${TPrefix}.`>
+        ? ErrorMessage<`Duplicate key '${TKey}', already defined in the extended env.`>
+        : HasClientPrefix<TPrefix, TKey> extends true
+        ? ErrorMessage<`'${TKey}' should not be prefixed with '${TPrefix}'.`>
         : TServer[TKey]
       : never;
   };
