@@ -96,3 +96,9 @@ if (env.DEBUG) {
   console.log(`NODE_ENV: ${env.NODE_ENV}, DB_HOST: ${env.DB_HOST}`);
 }
 ```
+
+<Callout type="warning">
+
+The extending env does not inherit any of the other env's options, such as `clientPrefix`, `emptyStringAsUndefined`, `runtimeEnv`, etc. You need to define these separately in each env.
+
+</Callout>
