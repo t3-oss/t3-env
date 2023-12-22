@@ -38,6 +38,24 @@ test("client vars should be correctly prefixed", () => {
       },
       runtimeEnv: {},
     });
+    createEnv({
+      clientPrefix: undefined,
+      server: {},
+      // @ts-expect-error - clientPrefix is required
+      client: {
+        BAR: z.string(),
+      },
+      runtimeEnv: {},
+    });
+    createEnv({
+      clientPrefix: "",
+      server: {},
+      // @ts-expect-error - clientPrefix should not be empty
+      client: {
+        BAR: z.string(),
+      },
+      runtimeEnv: {},
+    });
   });
 });
 

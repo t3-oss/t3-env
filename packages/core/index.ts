@@ -152,15 +152,19 @@ export interface ClientOptions<
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  client: {
-    [TKey in keyof TClient]?: TKey extends string
-      ? TKey extends keyof TExtends
-        ? ErrorMessage<`Duplicate key '${TKey}', already defined in the extended env.`>
-        : HasClientPrefix<TPrefix, TKey> extends true
-        ? TClient[TKey]
-        : ErrorMessage<`'${TKey}' should be prefixed with '${TPrefix}'.`>
-      : never;
-  };
+  client: TPrefix extends undefined
+    ? ErrorMessage<"clientPrefix is required when client is defined.">
+    : TPrefix extends ""
+    ? ErrorMessage<"clientPrefix cannot be empty when client is defined.">
+    : {
+        [TKey in keyof TClient]?: TKey extends string
+          ? TKey extends keyof TExtends
+            ? ErrorMessage<`Duplicate key '${TKey}', already defined in the extended env.`>
+            : HasClientPrefix<TPrefix, TKey> extends true
+            ? TClient[TKey]
+            : ErrorMessage<`'${TKey}' should be prefixed with '${TPrefix}'.`>
+          : never;
+      };
 }
 
 export interface ServerOptions<
