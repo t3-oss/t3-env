@@ -135,7 +135,9 @@ export interface ServerOptions<
    * built with invalid env vars.
    */
   server: Partial<{
-    [TKey in keyof TServer]: TPrefix extends ""
+    [TKey in keyof TServer]: TPrefix extends undefined
+      ? TServer[TKey]
+      : TPrefix extends ""
       ? TServer[TKey]
       : TKey extends `${TPrefix}${string}`
       ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
