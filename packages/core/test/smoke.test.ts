@@ -336,17 +336,19 @@ describe("shared can be accessed on both server and client", () => {
     FOO_BAR: "foo",
   };
 
-  const env = createEnv({
-    shared: {
-      NODE_ENV: z.enum(["development", "production", "test"]),
-    },
-    clientPrefix: "FOO_",
-    server: { BAR: z.string() },
-    client: { FOO_BAR: z.string() },
-    runtimeEnv: process.env,
-  });
+  function lazyCreateEnv() {
+    return createEnv({
+      shared: {
+        NODE_ENV: z.enum(["development", "production", "test"]),
+      },
+      clientPrefix: "FOO_",
+      server: { BAR: z.string() },
+      client: { FOO_BAR: z.string() },
+      runtimeEnv: process.env,
+    });
+  }
 
-  expectTypeOf(env).toEqualTypeOf<
+  expectTypeOf(lazyCreateEnv).returns.toEqualTypeOf<
     Readonly<{
       NODE_ENV: "development" | "production" | "test";
       BAR: string;
@@ -358,6 +360,8 @@ describe("shared can be accessed on both server and client", () => {
     const { window } = globalThis;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     globalThis.window = undefined as any;
+
+    const env = lazyCreateEnv();
 
     expect(env).toMatchObject({
       NODE_ENV: "development",
@@ -373,10 +377,13 @@ describe("shared can be accessed on both server and client", () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     globalThis.window = {} as any;
 
-    expect(env).toMatchObject({
-      NODE_ENV: "development",
-      FOO_BAR: "foo",
-    });
+    const env = lazyCreateEnv();
+
+    expect(() => env.BAR).toThrowErrorMatchingInlineSnapshot(
+      `"❌ Attempted to access a server-side environment variable on the client"`
+    );
+    expect(env.FOO_BAR).toBe("foo");
+    expect(env.NODE_ENV).toBe("development");
 
     globalThis.window = window;
   });
