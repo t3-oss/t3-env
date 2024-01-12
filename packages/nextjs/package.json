@@ -40,7 +40,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "0.7.2"
+    "@t3-oss/env-core": "workspace:*"
   },
   "peerDependencies": {
     "typescript": ">=4.7.2",
