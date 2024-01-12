@@ -44,5 +44,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "useDefineForClassFields": true
-  }
+  },
+  "include": ["*.ts"]
 }

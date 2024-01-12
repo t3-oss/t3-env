@@ -30,6 +30,7 @@ const config = {
     "**/node_modules/**",
     ".eslintrc.cjs",
     "**/config.*",
+    "replace-workspace-protocol.ts",
   ],
 };
 
