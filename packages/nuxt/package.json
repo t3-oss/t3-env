@@ -53,8 +53,8 @@
     }
   },
   "devDependencies": {
-    "eslint": "^8.39.0",
     "bunchee": "^4.3.3",
+    "eslint": "^8.39.0",
     "typescript": "^5.0.4",
     "zod": "^3.20.2"
   }
