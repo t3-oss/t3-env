@@ -39,7 +39,7 @@
     "dev": "bunchee -w",
     "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit",
-    "prepack": "bun ../../replace-workspace-protocol.js"
+    "prepack": "bun ../../replace-workspace-protocol.ts"
   },
   "dependencies": {
     "@t3-oss/env-core": "workspace:*"
