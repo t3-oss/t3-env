@@ -1,0 +1,52 @@
+{
+  "name": "@t3-oss/env-cli",
+  "version": "0.1.0",
+  "keywords": [
+    "create-t3-app",
+    "environment variables",
+    "zod",
+    "cli"
+  ],
+  "author": "Julius Marminge",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t3-oss/t3-env",
+    "directory": "packages/cli"
+  },
+  "type": "module",
+  "bin": {
+    "t3-env": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "0.6.1",
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "dotenv": "^16.3.1",
+    "execa": "^8.0.1"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.7.2",
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.39.0",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4",
+    "zod": "^3.20.2"
+  }
+}
