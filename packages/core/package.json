@@ -36,8 +36,6 @@
     "build": "rm -rf dist && bunchee",
     "dev": "bunhcee -w",
     "lint": "eslint . --ext .ts",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
