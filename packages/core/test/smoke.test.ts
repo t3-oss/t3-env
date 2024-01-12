@@ -1,6 +1,6 @@
 import { expect, expectTypeOf, test, describe } from "vitest";
 
-import { createEnv } from "../src";
+import { createEnv } from "../src/index.js";
 import z from "zod";
 
 function ignoreErrors(cb: () => void) {
