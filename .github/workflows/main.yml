@@ -24,6 +24,11 @@ jobs:
         with:
           node-version: 18
 
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.0.21
+
       - name: Install deps (with cache)
         run: bun install
 
