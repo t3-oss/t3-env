@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.7.3
+
+### Patch Changes
+
+- [`25f209536d1efdf6713906c361f213f9c34e12d9`](https://github.com/t3-oss/t3-env/commit/25f209536d1efdf6713906c361f213f9c34e12d9) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - fix: add a prepack to remove worksapce protocol
+
 ## 0.7.2
 
 ### Patch Changes
