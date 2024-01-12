@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nextjs",
-  "version": "0.7.3-manual.3",
+  "version": "0.7.2",
   "type": "module",
   "keywords": [
     "create-t3-app",
@@ -41,7 +41,7 @@
     "prepack": "bun ../../replace-workspace-protocol.js"
   },
   "dependencies": {
-    "@t3-oss/env-core": "0.7.2"
+    "@t3-oss/env-core": "workspace:*"
   },
   "peerDependencies": {
     "typescript": ">=4.7.2",
