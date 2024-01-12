@@ -13,7 +13,7 @@
     "nuxt": "^3.4.2"
   },
   "dependencies": {
-    "@t3-oss/env-nuxt": "0.7.1",
+    "@t3-oss/env-nuxt": "0.7.2",
     "zod": "^3.20.2"
   }
 }

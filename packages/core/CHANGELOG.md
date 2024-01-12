@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.7.2
+
+### Patch Changes
+
+- [#160](https://github.com/t3-oss/t3-env/pull/160) [`f4d5aeb98bf415fef18f9818507a38eb1c2ea700`](https://github.com/t3-oss/t3-env/commit/f4d5aeb98bf415fef18f9818507a38eb1c2ea700) Thanks [@Just-Moh-it](https://github.com/Just-Moh-it)! - fix: handle undefined clientPrefix for server env and not throw error
+
 ## 0.7.1
 
 ### Patch Changes
