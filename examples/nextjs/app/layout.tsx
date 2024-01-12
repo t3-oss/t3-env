@@ -1,6 +1,7 @@
-import { env } from "./env.mjs";
-import "./globals.css";
 import { Inter } from "next/font/google";
+
+import { env } from "~/env";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
