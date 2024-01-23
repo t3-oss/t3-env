@@ -1,8 +1,8 @@
 /// <reference types="bun-types" />
 import { expect, test, describe } from "bun:test";
 
-import { createEnv } from "../src/index.js";
-import { createEnv as createEnvCore } from "../../core/src/index.js";
+import { createEnv } from "../src";
+import { createEnv as createEnvCore } from "../../core/src";
 import z from "zod";
 import { expectTypeOf } from "expect-type";
 
