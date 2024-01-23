@@ -1,8 +1,10 @@
-import { expect, expectTypeOf, test, describe } from "vitest";
+/// <reference types="bun-types" />
+import { expect, test, describe } from "bun:test";
 
-import { createEnv } from "..";
-import { createEnv as createEnvCore } from "../../core";
+import { createEnv } from "../src/index.js";
+import { createEnv as createEnvCore } from "../../core/src/index.js";
 import z from "zod";
+import { expectTypeOf } from "expect-type";
 
 function ignoreErrors(cb: () => void) {
   try {

@@ -1,5 +1,6 @@
 {
   "name": "@examples/nextjs",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,12 +10,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "0.7.1",
+    "@t3-oss/env-nextjs": "workspace:*",
     "@types/node": "^18.15.13",
     "@types/react": "18.0.38",
     "@types/react-dom": "18.0.11",
     "eslint": "^8.39.0",
-    "next": "^13.4.4",
+    "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.0.4",

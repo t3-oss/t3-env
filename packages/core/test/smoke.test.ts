@@ -1,6 +1,8 @@
-import { expect, expectTypeOf, test, describe } from "vitest";
+/// <reference types="bun-types" />
+import { expect, test, describe } from "bun:test";
+import { expectTypeOf } from "expect-type";
 
-import { createEnv } from "..";
+import { createEnv } from "../src/index.js";
 import z from "zod";
 
 function ignoreErrors(cb: () => void) {
@@ -260,7 +262,7 @@ describe("errors when validation fails", () => {
         client: { FOO_BAR: z.string() },
         runtimeEnv: {},
       })
-    ).toThrowErrorMatchingInlineSnapshot(`"Invalid environment variables"`);
+    ).toThrow("Invalid environment variables");
   });
 
   test("envs are invalid", () => {
@@ -274,7 +276,7 @@ describe("errors when validation fails", () => {
           FOO_BAR: "foo",
         },
       })
-    ).toThrowErrorMatchingInlineSnapshot(`"Invalid environment variables"`);
+    ).toThrow("Invalid environment variables");
   });
 
   test("with custom error handler", () => {
@@ -292,9 +294,7 @@ describe("errors when validation fails", () => {
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       })
-    ).toThrowErrorMatchingInlineSnapshot(`
-      "Invalid variable BAR: Expected number, received nan"
-    `);
+    ).toThrow("Invalid variable BAR: Expected number, received nan");
   });
 });
 
@@ -311,8 +311,8 @@ describe("errors when server var is accessed on client", () => {
       isServer: false,
     });
 
-    expect(() => env.BAR).toThrowErrorMatchingInlineSnapshot(
-      `"❌ Attempted to access a server-side environment variable on the client"`
+    expect(() => env.BAR).toThrow(
+      "❌ Attempted to access a server-side environment variable on the client"
     );
   });
 
@@ -331,9 +331,7 @@ describe("errors when server var is accessed on client", () => {
       },
     });
 
-    expect(() => env.BAR).toThrowErrorMatchingInlineSnapshot(
-      `"Attempted to access BAR on the client"`
-    );
+    expect(() => env.BAR).toThrow("Attempted to access BAR on the client");
   });
 });
 
@@ -537,8 +535,14 @@ describe("shared can be accessed on both server and client", () => {
 
     expect(env).toEqual({
       NODE_ENV: "development",
+      BAR: "bar",
       FOO_BAR: "foo",
     });
+    expect(() => env.BAR).toThrow(
+      "❌ Attempted to access a server-side environment variable on the client"
+    );
+    expect(env.FOO_BAR).toBe("foo");
+    expect(env.NODE_ENV).toBe("development");
 
     globalThis.window = window;
   });
@@ -639,7 +643,7 @@ test("envs are readonly", () => {
   // expect(() => {
   //   // @ts-expect-error - envs are readonly
   //   env.BAR = "foo";
-  // }).toThrowErrorMatchingInlineSnapshot(
+  // }).toThrow(
   //   '"Cannot assign to read only property BAR of object #<Object>"'
   // );
 

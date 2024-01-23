@@ -1,5 +1,21 @@
 # @t3-oss/env-nuxt
 
+## 0.7.3
+
+### Patch Changes
+
+- [`25f209536d1efdf6713906c361f213f9c34e12d9`](https://github.com/t3-oss/t3-env/commit/25f209536d1efdf6713906c361f213f9c34e12d9) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - fix: add a prepack to remove worksapce protocol
+
+- Updated dependencies [[`25f209536d1efdf6713906c361f213f9c34e12d9`](https://github.com/t3-oss/t3-env/commit/25f209536d1efdf6713906c361f213f9c34e12d9)]:
+  - @t3-oss/env-core@0.7.3
+
+## 0.7.2
+
+### Patch Changes
+
+- Updated dependencies [[`f4d5aeb98bf415fef18f9818507a38eb1c2ea700`](https://github.com/t3-oss/t3-env/commit/f4d5aeb98bf415fef18f9818507a38eb1c2ea700)]:
+  - @t3-oss/env-core@0.7.2
+
 ## 0.7.1
 
 ### Patch Changes

@@ -1,6 +1,7 @@
 {
   "name": "@t3-oss/env-core",
-  "version": "0.7.1",
+  "version": "0.7.3",
+  "type": "module",
   "keywords": [
     "create-t3-app",
     "environment variables",
@@ -14,13 +15,14 @@
     "directory": "packages/core"
   },
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
+  "require": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
   },
@@ -31,11 +33,9 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "rm -rf dist && bunchee",
+    "dev": "bunhcee -w",
     "lint": "eslint . --ext .ts",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -48,8 +48,8 @@
     }
   },
   "devDependencies": {
+    "bunchee": "^4.3.3",
     "eslint": "^8.39.0",
-    "tsup": "^6.7.0",
     "typescript": "^5.0.4",
     "zod": "^3.20.2"
   }

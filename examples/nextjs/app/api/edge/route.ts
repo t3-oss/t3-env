@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 
 export const runtime = "edge";
 
