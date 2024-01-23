@@ -618,6 +618,7 @@ describe("shared can be accessed on both server and client (extended env)", () =
 
     const env = lazyCreateEnv();
 
+    // @ts-expect-error - BAR and BAZ are not present on client
     expect(env).toEqual({
       DEBUG: false,
       NODE_ENV: "development",
@@ -727,6 +728,7 @@ describe("Object.keys, Object.entries, Object.values, Reflect.ownKeys, spread, f
       keys.push(key);
     }
     expect(keys.sort()).toEqual(["FOO_BAR", "NODE_ENV"]);
+    // @ts-expect-error - BAR is not present on client
     expect({ ...env }).toEqual({
       NODE_ENV: "development",
       FOO_BAR: "foo",
@@ -882,6 +884,7 @@ describe("Object.keys, Object.entries, Object.values, Reflect.ownKeys, spread, f
       keys.push(key);
     }
     expect(keys.sort()).toEqual(["DEBUG", "FOO_BAR", "FOO_BAZ", "NODE_ENV"]);
+    // @ts-expect-error - BAR and BAZ are not present on client
     expect({ ...env }).toEqual({
       DEBUG: false,
       NODE_ENV: "development",
@@ -983,9 +986,7 @@ describe("extending envs", () => {
         runtimeEnv: { BAR: "bar" },
         extends: env1,
       });
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"Cannot extend env with duplicate keys: BAR"`
-    );
+    }).toThrow("Cannot extend env with duplicate keys: BAR");
 
     expect(() => {
       createEnv({
@@ -995,9 +996,7 @@ describe("extending envs", () => {
         clientPrefix: "FOO_",
         extends: env1,
       });
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"Cannot extend env with duplicate keys: FOO_BAR"`
-    );
+    }).toThrow("Cannot extend env with duplicate keys: FOO_BAR");
 
     expect(() => {
       createEnv({
@@ -1006,9 +1005,7 @@ describe("extending envs", () => {
         runtimeEnv: { BAR: "bar" },
         extends: env1,
       });
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"Cannot extend env with duplicate keys: BAR"`
-    );
+    }).toThrow("Cannot extend env with duplicate keys: BAR");
   });
 
   test("cannot access server vars from extended env on client", () => {
@@ -1035,20 +1032,20 @@ describe("extending envs", () => {
       extends: env1,
     });
 
-    expect(() => env2.BAR).toThrowErrorMatchingInlineSnapshot(
-      `"❌ Attempted to access a server-side environment variable on the client"`
+    expect(() => env2.BAR).toThrow(
+      "❌ Attempted to access a server-side environment variable on the client"
     );
 
     expect(() => {
       env2.BAR;
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"❌ Attempted to access a server-side environment variable on the client"`
+    }).toThrow(
+      "❌ Attempted to access a server-side environment variable on the client"
     );
 
     expect(() => {
       env2.BAZ;
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"❌ Attempted to access a server-side environment variable on the client"`
+    }).toThrow(
+      "❌ Attempted to access a server-side environment variable on the client"
     );
   });
 
@@ -1066,6 +1063,7 @@ describe("extending envs", () => {
       isServer: false,
     });
 
+    // @ts-expect-error - BAR is not present on client
     expect(env1).toEqual({
       NODE_ENV: "development",
       FOO_BAR: "foo",
@@ -1087,6 +1085,7 @@ describe("extending envs", () => {
       extends: env1,
     });
 
+    // @ts-expect-error - BAR and BAZ are not present on client
     expect(env2).toEqual({
       NODE_ENV: "development",
       DEBUG: false,
@@ -1098,11 +1097,11 @@ describe("extending envs", () => {
     expect(env2.DEBUG).toBe(false);
     expect(env2.FOO_BAR).toBe("foo");
     expect(env2.FOO_BAZ).toBe("baz");
-    expect(() => env2.BAR).toThrowErrorMatchingInlineSnapshot(
-      '"❌ Attempted to access a server-side environment variable on the client"'
+    expect(() => env2.BAR).toThrow(
+      "❌ Attempted to access a server-side environment variable on the client"
     );
-    expect(() => env2.BAZ).toThrowErrorMatchingInlineSnapshot(
-      '"❌ Attempted to access a server-side environment variable on the client"'
+    expect(() => env2.BAZ).toThrow(
+      "❌ Attempted to access a server-side environment variable on the client"
     );
   });
 

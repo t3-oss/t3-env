@@ -293,9 +293,7 @@ export function createEnv<
   }
 
   const ignoreProp = (prop: string) =>
-    prop === "__esModule" ||
-    prop === "$$typeof" ||
-    ("__vitest_environment__" in globalThis && prop === "nodeType");
+    prop === "__esModule" || prop === "$$typeof";
 
   const isServerAccess = (prop: string) =>
     !opts.clientPrefix ||
@@ -313,7 +311,7 @@ export function createEnv<
       ...parsed.data,
     },
     {
-      has(target: Record<string, unknown>, prop: string | symbol) {
+      has(target: Record<string, unknown>, prop) {
         if (typeof prop !== "string") return false;
         if (ignoreProp(prop)) return false;
         if (isExtendedProp(prop)) return true;
