@@ -533,9 +533,9 @@ describe("shared can be accessed on both server and client", () => {
 
     const env = lazyCreateEnv();
 
+    // @ts-expect-error - BAR is not present on client
     expect(env).toEqual({
       NODE_ENV: "development",
-      BAR: "bar",
       FOO_BAR: "foo",
     });
     expect(() => env.BAR).toThrow(
