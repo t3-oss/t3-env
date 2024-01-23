@@ -25,6 +25,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./presets": {
+      "types": "./dist/presets/index.d.ts",
+      "import": "./dist/presets/index.js",
+      "require": "./dist/presets/index.cjs"
+    },
     "./package.json": "./package.json"
   },
   "files": [
