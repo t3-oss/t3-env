@@ -1,14 +1,11 @@
 {
+  "biome.lspBin": "node_modules/.bin/biome",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
-  "eslint.workingDirectories": [
-    { "pattern": "examples/*" },
-    { "pattern": "packages/*" }
-  ],
+  "editor.defaultFormatter": "biomejs.biome",
   "tailwindCSS.experimental.configFile": "./docs/tailwind.config.ts",
   "tailwindCSS.experimental.classRegex": [
     ["clsx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
