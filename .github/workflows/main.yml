@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./.github/setup
 
-      - run: bun turbo build typecheck
+      - run: bun turbo build
 
   lint:
     runs-on: ubuntu-latest
@@ -42,4 +42,4 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./.github/setup
 
-      - run: bun test
+      - run: bun turbo test typecheck
