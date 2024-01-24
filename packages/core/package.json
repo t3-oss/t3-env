@@ -35,8 +35,8 @@
         "default": "./dist/presets.js"
       },
       "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
+        "types": "./dist/presets.d.cts",
+        "default": "./dist/presets.cjs"
       }
     },
     "./package.json": "./package.json"
