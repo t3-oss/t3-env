@@ -11,9 +11,10 @@ type ClientPrefix = typeof CLIENT_PREFIX;
 type Options<
   TServer extends Record<string, ZodType>,
   TClient extends Record<`${ClientPrefix}${string}`, ZodType>,
-  TShared extends Record<string, ZodType>
+  TShared extends Record<string, ZodType>,
+  TExtends extends Array<Record<string, unknown>>
 > = Omit<
-  StrictOptions<ClientPrefix, TServer, TClient, TShared> &
+  StrictOptions<ClientPrefix, TServer, TClient, TShared, TExtends> &
     ServerClientOptions<ClientPrefix, TServer, TClient>,
   "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
 >;
@@ -21,13 +22,14 @@ type Options<
 export function createEnv<
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
-  TShared extends Record<string, ZodType> = NonNullable<unknown>
->(opts: Options<TServer, TClient, TShared>) {
+  TShared extends Record<string, ZodType> = NonNullable<unknown>,
+  const TExtends extends Array<Record<string, unknown>> = []
+>(opts: Options<TServer, TClient, TShared, TExtends>) {
   const client = typeof opts.client === "object" ? opts.client : {};
   const server = typeof opts.server === "object" ? opts.server : {};
   const shared = opts.shared;
 
-  return createEnvCore<ClientPrefix, TServer, TClient, TShared>({
+  return createEnvCore<ClientPrefix, TServer, TClient, TShared, TExtends>({
     ...opts,
     shared,
     client,

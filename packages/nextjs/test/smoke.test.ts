@@ -1,5 +1,5 @@
-/// <reference types="bun-types" />
-import { expect, test, describe } from "bun:test";
+/// <reference types="bun" />
+import { expect, test, describe, spyOn } from "bun:test";
 
 import { createEnv } from "../src";
 import z from "zod";
@@ -206,5 +206,123 @@ test("can specify only client", () => {
 
   expect(onlyClient).toMatchObject({
     NEXT_PUBLIC_BAR: "FOO",
+  });
+});
+
+describe("extending presets", () => {
+  test("with invalid runtime envs", () => {
+    const processEnv = {
+      SERVER_ENV: "server",
+      NEXT_PUBLIC_ENV: "client",
+    };
+
+    function lazyCreateEnv() {
+      const preset = createEnv({
+        server: {
+          PRESET_ENV: z.string(),
+        },
+        experimental__runtimeEnv: processEnv,
+      });
+
+      return createEnv({
+        server: {
+          SERVER_ENV: z.string(),
+        },
+        client: {
+          NEXT_PUBLIC_ENV: z.string(),
+        },
+        extends: [preset],
+        runtimeEnv: processEnv,
+      });
+    }
+
+    expectTypeOf(lazyCreateEnv).returns.toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        NEXT_PUBLIC_ENV: string;
+        PRESET_ENV: string;
+      }>
+    >();
+
+    const consoleError = spyOn(console, "error");
+    expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
+    expect(consoleError.mock.calls[0]).toEqual([
+      "❌ Invalid environment variables:",
+      { PRESET_ENV: ["Required"] },
+    ]);
+  });
+  describe("single preset", () => {
+    const processEnv = {
+      PRESET_ENV: "preset",
+      SHARED_ENV: "shared",
+      SERVER_ENV: "server",
+      NEXT_PUBLIC_ENV: "client",
+    };
+
+    function lazyCreateEnv() {
+      const preset = createEnv({
+        server: {
+          PRESET_ENV: z.enum(["preset"]),
+        },
+        runtimeEnv: processEnv,
+      });
+
+      return createEnv({
+        server: {
+          SERVER_ENV: z.string(),
+        },
+        shared: {
+          SHARED_ENV: z.string(),
+        },
+        client: {
+          NEXT_PUBLIC_ENV: z.string(),
+        },
+        extends: [preset],
+        runtimeEnv: processEnv,
+      });
+    }
+
+    expectTypeOf(lazyCreateEnv).returns.toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        SHARED_ENV: string;
+        NEXT_PUBLIC_ENV: string;
+        PRESET_ENV: "preset";
+      }>
+    >();
+
+    test("server", () => {
+      const { window } = globalThis;
+      globalThis.window = undefined as any;
+
+      const env = lazyCreateEnv();
+
+      expect(env).toMatchObject({
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        NEXT_PUBLIC_ENV: "client",
+        PRESET_ENV: "preset",
+      });
+
+      globalThis.window = window;
+    });
+
+    test("client", () => {
+      const { window } = globalThis;
+      globalThis.window = {} as any;
+
+      const env = lazyCreateEnv();
+
+      expect(() => env.SERVER_ENV).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+      expect(() => env.PRESET_ENV).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+      expect(env.SHARED_ENV).toBe("shared");
+      expect(env.NEXT_PUBLIC_ENV).toBe("client");
+
+      globalThis.window = window;
+    });
   });
 });

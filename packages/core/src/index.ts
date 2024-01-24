@@ -11,7 +11,26 @@ type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-export interface BaseOptions<TShared extends Record<string, ZodType>> {
+type UnReadonlyObject<T> = T extends Readonly<infer U> ? U : T;
+
+type Reduce<
+  TArr extends Array<Record<string, unknown>>,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  TAcc = {}
+> = TArr extends []
+  ? TAcc
+  : TArr extends undefined
+  ? TAcc
+  : TArr extends [infer Head, ...infer Tail]
+  ? Tail extends Array<Record<string, unknown>>
+    ? Head & Reduce<Tail, TAcc>
+    : never
+  : never;
+
+export interface BaseOptions<
+  TShared extends Record<string, ZodType>,
+  TExtends extends Array<Record<string, unknown>>
+> {
   /**
    * How to determine whether the app is running on the server or the client.
    * @default typeof window === "undefined"
@@ -23,6 +42,11 @@ export interface BaseOptions<TShared extends Record<string, ZodType>> {
    * but isn't prefixed and doesn't require to be manually supplied. For example `NODE_ENV`, `VERCEL_URL` etc.
    */
   shared?: TShared;
+
+  /**
+   * Extend presets
+   */
+  extends?: TExtends;
 
   /**
    * Called when validation fails. By default the error is logged,
@@ -58,8 +82,10 @@ export interface BaseOptions<TShared extends Record<string, ZodType>> {
   emptyStringAsUndefined?: boolean;
 }
 
-export interface LooseOptions<TShared extends Record<string, ZodType>>
-  extends BaseOptions<TShared> {
+export interface LooseOptions<
+  TShared extends Record<string, ZodType>,
+  TExtends extends Array<Record<string, unknown>>
+> extends BaseOptions<TShared, TExtends> {
   runtimeEnvStrict?: never;
 
   /**
@@ -74,8 +100,9 @@ export interface StrictOptions<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>
-> extends BaseOptions<TShared> {
+  TShared extends Record<string, ZodType>,
+  TExtends extends Array<Record<string, unknown>>
+> extends BaseOptions<TShared, TExtends> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
    * Enforces all environment variables to be set. Required in for example Next.js Edge and Client runtimes.
@@ -160,24 +187,28 @@ export type EnvOptions<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>
+  TShared extends Record<string, ZodType>,
+  TExtends extends Array<Record<string, unknown>>
 > =
-  | (LooseOptions<TShared> & ServerClientOptions<TPrefix, TServer, TClient>)
-  | (StrictOptions<TPrefix, TServer, TClient, TShared> &
+  | (LooseOptions<TShared, TExtends> &
+      ServerClientOptions<TPrefix, TServer, TClient>)
+  | (StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>);
 
 export function createEnv<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
-  TShared extends Record<string, ZodType> = NonNullable<unknown>
+  TShared extends Record<string, ZodType> = NonNullable<unknown>,
+  const TExtends extends Array<Record<string, unknown>> = []
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient, TShared>
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>
 ): Readonly<
   Simplify<
     z.infer<ZodObject<TServer>> &
       z.infer<ZodObject<TClient>> &
-      z.infer<ZodObject<TShared>>
+      z.infer<ZodObject<TShared>> &
+      UnReadonlyObject<Reduce<TExtends>>
   >
 > {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
@@ -231,7 +262,12 @@ export function createEnv<
     return onValidationError(parsed.error);
   }
 
-  const env = new Proxy(parsed.data, {
+  const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
+    return Object.assign(acc, curr);
+  }, {});
+  const fullObj = Object.assign({}, parsed.data, extendedObj);
+
+  const env = new Proxy(fullObj, {
     get(target, prop) {
       if (
         typeof prop !== "string" ||
@@ -247,7 +283,7 @@ export function createEnv<
       ) {
         return onInvalidAccess(prop);
       }
-      return target[prop as keyof typeof target];
+      return target[prop];
     },
     // Maybe reconsider this in the future:
     // https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
