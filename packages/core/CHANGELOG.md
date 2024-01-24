@@ -1,5 +1,13 @@
 # @t3-oss/env-core
 
+## 0.8.0
+
+### Minor Changes
+
+- [#170](https://github.com/t3-oss/t3-env/pull/170) [`9858b2786cc7f05f9d27a4ce325329f55bbb5c89`](https://github.com/t3-oss/t3-env/commit/9858b2786cc7f05f9d27a4ce325329f55bbb5c89) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - feat!: add ability to extend presets. Read more [in the docs](https://env.t3.gg/docs/customization#extending-presets).
+
+  **BREAKING CHANGE**: The required TypeScript version is now ^5.0.0
+
 ## 0.7.3
 
 ### Patch Changes
