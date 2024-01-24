@@ -37,7 +37,6 @@ export const siteConfig = {
         {
           title: "Nuxt",
           href: "/docs/nuxt",
-          label: "New",
           items: [],
         },
       ],
@@ -53,6 +52,7 @@ export const siteConfig = {
         {
           title: "Customization",
           href: "/docs/customization",
+          label: "New",
           items: [],
         },
       ],
