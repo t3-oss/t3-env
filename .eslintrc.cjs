@@ -25,6 +25,16 @@ const config = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ["**/*.test.ts"],
+      rules: {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+      },
+    },
+  ],
+  reportUnusedDisableDirectives: true,
   ignorePatterns: [
     "**/dist/**",
     "**/node_modules/**",

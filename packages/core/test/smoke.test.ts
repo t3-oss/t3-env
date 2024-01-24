@@ -1,5 +1,5 @@
-/// <reference types="bun-types" />
-import { expect, test, describe } from "bun:test";
+/// <reference types="bun" />
+import { expect, test, describe, spyOn } from "bun:test";
 import { expectTypeOf } from "expect-type";
 
 import { createEnv } from "../src";
@@ -356,7 +356,7 @@ describe("shared can be accessed on both server and client", () => {
 
   test("server", () => {
     const { window } = globalThis;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+
     globalThis.window = undefined as any;
 
     const env = lazyCreateEnv();
@@ -372,7 +372,7 @@ describe("shared can be accessed on both server and client", () => {
 
   test("client", () => {
     const { window } = globalThis;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+
     globalThis.window = {} as any;
 
     const env = lazyCreateEnv();
@@ -410,4 +410,213 @@ test("envs are readonly", () => {
   // @ts-expect-error - envs are readonly
   env.BAR = "foo";
   expect(env).toMatchObject({ BAR: "foo" });
+});
+
+describe("extending presets", () => {
+  test("with invalid runtime envs", () => {
+    const processEnv = {
+      SERVER_ENV: "server",
+      CLIENT_ENV: "client",
+    };
+
+    function lazyCreateEnv() {
+      const preset = createEnv({
+        server: {
+          PRESET_ENV: z.string(),
+        },
+        runtimeEnv: processEnv,
+      });
+
+      return createEnv({
+        server: {
+          SERVER_ENV: z.string(),
+        },
+        clientPrefix: "CLIENT_",
+        client: {
+          CLIENT_ENV: z.string(),
+        },
+        extends: [preset],
+        runtimeEnv: processEnv,
+      });
+    }
+
+    expectTypeOf(lazyCreateEnv).returns.toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        CLIENT_ENV: string;
+        PRESET_ENV: string;
+      }>
+    >();
+
+    const consoleError = spyOn(console, "error");
+    expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
+    expect(consoleError.mock.calls[0]).toEqual([
+      "❌ Invalid environment variables:",
+      { PRESET_ENV: ["Required"] },
+    ]);
+  });
+  describe("single preset", () => {
+    const processEnv = {
+      PRESET_ENV: "preset",
+      SHARED_ENV: "shared",
+      SERVER_ENV: "server",
+      CLIENT_ENV: "client",
+    };
+
+    function lazyCreateEnv() {
+      const preset = createEnv({
+        server: {
+          PRESET_ENV: z.enum(["preset"]),
+        },
+        runtimeEnv: processEnv,
+      });
+
+      return createEnv({
+        server: {
+          SERVER_ENV: z.string(),
+        },
+        shared: {
+          SHARED_ENV: z.string(),
+        },
+        clientPrefix: "CLIENT_",
+        client: {
+          CLIENT_ENV: z.string(),
+        },
+        extends: [preset],
+        runtimeEnv: processEnv,
+      });
+    }
+
+    expectTypeOf(lazyCreateEnv).returns.toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        SHARED_ENV: string;
+        CLIENT_ENV: string;
+        PRESET_ENV: "preset";
+      }>
+    >();
+
+    test("server", () => {
+      const { window } = globalThis;
+      globalThis.window = undefined as any;
+
+      const env = lazyCreateEnv();
+
+      expect(env).toMatchObject({
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        CLIENT_ENV: "client",
+        PRESET_ENV: "preset",
+      });
+
+      globalThis.window = window;
+    });
+
+    test("client", () => {
+      const { window } = globalThis;
+      globalThis.window = {} as any;
+
+      const env = lazyCreateEnv();
+
+      expect(() => env.SERVER_ENV).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+      expect(() => env.PRESET_ENV).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+      expect(env.SHARED_ENV).toBe("shared");
+      expect(env.CLIENT_ENV).toBe("client");
+
+      globalThis.window = window;
+    });
+  });
+
+  describe("multiple presets", () => {
+    const processEnv = {
+      PRESET_ENV1: "preset",
+      PRESET_ENV2: 123,
+      SHARED_ENV: "shared",
+      SERVER_ENV: "server",
+      CLIENT_ENV: "client",
+    };
+
+    function lazyCreateEnv() {
+      const preset1 = createEnv({
+        server: {
+          PRESET_ENV1: z.enum(["preset"]),
+        },
+        runtimeEnv: processEnv,
+      });
+
+      const preset2 = createEnv({
+        server: {
+          PRESET_ENV2: z.number(),
+        },
+        runtimeEnv: processEnv,
+      });
+
+      return createEnv({
+        server: {
+          SERVER_ENV: z.string(),
+        },
+        shared: {
+          SHARED_ENV: z.string(),
+        },
+        clientPrefix: "CLIENT_",
+        client: {
+          CLIENT_ENV: z.string(),
+        },
+        extends: [preset1, preset2],
+        runtimeEnv: processEnv,
+      });
+    }
+
+    expectTypeOf(lazyCreateEnv).returns.toEqualTypeOf<
+      Readonly<{
+        PRESET_ENV1: "preset";
+        PRESET_ENV2: number;
+        SERVER_ENV: string;
+        SHARED_ENV: string;
+        CLIENT_ENV: string;
+      }>
+    >();
+
+    test("server", () => {
+      const { window } = globalThis;
+      globalThis.window = undefined as any;
+
+      const env = lazyCreateEnv();
+
+      expect(env).toMatchObject({
+        PRESET_ENV1: "preset",
+        PRESET_ENV2: 123,
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        CLIENT_ENV: "client",
+      });
+
+      globalThis.window = window;
+    });
+
+    test("client", () => {
+      const { window } = globalThis;
+      globalThis.window = {} as any;
+
+      const env = lazyCreateEnv();
+
+      expect(() => env.SERVER_ENV).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+      expect(() => env.PRESET_ENV1).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+      expect(() => env.PRESET_ENV2).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client"
+      );
+      expect(env.SHARED_ENV).toBe("shared");
+      expect(env.CLIENT_ENV).toBe("client");
+
+      globalThis.window = window;
+    });
+  });
 });
