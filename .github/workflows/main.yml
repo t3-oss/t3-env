@@ -42,4 +42,4 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./.github/setup
 
-      - run: bun turbo test typecheck
+      - run: bun turbo test typecheck --filter "@t3-oss/env*"
