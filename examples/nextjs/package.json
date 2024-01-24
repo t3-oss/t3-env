@@ -6,7 +6,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^18.15.13",

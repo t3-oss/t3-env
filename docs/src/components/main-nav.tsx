@@ -3,7 +3,7 @@
 import Link from "next/link";
 import * as React from "react";
 
-import { Icons } from "@/components/icons";
+import type { Icons } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import { useSelectedLayoutSegment } from "next/navigation";
 

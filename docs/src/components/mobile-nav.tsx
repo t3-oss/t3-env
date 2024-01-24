@@ -11,8 +11,8 @@ import { cn } from "@/lib/cn";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { usePathname } from "next/navigation";
 import { Icons } from "./icons";
-import { NavItem } from "./main-nav";
-import { NestedNavItem } from "./sidebar";
+import type { NavItem } from "./main-nav";
+import type { NestedNavItem } from "./sidebar";
 import { ThemeToggle } from "./theme-toggle";
 
 export function MobileDropdown(props: {

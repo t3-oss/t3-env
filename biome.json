@@ -19,6 +19,10 @@
       },
       "complexity": {
         "noBannedTypes": "off"
+      },
+      "nursery": {
+        "useImportType": "error",
+        "useExportType": "error"
       }
     }
   },

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/cn";
-import { NavItem } from "./main-nav";
+import type { NavItem } from "./main-nav";
 
 export interface NestedNavItem extends NavItem {
   items: NestedNavItem[];

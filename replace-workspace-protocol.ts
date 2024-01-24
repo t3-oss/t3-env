@@ -1,5 +1,5 @@
 /// <reference types="bun-types" />
-export {};
+export const MODULE = true;
 
 declare module "bun" {
   interface BunFile {
