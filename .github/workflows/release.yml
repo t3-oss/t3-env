@@ -13,21 +13,12 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: 1.0.21
-
-      - name: Install deps (with cache)
-        run: bun install
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - uses: ./.github/setup
 
       - name: Build
-        run: bun turbo --filter "./packages/*" build
+        run: bun run build
 
       # Using custom token `MY_GITHUB_TOKEN` with more access to avoid rate limiting
       - name: Create Release
