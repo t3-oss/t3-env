@@ -2,10 +2,10 @@
 export {};
 
 declare module "bun" {
-    interface BunFile {
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        json(): Promise<any>;
-    }
+  interface BunFile {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    json(): Promise<any>;
+  }
 }
 
 /**
