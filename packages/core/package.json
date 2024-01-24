@@ -31,12 +31,12 @@
     },
     "./presets": {
       "import": {
-        "types": "./dist/presets/index.d.ts",
-        "default": "./dist/presets/index.js"
+        "types": "./dist/presets.d.ts",
+        "default": "./dist/presets.js"
       },
       "require": {
-        "types": "./dist/presets/index.d.cts",
-        "default": "./dist/presets/index.cjs"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     },
     "./package.json": "./package.json"
