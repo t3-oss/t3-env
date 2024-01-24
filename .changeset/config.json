@@ -1,15 +1,15 @@
 {
-	"$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
-	"changelog": ["@changesets/changelog-github", { "repo": "t3-oss/t3-env" }],
-	"commit": false,
-	"access": "public",
-	"baseBranch": "main",
-	"updateInternalDependencies": "patch",
-	"fixed": [["@t3-oss/env-core", "@t3-oss/env-nextjs", "@t3-oss/env-nuxt"]],
-	"ignore": [
-		"@examples/astro",
-		"@examples/nextjs",
-		"@examples/nuxt",
-		"@t3-env/docs"
-	]
+  "$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "t3-oss/t3-env" }],
+  "commit": false,
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "fixed": [["@t3-oss/env-core", "@t3-oss/env-nextjs", "@t3-oss/env-nuxt"]],
+  "ignore": [
+    "@examples/astro",
+    "@examples/nextjs",
+    "@examples/nuxt",
+    "@t3-env/docs"
+  ]
 }
