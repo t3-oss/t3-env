@@ -25,6 +25,16 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./future": {
+      "import": {
+        "types": "./dist/future.d.ts",
+        "default": "./dist/future.js"
+      },
+      "require": {
+        "types": "./dist/future.d.cts",
+        "default": "./dist/future.cjs"
+      }
+    },
     "./presets": {
       "import": {
         "types": "./dist/presets.d.ts",
@@ -48,16 +58,22 @@
     "@t3-oss/env-core": "workspace:*"
   },
   "peerDependencies": {
+    "react": "experimental",
     "typescript": ">=5.0.0",
     "zod": "^3.0.0"
   },
   "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
     "typescript": {
       "optional": true
     }
   },
   "devDependencies": {
+    "@types/react": "18.2.48",
     "bunchee": "^4.3.3",
+    "react": "experimental",
     "typescript": "^5.3.3",
     "zod": "^3.20.2"
   }

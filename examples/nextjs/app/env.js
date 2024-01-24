@@ -1,4 +1,4 @@
-import { createEnv } from "@t3-oss/env-nextjs";
+import { createEnv } from "@t3-oss/env-nextjs/future";
 import { vercel } from "@t3-oss/env-nextjs/presets";
 import { z } from "zod";
 

@@ -1,9 +1,12 @@
-import "./app/env.js";
+// import "./app/env.js";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  experimental: {
+    taint: true,
   },
 };
 
