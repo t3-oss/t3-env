@@ -19,7 +19,7 @@
       "outputs": []
     },
     "typecheck": {
-      "dependsOn": ["^topo"],
+      "dependsOn": ["^topo", "^build"],
       "outputs": []
     }
   }
