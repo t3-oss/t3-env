@@ -258,28 +258,28 @@ export function createEnv<
     return onValidationError(parsed.error);
   }
 
+  const isServerAccess = (prop: string) => {
+    if (!opts.clientPrefix) return true;
+    return !prop.startsWith(opts.clientPrefix) && !(prop in shared.shape);
+  };
+  const isValidServerAccess = (prop: string) => {
+    return isServer || !isServerAccess(prop);
+  };
+  const ignoreProp = (prop: string) => {
+    return prop === "__esModule" || prop === "$$typeof";
+  };
+
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
     return Object.assign(acc, curr);
   }, {});
-  const fullObj = Object.assign({}, parsed.data, extendedObj);
+  const fullObj = Object.assign(parsed.data, extendedObj);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
-      if (
-        typeof prop !== "string" ||
-        prop === "__esModule" ||
-        prop === "$$typeof"
-      )
-        return undefined;
-      if (
-        !isServer &&
-        opts.clientPrefix &&
-        !prop.startsWith(opts.clientPrefix) &&
-        shared.shape[prop as keyof typeof shared.shape] === undefined
-      ) {
-        return onInvalidAccess(prop);
-      }
-      return target[prop];
+      if (typeof prop !== "string") return undefined;
+      if (ignoreProp(prop)) return undefined;
+      if (!isValidServerAccess(prop)) return onInvalidAccess(prop);
+      return Reflect.get(target, prop);
     },
     // Maybe reconsider this in the future:
     // https://github.com/t3-oss/t3-env/pull/111#issuecomment-1682931526
