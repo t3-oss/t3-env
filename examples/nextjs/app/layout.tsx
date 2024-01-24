@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 
 import { env } from "~/env";
+import { ClientComponent } from "./client-component";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -11,10 +12,13 @@ export const metadata = {
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+  console.log("Server says", env.SECRET);
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div>Server says {env.SECRET}!</div>
+        {/* 👇👇👇 rendering the server secret will cause error because it's tained 👇👇👇 */}
+        {/* <div>Server says {env.SECRET}!</div> */}
         <main>{props.children}</main>
       </body>
     </html>
