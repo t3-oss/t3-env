@@ -62,6 +62,21 @@ export const env = createEnv({
 });
 ```
 
+## Treat empty strings as undefined
+
+By default, T3 Env will feed the environment variables directly to the Zod validator. This means that if you have an empty string for a value that is supposed to be a number (e.g. `PORT=` in a ".env" file), Zod will flag
+it as a type mismatch violation. Additionally, if you have an empty string for a value that is supposed to be a string with a default value (e.g. `DOMAIN=`in an ".env" file), the default value will never be applied. In order to solve these issues, you can set the`emptyStringAsUndefined`option to`true`.
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  // ...
+  // Treat empty strings as undefined.
+  emptyStringAsUndefined: false,
+});
+```
+
 ## Extending presets
 
 Your env object may extend other presets by using the `extends` property. This can be used to include system environment variables for your deployment provider, or if you have a monorepo with multiple packages that share some environment variables.
