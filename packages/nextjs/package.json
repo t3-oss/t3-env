@@ -2,12 +2,7 @@
   "name": "@t3-oss/env-nextjs",
   "version": "0.8.0",
   "type": "module",
-  "keywords": [
-    "create-t3-app",
-    "environment variables",
-    "zod",
-    "nextjs"
-  ],
+  "keywords": ["create-t3-app", "environment variables", "zod", "nextjs"],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -42,16 +37,10 @@
     },
     "./package.json": "./package.json"
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md"],
   "scripts": {
     "build": "rm -rf dist && bunchee",
     "dev": "bunchee -w",
-    "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit",
     "prepack": "bun ../../replace-workspace-protocol.ts"
   },
@@ -69,7 +58,6 @@
   },
   "devDependencies": {
     "bunchee": "^4.3.3",
-    "eslint": "^8.39.0",
     "typescript": "^5.3.3",
     "zod": "^3.20.2"
   }

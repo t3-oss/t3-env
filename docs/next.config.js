@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import withMdx from "@next/mdx";
 import rehypePrettyCode from "rehype-pretty-code";
 import { getHighlighter } from "shiki";
@@ -8,9 +5,12 @@ import { getHighlighter } from "shiki";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
-  redirects: () => [
+  redirects: async () => [
     { source: "/docs", destination: "/docs/introduction", permanent: true },
   ],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default withMdx({

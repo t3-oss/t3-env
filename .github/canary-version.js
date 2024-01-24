@@ -1,5 +1,5 @@
-import fs from "fs";
 import { exec } from "child_process";
+import fs from "fs";
 
 const pkgJsonPaths = [
   "packages/core/package.json",
@@ -23,10 +23,10 @@ try {
 
       pkg.version = newVersion;
 
-      const content = JSON.stringify(pkg, null, "\t") + "\n";
+      const content = `${JSON.stringify(pkg, null, "\t")}\n`;
       const newContent = content.replace(
         new RegExp(`"@t3-oss/\\*": "${oldVersion}"`, "g"),
-        `"@t3-oss/*": "${newVersion}"`
+        `"@t3-oss/*": "${newVersion}"`,
       );
 
       fs.writeFileSync(pkgJsonPath, newContent);

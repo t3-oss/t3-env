@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/cn";
-import { NavItem } from "./main-nav";
+import type { NavItem } from "./main-nav";
 
 export interface NestedNavItem extends NavItem {
   items: NestedNavItem[];
@@ -15,8 +15,8 @@ export function DocsSidebarNav(props: { items: NestedNavItem[] }) {
 
   return props.items.length ? (
     <div className="w-full px-2">
-      {props.items.map((item, index) => (
-        <div key={index} className={cn("pb-6")}>
+      {props.items.map((item) => (
+        <div key={item.href} className={cn("pb-6")}>
           <h4 className="mb-1 rounded-md px-3 py-1 text-sm font-semibold">
             {item.title}
           </h4>
@@ -35,10 +35,10 @@ export function DocsSidebarNavItems(props: {
 }) {
   return props.items?.length ? (
     <div className="grid grid-flow-row auto-rows-max text-sm">
-      {props.items.map((item, index) =>
+      {props.items.map((item) =>
         item.href ? (
           <Link
-            key={index}
+            key={item.title}
             href={item.href}
             className={cn(
               "group flex w-full items-center rounded-md border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ringfocus-visible:outline-none focus-visible:ring-ring ring-offset-background h-9 px-3",
@@ -46,7 +46,7 @@ export function DocsSidebarNavItems(props: {
               {
                 "font-medium bg-accent border-border text-accent-foreground":
                   props.pathname === item.href,
-              }
+              },
             )}
             target={item.external ? "_blank" : ""}
             rel={item.external ? "noreferrer" : ""}
@@ -60,12 +60,12 @@ export function DocsSidebarNavItems(props: {
           </Link>
         ) : (
           <span
-            key={index}
+            key={item.title}
             className="flex w-full cursor-not-allowed items-center rounded-md p-2 text-muted-foreground hover:underline"
           >
             {item.title}
           </span>
-        )
+        ),
       )}
     </div>
   ) : null;

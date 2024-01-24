@@ -1,8 +1,8 @@
+import { siteConfig } from "@/app/site-config";
 import { DocsSidebarNav } from "@/components/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { siteConfig } from "@/app/site-config";
-import { ReactNode } from "react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: {

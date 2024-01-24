@@ -1,13 +1,13 @@
-import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/react";
 import { siteConfig } from "@/app/site-config";
-import { cn } from "@/lib/cn";
 import { SiteHeader } from "@/components/site-header";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
-import { ThemeProvider } from "@/components/theme-provider";
+import { cn } from "@/lib/cn";
+import "@/styles/globals.css";
+import { ThemeProvider } from "@juliusmarminge/next-themes";
+import { Analytics } from "@vercel/analytics/react";
+import type { Metadata, Viewport } from "next";
 
-import { JetBrains_Mono, Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 
 const fontSans = Inter({
@@ -81,7 +81,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             "min-h-screen font-sans antialiased",
             fontSans.variable,
             fontCal.variable,
-            fontMono.variable
+            fontMono.variable,
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

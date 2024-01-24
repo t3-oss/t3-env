@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { CheckCheck, Copy } from "lucide-react";
-import { Icons } from "../icons";
 import { cn } from "@/lib/cn";
+import { CheckCheck, Copy } from "lucide-react";
+import { useRef, useState } from "react";
+import { Icons } from "../icons";
 
 export type CodeblockProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLPreElement>,
@@ -53,13 +53,13 @@ export function Codeblock(props: CodeblockProps) {
           <Copy
             className={cn(
               "absolute h-6 w-6 p-0 transition-all",
-              copied && "scale-0"
+              copied && "scale-0",
             )}
           />
           <CheckCheck
             className={cn(
               "absolute h-6 w-6 scale-0 p-0 transition-all",
-              copied && "scale-100"
+              copied && "scale-100",
             )}
           />
         </div>

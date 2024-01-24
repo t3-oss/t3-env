@@ -1,9 +1,6 @@
+import { createEnv as createEnvCore } from "@t3-oss/env-core";
+import type { ServerClientOptions, StrictOptions } from "@t3-oss/env-core";
 import type { ZodType } from "zod";
-import {
-  createEnv as createEnvCore,
-  ServerClientOptions,
-  StrictOptions,
-} from "@t3-oss/env-core";
 
 const CLIENT_PREFIX = "NUXT_PUBLIC_" as const;
 type ClientPrefix = typeof CLIENT_PREFIX;
@@ -12,7 +9,7 @@ type Options<
   TServer extends Record<string, ZodType>,
   TClient extends Record<`${ClientPrefix}${string}`, ZodType>,
   TShared extends Record<string, ZodType>,
-  TExtends extends Array<Record<string, unknown>>
+  TExtends extends Array<Record<string, unknown>>,
 > = Omit<
   StrictOptions<ClientPrefix, TServer, TClient, TShared, TExtends> &
     ServerClientOptions<ClientPrefix, TServer, TClient>,
@@ -23,7 +20,7 @@ export function createEnv<
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
   TShared extends Record<string, ZodType> = NonNullable<unknown>,
-  const TExtends extends Array<Record<string, unknown>> = []
+  const TExtends extends Array<Record<string, unknown>> = [],
 >(opts: Options<TServer, TClient, TShared, TExtends>) {
   const client = typeof opts.client === "object" ? opts.client : {};
   const server = typeof opts.server === "object" ? opts.server : {};

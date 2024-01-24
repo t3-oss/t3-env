@@ -5,8 +5,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "turbo build --filter env-nuxt && nuxt prepare"
+    "preview": "nuxt preview"
   },
   "devDependencies": {
     "@types/node": "^18.15.13",

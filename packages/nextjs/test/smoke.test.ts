@@ -1,9 +1,9 @@
 /// <reference types="bun" />
-import { expect, test, describe, spyOn } from "bun:test";
+import { describe, expect, spyOn, test } from "bun:test";
 
-import { createEnv } from "../src";
-import z from "zod";
 import { expectTypeOf } from "expect-type";
+import z from "zod";
+import { createEnv } from "../src";
 
 function ignoreErrors(cb: () => void) {
   try {
@@ -314,10 +314,10 @@ describe("extending presets", () => {
       const env = lazyCreateEnv();
 
       expect(() => env.SERVER_ENV).toThrow(
-        "❌ Attempted to access a server-side environment variable on the client"
+        "❌ Attempted to access a server-side environment variable on the client",
       );
       expect(() => env.PRESET_ENV).toThrow(
-        "❌ Attempted to access a server-side environment variable on the client"
+        "❌ Attempted to access a server-side environment variable on the client",
       );
       expect(env.SHARED_ENV).toBe("shared");
       expect(env.NEXT_PUBLIC_ENV).toBe("client");

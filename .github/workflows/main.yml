@@ -7,33 +7,39 @@ on:
     branches: ["main"]
   merge_group:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  FORCE_COLOR: 3
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
 jobs:
-  build-lint:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - uses: ./.github/setup
 
-      - name: Setup Node 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - run: bun turbo build
 
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: 1.0.21
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - uses: ./.github/setup
 
-      - name: Install deps (with cache)
-        run: bun install
+      - run: bun lint
 
-      - name: Build, lint and type-check
-        run: bun turbo build lint typecheck
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - uses: ./.github/setup
 
-      - name: Test
-        run: bun test
+      - run: bun turbo test typecheck --filter "@t3-oss/env*"

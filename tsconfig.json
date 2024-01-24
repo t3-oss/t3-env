@@ -1,49 +1,27 @@
 {
   "compilerOptions": {
-    /* LANGUAGE COMPILATION OPTIONS */
-    "target": "ES2022",
-    "lib": ["DOM", "DOM.Iterable", "ES2020"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
+    /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
     "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+
+    /* Strictness */
+    "strict": true,
+    // "noUncheckedIndexedAccess": true,
     "checkJs": true,
 
-    /* EMIT RULES */
-    "outDir": "./dist",
+    /* Bundled projects */
+    "lib": ["dom", "dom.iterable", "ES2022"],
     "noEmit": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "removeComments": true,
-
-    /* TYPE CHECKING RULES */
-    "strict": true,
-    // "noImplicitAny": true, // Included in "Strict"
-    // "noImplicitThis": true, // Included in "Strict"
-    // "strictBindCallApply": true, // Included in "Strict"
-    // "strictFunctionTypes": true, // Included in "Strict"
-    // "strictNullChecks": true, // Included in "Strict"
-    // "strictPropertyInitialization": true, // Included in "Strict"
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "useUnknownInCatchVariables": true,
-    "noUncheckedIndexedAccess": true, // TLDR - Checking an indexed value (array[0]) now forces type <T | undefined> as there is no confirmation that index exists
-    // THE BELOW ARE EXTRA STRICT OPTIONS THAT SHOULD ONLY BY CONSIDERED IN VERY SAFE PROJECTS
-    // "exactOptionalPropertyTypes": true, // TLDR - Setting to undefined is not the same as a property not being defined at all
-    // "noPropertyAccessFromIndexSignature": true, // TLDR - Use dot notation for objects if youre sure it exists, use ['index'] notaion if unsure
-
-    /* OTHER OPTIONS */
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    // "emitDecoratorMetadata": true,
-    // "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "useDefineForClassFields": true
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "incremental": true,
   },
-  "include": ["*.ts"]
+  "include": ["*.ts"],
+  "exclude": ["node_modules"]
 }

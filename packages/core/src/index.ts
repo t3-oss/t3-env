@@ -1,12 +1,11 @@
-import { z, type ZodError, type ZodObject, type ZodType } from "zod";
+import { type ZodError, type ZodObject, type ZodType, z } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
   [P in keyof T]: T[P];
-  // eslint-disable-next-line @typescript-eslint/ban-types
 } & {};
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
@@ -15,19 +14,18 @@ type UnReadonlyObject<T> = T extends Readonly<infer U> ? U : T;
 
 type Reduce<
   TArr extends Array<Record<string, unknown>>,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  TAcc = {}
+  TAcc = {},
 > = TArr extends []
   ? TAcc
   : TArr extends [infer Head, ...infer Tail]
-  ? Tail extends Array<Record<string, unknown>>
-    ? Head & Reduce<Tail, TAcc>
-    : never
-  : never;
+    ? Tail extends Array<Record<string, unknown>>
+      ? Head & Reduce<Tail, TAcc>
+      : never
+    : never;
 
 export interface BaseOptions<
   TShared extends Record<string, ZodType>,
-  TExtends extends Array<Record<string, unknown>>
+  TExtends extends Array<Record<string, unknown>>,
 > {
   /**
    * How to determine whether the app is running on the server or the client.
@@ -82,7 +80,7 @@ export interface BaseOptions<
 
 export interface LooseOptions<
   TShared extends Record<string, ZodType>,
-  TExtends extends Array<Record<string, unknown>>
+  TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   runtimeEnvStrict?: never;
 
@@ -99,7 +97,7 @@ export interface StrictOptions<
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
   TShared extends Record<string, ZodType>,
-  TExtends extends Array<Record<string, unknown>>
+  TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   /**
    * Runtime Environment variables to use for validation - `process.env`, `import.meta.env` or similar.
@@ -110,15 +108,15 @@ export interface StrictOptions<
         [TKey in keyof TClient]: TPrefix extends undefined
           ? never
           : TKey extends `${TPrefix}${string}`
-          ? TKey
-          : never;
+            ? TKey
+            : never;
       }[keyof TClient]
     | {
         [TKey in keyof TServer]: TPrefix extends undefined
           ? TKey
           : TKey extends `${TPrefix}${string}`
-          ? never
-          : TKey;
+            ? never
+            : TKey;
       }[keyof TServer]
     | {
         [TKey in keyof TShared]: TKey extends string ? TKey : never;
@@ -130,7 +128,7 @@ export interface StrictOptions<
 
 export interface ClientOptions<
   TPrefix extends string | undefined,
-  TClient extends Record<string, ZodType>
+  TClient extends Record<string, ZodType>,
 > {
   /**
    * The prefix that client-side variables must have. This is enforced both at
@@ -153,7 +151,7 @@ export interface ClientOptions<
 
 export interface ServerOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>
+  TServer extends Record<string, ZodType>,
 > {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
@@ -163,19 +161,19 @@ export interface ServerOptions<
     [TKey in keyof TServer]: TPrefix extends undefined
       ? TServer[TKey]
       : TPrefix extends ""
-      ? TServer[TKey]
-      : TKey extends `${TPrefix}${string}`
-      ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
-          ? TKey
-          : never} should not prefixed with ${TPrefix}.`>
-      : TServer[TKey];
+        ? TServer[TKey]
+        : TKey extends `${TPrefix}${string}`
+          ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
+              ? TKey
+              : never} should not prefixed with ${TPrefix}.`>
+          : TServer[TKey];
   }>;
 }
 
 export type ServerClientOptions<
   TPrefix extends string | undefined,
   TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>
+  TClient extends Record<string, ZodType>,
 > =
   | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
   | (ServerOptions<TPrefix, TServer> & Impossible<ClientOptions<never, never>>)
@@ -186,7 +184,7 @@ export type EnvOptions<
   TServer extends Record<string, ZodType>,
   TClient extends Record<string, ZodType>,
   TShared extends Record<string, ZodType>,
-  TExtends extends Array<Record<string, unknown>>
+  TExtends extends Array<Record<string, unknown>>,
 > =
   | (LooseOptions<TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>)
@@ -198,9 +196,9 @@ export function createEnv<
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<string, ZodType> = NonNullable<unknown>,
   TShared extends Record<string, ZodType> = NonNullable<unknown>,
-  const TExtends extends Array<Record<string, unknown>> = []
+  const TExtends extends Array<Record<string, unknown>> = [],
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>,
 ): Readonly<
   Simplify<
     z.infer<ZodObject<TServer>> &
@@ -221,7 +219,7 @@ export function createEnv<
   }
 
   const skip = !!opts.skipValidation;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   if (skip) return runtimeEnv as any;
 
   const _client = typeof opts.client === "object" ? opts.client : {};
@@ -243,7 +241,7 @@ export function createEnv<
     ((error: ZodError) => {
       console.error(
         "❌ Invalid environment variables:",
-        error.flatten().fieldErrors
+        error.flatten().fieldErrors,
       );
       throw new Error("Invalid environment variables");
     });
@@ -252,7 +250,7 @@ export function createEnv<
     opts.onInvalidAccess ??
     ((_variable: string) => {
       throw new Error(
-        "❌ Attempted to access a server-side environment variable on the client"
+        "❌ Attempted to access a server-side environment variable on the client",
       );
     });
 
@@ -295,6 +293,6 @@ export function createEnv<
     // },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   return env as any;
 }

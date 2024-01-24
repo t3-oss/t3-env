@@ -1,56 +1,53 @@
-import * as React from "react";
-import Link from "next/link";
 import type { MDXComponents } from "mdx/types";
+import Link from "next/link";
+import * as React from "react";
 
+import { Icons } from "@/components/icons";
 import { Callout } from "@/components/mdx/callout";
 import { Codeblock } from "@/components/mdx/code-block";
-import { Icons } from "@/components/icons";
 
 // This file is required to use MDX in `app` directory.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     // Allows customizing built-in components, e.g. to add styling.
-    h1: ({children, ...props}) => (
-      <h1 
-        className="scroll-m-20 font-cal text-4xl mt-10"
-        {...props}
-      >
+    h1: ({ children, ...props }) => (
+      <h1 className="scroll-m-20 font-cal text-4xl mt-10" {...props}>
         {children}
       </h1>
     ),
-    h2: ({children, ...props}) => (
+    h2: ({ children, ...props }) => (
       <h2
         className="mt-10 scroll-m-20 border-b pb-2 font-cal text-3xl first:mt-0"
         id={slugify(children)}
         {...props}
       >
-        <a className="group" href={"#" + slugify(children)}>
+        <a className="group" href={`#${slugify(children)}`}>
           <span>{children}</span>
-          <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible"/>
+          <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible" />
         </a>
       </h2>
-
     ),
-    h3: ({children, ...props}) => (
-      <h3 
+    h3: ({ children, ...props }) => (
+      <h3
         className="mt-8 scroll-m-20 font-cal text-2xl"
-        id={slugify(children)} 
+        id={slugify(children)}
         {...props}
       >
-        <a className="group" href={"#" + slugify(children)}>
+        <a className="group" href={`#${slugify(children)}`}>
           <span>{children}</span>
-          <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible"/>
+          <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible" />
         </a>
       </h3>
     ),
-    h4: ({children, ...props}) => (
-      <h4 className="mt-6 -mb-4 scroll-m-20 font-cal text-2xl"
-        id={slugify(children)} 
+    h4: ({ children, ...props }) => (
+      <h4
+        className="mt-6 -mb-4 scroll-m-20 font-cal text-2xl"
+        id={slugify(children)}
         {...props}
       >
-        <a className="group" href={"#" + slugify(children)}>
+        <a className="group" href={`#${slugify(children)}`}>
           <span>{children}</span>
-          <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible"/>
+          <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible" />
         </a>
       </h4>
     ),
@@ -96,7 +93,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 function slugify(input: unknown) {
   if (typeof input !== "string") {
-    return ""
+    return "";
   }
-  return input.replaceAll(" ", "-").toLowerCase().trim()
+  return input.replaceAll(" ", "-").toLowerCase().trim();
 }

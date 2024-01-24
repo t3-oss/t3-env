@@ -1,19 +1,19 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
+import * as React from "react";
 
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
 
-import { ThemeToggle } from "./theme-toggle";
-import { NavItem } from "./main-nav";
-import { NestedNavItem } from "./sidebar";
-import { PopoverClose } from "@radix-ui/react-popover";
 import { cn } from "@/lib/cn";
-import { Icons } from "./icons";
+import { PopoverClose } from "@radix-ui/react-popover";
 import { usePathname } from "next/navigation";
+import { Icons } from "./icons";
+import type { NavItem } from "./main-nav";
+import type { NestedNavItem } from "./sidebar";
+import { ThemeToggle } from "./theme-toggle";
 
 export function MobileDropdown(props: {
   items: { main: NavItem[]; docs: NestedNavItem[] };
@@ -43,8 +43,8 @@ export function MobileDropdown(props: {
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4.0625rem)] w-screen bg-background animate-none rounded-none border-none transition-transform md:hidden">
         <ScrollArea className="pb-8">
-          {props.items.docs.map((item, index) => (
-            <div key={index} className="flex flex-col space-y-3 pt-6">
+          {props.items.docs.map((item) => (
+            <div key={item.title} className="flex flex-col space-y-3 pt-6">
               <h4 className="font-bold">{item.title}</h4>
               {item?.items?.length &&
                 item.items.map((item) => (
@@ -54,7 +54,7 @@ export function MobileDropdown(props: {
                         href={item.href}
                         className={cn(
                           "flex py-1 text-base font-medium text-muted-foreground transition-colors hover:text-primary",
-                          item.href === pathname && "text-foreground"
+                          item.href === pathname && "text-foreground",
                         )}
                         target={item.external ? "_blank" : ""}
                         rel={item.external ? "noreferrer" : ""}
