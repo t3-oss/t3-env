@@ -1,26 +1,26 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
-  "pipeline": {
-    "topo": {
-      "dependsOn": ["^topo"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", ".nuxt"]
-    },
-    "lint": { "cache": false },
-    "lint:fix": { "cache": false },
-    "test": {
-      "dependsOn": ["build"],
-      "outputs": []
-    },
-    "typecheck": {
-      "dependsOn": ["^topo"],
-      "outputs": []
-    }
-  }
+	"$schema": "https://turborepo.org/schema.json",
+	"pipeline": {
+		"topo": {
+			"dependsOn": ["^topo"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**", ".next/**", ".nuxt"]
+		},
+		"lint": { "cache": false },
+		"lint:fix": { "cache": false },
+		"test": {
+			"dependsOn": ["build"],
+			"outputs": []
+		},
+		"typecheck": {
+			"dependsOn": ["^topo"],
+			"outputs": []
+		}
+	}
 }
