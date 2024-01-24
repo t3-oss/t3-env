@@ -61,3 +61,49 @@ export const env = createEnv({
   isServer: typeof window === "undefined",
 });
 ```
+
+## Extending presets
+
+Your env object may extend other presets by using the `extends` property. This can be used to include system environment variables for your deployment provider, or if you have a monorepo with multiple packages that share some environment variables.
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { vercel } from "@t3-oss/env-core/presets";
+
+export const env = createEnv({
+  // ...
+  // Extend the Vercel preset.
+  extends: [vercel],
+});
+
+env.VERCEL_URL; // string
+```
+
+T3 Env ships the following presets out of the box, all importable from the `/presets` entrypoint.
+
+- `vercel` - Vercel environment variables. See full list [here](https://vercel.com/docs/projects/environment-variables/system-environment-variables#system-environment-variables).
+
+<Callout type="info">
+
+Feel free to open a PR with more presets!
+
+</Callout>
+
+A preset is just like any other env object, so you can easily create your own:
+
+```ts
+// packages/auth/env.ts
+import { createEnv } from "@t3-oss/env-core";
+export const env = createEnv({
+  // ...
+});
+
+// apps/web/env.ts
+import { createEnv } from "@t3-oss/env-nextjs";
+import { env as authEnv } from "@repo/auth/env";
+
+export const env = createEnv({
+  // ...
+  extends: [authEnv],
+});
+```
