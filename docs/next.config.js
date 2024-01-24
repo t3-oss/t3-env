@@ -5,7 +5,7 @@ import { getHighlighter } from "shiki";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
-  redirects: () => [
+  redirects: async () => [
     { source: "/docs", destination: "/docs/introduction", permanent: true },
   ],
   eslint: {
