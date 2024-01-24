@@ -1,70 +1,64 @@
 {
-    "name": "@t3-oss/env-nuxt",
-    "version": "0.8.0",
-    "type": "module",
-    "keywords": [
-        "create-t3-app",
-        "environment variables",
-        "zod",
-        "nuxt",
-        "vue"
-    ],
-    "author": "Julius Marminge",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/t3-oss/t3-env",
-        "directory": "packages/nuxt"
+  "name": "@t3-oss/env-nuxt",
+  "version": "0.8.0",
+  "type": "module",
+  "keywords": ["create-t3-app", "environment variables", "zod", "nuxt", "vue"],
+  "author": "Julius Marminge",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t3-oss/t3-env",
+    "directory": "packages/nuxt"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "require": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
-    "main": "dist/index.js",
-    "module": "dist/index.js",
-    "require": "dist/index.cjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-        ".": {
-            "import": {
-                "types": "./dist/index.d.ts",
-                "default": "./dist/index.js"
-            },
-            "require": {
-                "types": "./dist/index.d.cts",
-                "default": "./dist/index.cjs"
-            }
-        },
-        "./presets": {
-            "import": {
-                "types": "./dist/presets.d.ts",
-                "default": "./dist/presets.js"
-            },
-            "require": {
-                "types": "./dist/presets.d.cts",
-                "default": "./dist/presets.cjs"
-            }
-        },
-        "./package.json": "./package.json"
+    "./presets": {
+      "import": {
+        "types": "./dist/presets.d.ts",
+        "default": "./dist/presets.js"
+      },
+      "require": {
+        "types": "./dist/presets.d.cts",
+        "default": "./dist/presets.cjs"
+      }
     },
-    "files": ["dist", "package.json", "LICENSE", "README.md"],
-    "scripts": {
-        "build": "rm -rf dist && bunchee",
-        "dev": "bunchee -w",
-        "typecheck": "tsc --noEmit",
-        "prepack": "bun ../../replace-workspace-protocol.ts"
-    },
-    "dependencies": {
-        "@t3-oss/env-core": "workspace:*"
-    },
-    "peerDependencies": {
-        "typescript": ">=5.0.0",
-        "zod": "^3.0.0"
-    },
-    "peerDependenciesMeta": {
-        "typescript": {
-            "optional": true
-        }
-    },
-    "devDependencies": {
-        "bunchee": "^4.3.3",
-        "typescript": "^5.3.3",
-        "zod": "^3.20.2"
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "package.json", "LICENSE", "README.md"],
+  "scripts": {
+    "build": "rm -rf dist && bunchee",
+    "dev": "bunchee -w",
+    "typecheck": "tsc --noEmit",
+    "prepack": "bun ../../replace-workspace-protocol.ts"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0",
+    "zod": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
     }
+  },
+  "devDependencies": {
+    "bunchee": "^4.3.3",
+    "typescript": "^5.3.3",
+    "zod": "^3.20.2"
+  }
 }

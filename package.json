@@ -1,24 +1,24 @@
 {
-    "name": "@t3-oss/env-root",
-    "packageManager": "bun@1.0.25",
-    "private": true,
-    "type": "module",
-    "workspaces": ["docs", "examples/*", "packages/*"],
-    "scripts": {
-        "build": "turbo build --filter @t3-oss/env*",
-        "dev": "turbo dev --filter @t3-oss/env*",
-        "lint": "biome check .",
-        "lint:fix": "biome check . --apply",
-        "test": "turbo test",
-        "typecheck": "turbo typecheck"
-    },
-    "dependencies": {
-        "@biomejs/biome": "1.5.3",
-        "@changesets/changelog-github": "^0.4.8",
-        "@changesets/cli": "^2.26.1",
-        "@types/bun": "^1.0.4",
-        "expect-type": "^0.17.3",
-        "turbo": "^1.11.3",
-        "typescript": "^5.3.3"
-    }
+  "name": "@t3-oss/env-root",
+  "packageManager": "bun@1.0.25",
+  "private": true,
+  "type": "module",
+  "workspaces": ["docs", "examples/*", "packages/*"],
+  "scripts": {
+    "build": "turbo build --filter @t3-oss/env*",
+    "dev": "turbo dev --filter @t3-oss/env*",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --apply",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck"
+  },
+  "dependencies": {
+    "@biomejs/biome": "1.5.3",
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.1",
+    "@types/bun": "^1.0.4",
+    "expect-type": "^0.17.3",
+    "turbo": "^1.11.3",
+    "typescript": "^5.3.3"
+  }
 }
