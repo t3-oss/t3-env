@@ -19,8 +19,6 @@ type Reduce<
   TAcc = {}
 > = TArr extends []
   ? TAcc
-  : TArr extends undefined
-  ? TAcc
   : TArr extends [infer Head, ...infer Tail]
   ? Tail extends Array<Record<string, unknown>>
     ? Head & Reduce<Tail, TAcc>
