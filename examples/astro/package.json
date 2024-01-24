@@ -7,8 +7,7 @@
     "build": "astro build",
     "dev": "astro dev",
     "preview": "astro preview",
-    "start": "astro dev",
-    "typecheck": "tsc --noEmit"
+    "start": "astro dev"
   },
   "dependencies": {
     "@astrojs/solid-js": "^2.1.0",
