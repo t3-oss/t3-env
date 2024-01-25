@@ -1,7 +1,7 @@
 export * from "@t3-oss/env-core/presets";
 
-import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
+import { createEnv } from ".";
 
 const vercelEnv = z.enum(["development", "preview", "production"]);
 
@@ -29,10 +29,12 @@ export const vercel = createEnv({
     VERCEL_GIT_PREVIOUS_SHA: z.string().optional(),
     VERCEL_GIT_PULL_REQUEST_ID: z.string().optional(),
   },
-  clientPrefix: "NEXT_PUBLIC_",
   client: {
     NEXT_PUBLIC_VERCEL_ENV: vercelEnv.optional(),
     NEXT_PUBLIC_VERCEL_URL: z.string().optional(),
   },
-  runtimeEnv: process.env,
+  experimental__runtimeEnv: {
+    NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV,
+    NEXT_PUBLIC_VERCEL_URL: process.env.VERCEL_URL,
+  },
 });
