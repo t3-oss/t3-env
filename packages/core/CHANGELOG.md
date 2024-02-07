@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.9.0
+
+### Minor Changes
+
+- [#182](https://github.com/t3-oss/t3-env/pull/182) [`34d04142b3cb2ba06e76866f05c21e4eeed16dc9`](https://github.com/t3-oss/t3-env/commit/34d04142b3cb2ba06e76866f05c21e4eeed16dc9) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - chore!: drop cjs
+
 ## 0.8.0
 
 ### Minor Changes
