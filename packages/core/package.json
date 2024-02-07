@@ -10,32 +10,20 @@
     "url": "https://github.com/t3-oss/t3-env",
     "directory": "packages/core"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "require": "dist/index.cjs",
-  "types": "dist/index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
       }
     },
     "./presets": {
       "import": {
         "types": "./dist/presets.d.ts",
         "default": "./dist/presets.js"
-      },
-      "require": {
-        "types": "./dist/presets.d.cts",
-        "default": "./dist/presets.cjs"
       }
-    },
-    "./package.json": "./package.json"
+    }
   },
   "files": ["dist", "package.json", "LICENSE", "README.md"],
   "scripts": {
