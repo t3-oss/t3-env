@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.9.2
+
+### Patch Changes
+
+- [#186](https://github.com/t3-oss/t3-env/pull/186) [`ff17d1d05b8beb92d4f3a13de18b3a8f99c30ba3`](https://github.com/t3-oss/t3-env/commit/ff17d1d05b8beb92d4f3a13de18b3a8f99c30ba3) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - fix exports condition once more...
+
 ## 0.9.1
 
 ### Patch Changes
