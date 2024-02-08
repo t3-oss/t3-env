@@ -25,7 +25,7 @@ pnpm add @t3-oss/env-nextjs zod
 
 ### Create your schema
 
-```js title="src/env.mjs"
+```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
@@ -93,17 +93,19 @@ export const env = createEnv({
 
 ### Validate schema on build (recommended)
 
-We recommend you importing your newly created file in your `next.config.mjs`. This will make sure your environment variables are validated at build time which will save you a lot of time and headaches down the road.
+We recommend you importing your newly created file in your `next.config.js`. This will make sure your environment variables are validated at build time which will save you a lot of time and headaches down the road. You can use [unjs/jiti](https://github.com/unjs/jiti) to import TypeScript files in your `next.config.js`:
 
-```js title="next.config.mjs" {1}
-import "./src/env.mjs";
+```js title="next.config.js" {5}
+import createJiti from "jiti";
+const jiti = createJiti(new URL(import.meta.url).pathname);
 
-/** @type {import("next").NextConfig} */
-const config = {
+// Import env here to validate during build. Using jiti we can import .ts files :)
+jiti("./app/env");
+
+/** @type {import('next').NextConfig} */
+export default {
   /** ... */
 };
-
-export default config;
 ```
 
 ### Use your schema
@@ -111,7 +113,7 @@ export default config;
 Then, import the `env` object in your application and use it, taking advantage of type-safety and auto-completion:
 
 ```ts title="some-api-endpoint.ts"
-import { env } from "~/env.mjs"; // On server
+import { env } from "~/env"; // On server
 
 export const GET = async () => {
   // do fancy ai stuff
@@ -123,7 +125,7 @@ export const GET = async () => {
 ```
 
 ```ts title="some-component.tsx"
-import { env } from "~/env.mjs"; // On client - same import!
+import { env } from "~/env"; // On client - same import!
 
 export const SomeComponent = () => {
   return (
