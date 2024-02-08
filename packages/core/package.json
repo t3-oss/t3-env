@@ -2,11 +2,7 @@
   "name": "@t3-oss/env-core",
   "version": "0.9.1",
   "type": "module",
-  "keywords": [
-    "create-t3-app",
-    "environment variables",
-    "zod"
-  ],
+  "keywords": ["create-t3-app", "environment variables", "zod"],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -14,28 +10,18 @@
     "url": "https://github.com/t3-oss/t3-env",
     "directory": "packages/core"
   },
-  "main": "dist/index.js",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./presets": {
-      "import": {
-        "types": "./dist/presets.d.ts",
-        "default": "./dist/presets.js"
-      }
+      "types": "./dist/presets.d.ts",
+      "default": "./dist/presets.js"
     }
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md"],
   "scripts": {
     "build": "rm -rf dist && bunchee",
     "dev": "bunhcee -w",
