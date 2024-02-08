@@ -16,6 +16,7 @@
     "url": "https://github.com/t3-oss/t3-env",
     "directory": "packages/nuxt"
   },
+  "main": "dist/index.js",
   "exports": {
     "./package.json": "./package.json",
     ".": {
