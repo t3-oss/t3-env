@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.9.1
+
+### Patch Changes
+
+- [#184](https://github.com/t3-oss/t3-env/pull/184) [`48dd2b5b4dfbc514b720f41a9362c50e9d4da93b`](https://github.com/t3-oss/t3-env/commit/48dd2b5b4dfbc514b720f41a9362c50e9d4da93b) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - fix: add main field to package json
+
 ## 0.9.0
 
 ### Minor Changes
