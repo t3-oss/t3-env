@@ -23,6 +23,12 @@ pnpm add @t3-oss/env-nextjs zod
 
 </Callout>
 
+<Callout>
+
+`@t3-oss/env-core` is an ESM only package. Make sure that your tsconfig uses a module resolution that can read `package.json#exports` (`Bundler` is recommended).
+
+</Callout>
+
 ### Create your schema
 
 ```ts title="src/env.ts"
