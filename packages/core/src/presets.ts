@@ -27,3 +27,14 @@ export const vercel = createEnv({
   },
   runtimeEnv: process.env,
 });
+
+/**
+ * @see https://docs.uploadthing.com/getting-started/appdir#add-env-variables
+ */
+export const uploadthing = createEnv({
+  server: {
+    UPLOADTHING_SECRET: z.string(),
+    UPLOADTHING_APP_ID: z.string(),
+  },
+  runtimeEnv: process.env,
+});
