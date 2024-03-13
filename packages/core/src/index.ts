@@ -1,4 +1,4 @@
-import { type ZodError, type ZodObject, type ZodType, z } from "zod";
+import type { ZodError, ZodType, z } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
@@ -48,7 +48,7 @@ export interface BaseOptions<
    * Called when validation fails. By default the error is logged,
    * and an error is thrown telling what environment variables are invalid.
    */
-  onValidationError?: (error: ZodError) => never;
+  onValidationError?: (errors: Record<string, ZodError>) => never;
 
   /**
    * Called when a server-side environment variable is accessed on the client.
@@ -201,9 +201,9 @@ export function createEnv<
   opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>,
 ): Readonly<
   Simplify<
-    z.infer<ZodObject<TServer>> &
-      z.infer<ZodObject<TClient>> &
-      z.infer<ZodObject<TShared>> &
+    {[K in keyof TServer]: z.infer<TServer[K]>} &
+    {[K in keyof TClient]: z.infer<TClient[K]>} &
+    {[K in keyof TShared]: z.infer<TShared[K]>} &
       UnReadonlyObject<Reduce<TExtends>>
   >
 > {
@@ -222,26 +222,35 @@ export function createEnv<
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   if (skip) return runtimeEnv as any;
 
-  const _client = typeof opts.client === "object" ? opts.client : {};
-  const _server = typeof opts.server === "object" ? opts.server : {};
-  const _shared = typeof opts.shared === "object" ? opts.shared : {};
-  const client = z.object(_client);
-  const server = z.object(_server);
-  const shared = z.object(_shared);
+  const client =
+    typeof opts.client === "object"
+      ? opts.client
+      : ({} as Record<string, never>);
+  const server =
+    typeof opts.server === "object"
+      ? opts.server
+      : ({} as Record<string, never>);
+  const shared =
+    typeof opts.shared === "object"
+      ? opts.shared
+      : ({} as Record<string, never>);
   const isServer = opts.isServer ?? typeof window === "undefined";
 
-  const allClient = client.merge(shared);
-  const allServer = server.merge(shared).merge(client);
-  const parsed = isServer
-    ? allServer.safeParse(runtimeEnv) // on server we can validate all env vars
-    : allClient.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
+  const allClient = { ...client, ...shared };
+  const allServer = { ...server, ...shared, ...client };
+  const parsed = mapObject(
+    isServer
+      ? allServer // on server we can validate all env vars
+      : allClient, // on client we can only validate the ones that are exposed
+    (field, key) => field.safeParse(runtimeEnv[key]),
+  );
 
   const onValidationError =
     opts.onValidationError ??
-    ((error: ZodError) => {
+    ((errors: Record<string, ZodError>) => {
       console.error(
         "❌ Invalid environment variables:",
-        error.flatten().fieldErrors,
+        mapObject(errors, ({ issues }) => issues.map(({ message }) => message)),
       );
       throw new Error("Invalid environment variables");
     });
@@ -254,13 +263,16 @@ export function createEnv<
       );
     });
 
-  if (parsed.success === false) {
-    return onValidationError(parsed.error);
+  const parseErrors = mapObject(parsed, (result) =>
+    result.success ? undefined : result.error,
+  );
+  if (Object.keys(parseErrors).length > 0) {
+    return onValidationError(parseErrors);
   }
 
   const isServerAccess = (prop: string) => {
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !(prop in shared.shape);
+    return !prop.startsWith(opts.clientPrefix) && !(prop in shared);
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
@@ -269,10 +281,13 @@ export function createEnv<
     return prop === "__esModule" || prop === "$$typeof";
   };
 
+  const parsedData = mapObject(parsed, (result) =>
+    result.success ? result.data : undefined,
+  );
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
     return Object.assign(acc, curr);
   }, {});
-  const fullObj = Object.assign(parsed.data, extendedObj);
+  const fullObj = Object.assign(parsedData, extendedObj);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
@@ -295,4 +310,20 @@ export function createEnv<
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   return env as any;
+}
+
+function mapObject<T, U>(
+  object: Record<string, T>,
+  fn: (value: T, key: string) => U | undefined,
+): Record<string, U> {
+  return Object.keys(object).reduce(
+    (result, key) => {
+      const value = fn(object[key], key);
+      if (value !== undefined) {
+        result[key] = value;
+      }
+      return result;
+    },
+    {} as Record<string, U>,
+  );
 }
