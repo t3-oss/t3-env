@@ -33,8 +33,8 @@ export const vercel = createEnv({
  */
 export const uploadthing = createEnv({
   server: {
-    UPLOADTHING_SECRET: z.string(),
-    UPLOADTHING_APP_ID: z.string(),
+    UPLOADTHING_SECRET: z.string().optional(),
+    UPLOADTHING_APP_ID: z.string().optional(),
   },
   runtimeEnv: process.env,
 });
