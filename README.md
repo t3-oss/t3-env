@@ -4,6 +4,10 @@ Deploying your app with invalid environment variables is a hassle. This package 
 
 ## Installation
 
+> [!NOTE]
+>
+>This is an ESM only package that requires a tsconfig with a module resolution that can read package.json#exports (`NodeNext` if transpiling with `tsc`, `Bundler` if using a bundler).
+
 ```bash
 # Core package, no framework specific features
 pnpm add @t3-oss/env-core zod

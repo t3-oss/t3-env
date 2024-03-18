@@ -20,7 +20,7 @@ pnpm add @t3-oss/env-nuxt zod
 
 <Callout>
 
-`@t3-oss/env-core` requires a minimum of `typescript@4.7.2`.
+`@t3-oss/env-core` requires a minimum of `typescript@5`.
 
 </Callout>
 
@@ -62,7 +62,6 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     OPEN_AI_API_KEY: z.string().min(1),
   },
-  runtimeEnv: process.env,
 });
 ```
 
@@ -74,7 +73,6 @@ export const env = createEnv({
   client: {
     PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
-  runtimeEnv: process.env,
 });
 ```
 
