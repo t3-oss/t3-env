@@ -231,7 +231,7 @@ describe("errors when validation fails", () => {
           FOO_BAR: "foo",
         },
         onValidationError: (err) => {
-          const barError = err.flatten().fieldErrors.BAR?.[0] as string;
+          const barError = err.BAR?.issues?.[0]?.message as string;
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),
