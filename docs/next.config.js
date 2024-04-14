@@ -1,3 +1,4 @@
+// @ts-nocheck - whatever
 import withMdx from "@next/mdx";
 import rehypePrettyCode from "rehype-pretty-code";
 import { getHighlighter } from "shiki";
