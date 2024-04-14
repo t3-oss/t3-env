@@ -1,5 +1,5 @@
 import type { MDXComponents } from "mdx/types";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import * as React from "react";
 
 import { Icons } from "@/components/icons";

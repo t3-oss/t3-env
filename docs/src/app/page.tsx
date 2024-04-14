@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import Balancer from "react-wrap-balancer";
 
 import { siteConfig } from "@/app/site-config";

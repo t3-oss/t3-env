@@ -1,7 +1,7 @@
 import { Link, Moon, SunMedium, TerminalSquare, Twitter } from "lucide-react";
-import type { Icon, LucideProps } from "lucide-react";
+import type { LucideIcon, LucideProps } from "lucide-react";
 
-export type { Icon };
+export type { LucideIcon as Icon };
 
 export const Icons = {
   sun: SunMedium,
