@@ -1,5 +1,5 @@
-import { exec } from "child_process";
-import fs from "fs";
+import { exec } from "node:child_process";
+import fs from "node:fs";
 
 const pkgJsonPaths = [
   "packages/core/package.json",

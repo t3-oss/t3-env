@@ -1,5 +1,6 @@
 {
   "name": "@examples/nuxt",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -8,11 +9,11 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "@types/node": "^18.15.13",
-    "nuxt": "^3.4.2"
+    "@types/node": "^20.12.0",
+    "nuxt": "^3.11.2"
   },
   "dependencies": {
     "@t3-oss/env-nuxt": "workspace:*",
-    "zod": "^3.20.2"
+    "zod": "^3.22.4"
   }
 }

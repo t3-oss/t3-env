@@ -20,7 +20,7 @@
       "complexity": {
         "noBannedTypes": "off"
       },
-      "nursery": {
+      "style": {
         "useImportType": "error",
         "useExportType": "error"
       }
