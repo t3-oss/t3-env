@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import * as React from "react";
 
 import type { Icons } from "@/components/icons";

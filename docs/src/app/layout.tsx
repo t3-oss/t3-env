@@ -6,6 +6,7 @@ import "@/styles/globals.css";
 import { ThemeProvider } from "@juliusmarminge/next-themes";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
+import { ViewTransitions } from "next-view-transitions";
 
 import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
@@ -73,7 +74,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
+    <ViewTransitions>
       <html lang="en" suppressHydrationWarning className="bg-background">
         <head />
         <body
@@ -94,6 +95,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <Analytics />
         </body>
       </html>
-    </>
+    </ViewTransitions>
   );
 }
