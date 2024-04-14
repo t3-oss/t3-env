@@ -5,7 +5,7 @@ import { createEnv } from ".";
  * Vercel System Environment Variables
  * @see https://vercel.com/docs/projects/environment-variables/system-environment-variables#system-environment-variables
  */
-export const vercel = createEnv({
+export const vercel = () => createEnv({
   server: {
     VERCEL: z.string().optional(),
     VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
@@ -31,7 +31,7 @@ export const vercel = createEnv({
 /**
  * @see https://docs.uploadthing.com/getting-started/appdir#add-env-variables
  */
-export const uploadthing = createEnv({
+export const uploadthing = () => createEnv({
   server: {
     UPLOADTHING_SECRET: z.string(),
     UPLOADTHING_APP_ID: z.string().optional(),
