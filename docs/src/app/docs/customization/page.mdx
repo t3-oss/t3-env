@@ -88,7 +88,7 @@ import { vercel } from "@t3-oss/env-core/presets";
 export const env = createEnv({
   // ...
   // Extend the Vercel preset.
-  extends: [vercel],
+  extends: [vercel()],
 });
 
 env.VERCEL_URL; // string
