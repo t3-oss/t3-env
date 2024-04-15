@@ -1,0 +1,60 @@
+---
+title: Contentlayer
+description: Learn how to use Contentlayer with Fumadocs
+---
+
+We have native support for Contentlayer which provides the default
+configuration with required MDX plugins.
+
+It also adds extra functionalities to Contentlayer, making it more
+convenient to use and straightforward.
+
+## Setup
+
+```package-install
+fumadocs-contentlayer
+```
+
+1. Edit your configuration.
+
+```ts title="contentlayer.config.ts"
+import { makeSource } from 'contentlayer/source-files';
+import { defaultConfig } from 'fumadocs-contentlayer/configuration';
+
+export default makeSource(defaultConfig);
+```
+
+<Callout title="Note">
+  Configuration file **can't** be imported from Next.js runtime.
+</Callout>
+
+2. Load the files with Source API.
+
+```ts
+import { allDocs, allMeta } from 'contentlayer/generated';
+import { createContentlayerSource } from 'fumadocs-contentlayer';
+import { loader } from 'fumadocs-core/source';
+
+export const docs = loader({
+  baseUrl: '/docs',
+  rootDir: 'docs',
+  source: createContentlayerSource(allMeta, allDocs),
+});
+```
+
+## Pages Structure
+
+All documents should be located in `/content` or `/content/docs`.
+
+<Cards>
+  <Card
+    title="Pages Structure"
+    description="Learn how to structure your pages"
+    href="/docs/headless/page-conventions"
+  />
+</Cards>
+
+### Adding Icons
+
+You can configure the icon handler in
+the [`loader`](/docs/headless/source-api#icons).

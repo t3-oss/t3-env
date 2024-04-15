@@ -1,0 +1,42 @@
+---
+title: Callout
+description: Add callout to your docs
+preview: callout
+---
+
+## Usage
+
+Add it to your MDX components, or import it in MDX files.
+
+```mdx
+<Callout title="Title">Hello World</Callout>
+```
+
+### Types
+
+You can specify the type of callout.
+
+```mdx
+<Callout title="Title" type="warn">
+  Hello World
+</Callout>
+```
+
+<Callout title="Title" type="warn">
+  Hello World
+</Callout>
+
+### Without Title
+
+You can create a Callout without title.
+
+<Callout>Hello World</Callout>
+
+### Reference
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "CalloutProps"
+}
+```

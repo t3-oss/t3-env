@@ -1,0 +1,51 @@
+---
+title: TOC
+description: Table of Content
+---
+
+A Table of Contents with active anchor observer and auto scroll.
+
+## Usage
+
+```tsx
+import * as Base from 'fumadocs-core/toc';
+
+return (
+  <Base.TOCProvider>
+    <Base.TOCItem />
+  </Base.TOCProvider>
+);
+```
+
+### TOC Provider
+
+Contains all anchor items. By default, it automatically scrolls to the active
+anchor.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "TOCProviderProps"
+}
+```
+
+### TOC Item
+
+The anchor element.
+
+| Data Attribute | Values        | Description      |
+| -------------- | ------------- | ---------------- |
+| `data-active`  | `true, false` | Is active anchor |
+
+### Use Active Anchor
+
+A hook for getting the active anchor. It accepts the item url and return a
+boolean value, must be called under the TOC Provider.
+
+Useful for implementing advanced styling.
+
+```ts
+import { useActiveAnchor } from 'fumadocs-core/toc';
+
+const isActive = useActiveAnchor(item.url);
+```

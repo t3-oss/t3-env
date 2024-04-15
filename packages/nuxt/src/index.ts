@@ -35,3 +35,5 @@ export function createEnv<
     runtimeEnv: process.env,
   });
 }
+
+export { version } from "../package.json";

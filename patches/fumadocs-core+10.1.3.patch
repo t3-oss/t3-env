@@ -1,0 +1,13 @@
+diff --git a/node_modules/fumadocs-core/dist/chunk-AFKH746E.js b/node_modules/fumadocs-core/dist/chunk-AFKH746E.js
+index f91efb2..21149b1 100644
+--- a/node_modules/fumadocs-core/dist/chunk-AFKH746E.js
++++ b/node_modules/fumadocs-core/dist/chunk-AFKH746E.js
+@@ -5,7 +5,7 @@ import {
+ } from "./chunk-WEAGW6MQ.js";
+ 
+ // src/link.tsx
+-import Original from "next/link";
++import { Link as Original } from "next-view-transitions";
+ import { forwardRef } from "react";
+ import { jsx } from "react/jsx-runtime";
+ var Link = forwardRef(

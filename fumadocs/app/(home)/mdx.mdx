@@ -1,0 +1,62 @@
+# Introduction
+
+Forgetting environment variables during build can be a hassle and difficult to debug if a bug is caused by a missing environment variable. This package provides a simple way to define environment variables validation for your app.
+
+This library does all the grunt work for you, simply define your schema and use your environment variables safely.
+
+import { buttonVariants } from "@/components/ui/button";
+import { ImageZoom } from 'fumadocs-ui/components/image-zoom';
+import { cn } from "@/utils/cn";
+import { LibraryIcon } from "lucide-react";
+import { NextjsIcon, NuxtIcon } from "@/components/icons";
+import { Items } from "./item";
+
+<Items />
+
+## Rationale
+
+For a while, we've had validated environment variables in [create-t3-app](https://create.t3.gg) which has been super appreciated by the community. However, the code was quite scary and lived in user land which caused some confusion for new users. This library aims to move that complexity into a library that abstracts the implementation details and lets the user focus on just the necessary parts. It also allows other framework and stacks to benefit from the same validation strategy - which we've polished over a number of iterations up until now.
+
+## Advantages over simpler solutions
+
+Validating envs are quite easy and can be done in a few lines of code. You can also infer the result from the validation onto your `process.env` object to benefit from autocompletion throughout your application. [Matt Pocock](https://www.youtube.com/watch?v=q1im-hMlKhM) did a video explaining how you can implement this approach:
+
+```ts
+import { z } from "zod";
+
+const envVariables = z.object({
+  DATABASE_URL: z.string(),
+  CUSTOM_STUFF: z.string(),
+});
+
+envVariables.parse(process.env);
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv extends z.infer<typeof envVariables> {}
+  }
+}
+```
+
+However, it has a few drawbacks that this library solves:
+
+### Transforms and Default values
+
+Since the above implementation doesn't mutate the `process.env` object, any transforms applied will make your types lie to you, as the type will be of the transformed type, but the value on `process.env` will be the original string. You also cannot apply default values to your environment variables which can be useful in some cases.
+
+By having an object you import and use throughout the application, you can use both of the above which unlocks some quite powerful features.
+
+### Support for multiple environments
+
+By default, some frameworks (e.g. Next.js) treeshake away unused environment variables unless you explicitly access them on the `process.env` object. This means that the above implementation would fail even if you export and use the `envVariables` object in your application, as no environment will be included in the bundle for some environments / runtimes.
+
+Another pitfall is client side validation. Importing `envVariables` on the client will throw an error as the server side environment variables `DATABASE_URL` & `CUSTOM_STUFF` is not defined on the client. This library solves this issue by using a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) based implementation combined with Zod's `safeParse` method instead of `parse`.
+
+<Callout type="info">
+
+We're not leaking your server variables onto the client. Your server variables will be undefined on the client, and attempting to access one will throw a descriptive error message to ease debugging:
+
+<ImageZoom src="https://user-images.githubusercontent.com/51714798/234414211-33d9a91d-4bd7-42ff-a4af-1e101ee8cd93.png" alt="Invalid access" width={550} height={300} />  
+
+</Callout>
+

@@ -1,0 +1,58 @@
+---
+title: Accordion
+description: Add Accordions to your documentation
+preview: accordion
+---
+
+## Usage
+
+Wrap accordions in the container, a `type` property is required by default.
+
+Based on
+[Radix UI Accordion](https://www.radix-ui.com/primitives/docs/components/accordion).
+
+```mdx
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+<Accordions>
+<Accordion title="My Title">
+
+My Content
+
+</Accordion>
+</Accordions>
+```
+
+### Accordions
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "AccordionsProps"
+}
+```
+
+### Accordion
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "AccordionProps"
+}
+```
+
+## Linking to Accordion
+
+You can specify an `id` for accordion. The accordion will automatically open when the user is navigating to the page with the specified `id` in hash parameter.
+
+```mdx
+<Accordions>
+<Accordion title="My Title" id="my-title">
+
+My Content
+
+</Accordion>
+</Accordions>
+```
+
+> The value of accordion is `title` by default. When an `id` is specified, it will be used as the value instead.

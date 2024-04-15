@@ -1,0 +1,84 @@
+---
+title: Page
+description: A page in your documentation
+---
+
+Page is the base element of a documentation, it includes Table of contents,
+Footer, and Breadcrumb.
+
+## Usage
+
+```mdx
+import { DocsPage, DocsBody } from 'fumadocs-ui/page';
+
+<DocsPage>
+  <DocsBody>...</DocsBody>
+</DocsPage>
+```
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "PageProps"
+}
+```
+
+### Body
+
+To apply the [Typography](/docs/ui/theme#typography) styles, wrap your content in the `DocsBody` component.
+
+```mdx
+import { DocsBody } from 'fumadocs-ui/page';
+
+<DocsBody>
+  <h1>This heading looks good!</h1>
+</DocsBody>
+```
+
+### Table of Contents
+
+It is an array with all the headings in your document. For Markdown or MDX
+documents, You can parse TOC by using the
+[TOC Utility](/docs/headless/utils/get-toc). Some source providers may offer this out-of-the-box.
+
+In addition, you can easily customise or disable TOC in your documentation.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "TOCProps"
+}
+```
+
+### Last Update Time
+
+Since you might have different version controls (e.g. Github) or it's from
+remote sources like Sanity, Fumadocs UI doesn't display last updated time by
+default.
+
+For Github hosted documents, you can use
+the [Git Last Modified](/docs/headless/utils/git-last-edit) utility.
+
+```tsx
+<DocsPage lastUpdate={new Date(lastModifiedTime)} />
+```
+
+### Footer
+
+Footer is a navigation element that has two buttons to jump to the next and previous pages. By default, it finds the neighbour pages from page tree.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "FooterProps"
+}
+```
+
+### Breadcrumb
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "BreadcrumbProps"
+}
+```

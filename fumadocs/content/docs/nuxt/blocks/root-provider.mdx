@@ -1,0 +1,47 @@
+---
+title: Root Provider
+description: The context provider of Fumadocs UI.
+---
+
+The context provider of all the components, including `next-themes` and context
+for search dialog. It should be located at the root layout.
+
+## Usage
+
+```jsx
+import { RootProvider } from 'fumadocs-ui/provider';
+
+export default function Layout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <RootProvider>{children}</RootProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### Search Dialog
+
+You can customize the search dialog from the root provider.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "ProviderProps"
+}
+```
+
+```jsx
+<RootProvider
+  search={{
+    links: [
+      ['Home', '/'],
+      ['Docs', '/docs'],
+    ],
+  }}
+>
+  ...
+</RootProvider>
+```

@@ -1,0 +1,107 @@
+---
+title: Card
+description: Use the Card component in your MDX documentation
+preview: card
+---
+
+import { HomeIcon } from 'lucide-react';
+
+## Usage
+
+Add it to your MDX components.
+
+```mdx
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+<MDX
+  components={{
+    Card: (props) => <Card {...props} />,
+    Cards: (props) => <Cards {...props} />,
+  }}
+/>
+```
+
+### Cards
+
+The container of cards.
+
+### Card
+
+Based on `<Link />`.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "CardProps"
+}
+```
+
+## Example
+
+Pass the href, title and description.
+
+```mdx
+<Cards>
+  <Card
+    href="https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating"
+    title="Fetching, Caching, and Revalidating"
+    description="Learn more about caching in Next.js"
+  />
+</Cards>
+```
+
+<Cards>
+  <Card
+    href="https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating"
+    title="Fetching, Caching, and Revalidating"
+    description="Learn more about caching in Next.js"
+  />
+</Cards>
+
+### With Icons
+
+```mdx
+import { HomeIcon } from 'lucide-react';
+
+<Cards>
+  <Card
+    icon={<HomeIcon />}
+    href="/"
+    title="Home"
+    description="Go back to home"
+  />
+</Cards>
+```
+
+<Callout title="Tree Shaking" type="warn">
+
+If you're using Contentlayer, or other libraries for rendering MDX, ensure that
+tree shaking is working properly.
+
+Most of the icon libraries support importing icons individually.
+
+```tsx
+import HomeIcon from 'lucide-react/dist/esm/icons/home';
+```
+
+As a workaround, you can pass icons to MDX Components too.
+
+```tsx
+import { HomeIcon } from 'lucide-react';
+
+const components = {
+  ...defaultComponents,
+  HomeIcon,
+};
+```
+
+</Callout>
+
+<Cards>
+  <Card
+    icon={<HomeIcon />}
+    href="/"
+    title="Home"
+    description="Go back to home"
+  />
+</Cards>

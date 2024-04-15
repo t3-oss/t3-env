@@ -1,0 +1,46 @@
+---
+title: Sidebar
+description: The navigation bar at aside of viewport
+---
+
+A sidebar component which handles device resizing and remove scroll bar
+automatically.
+
+## Usage
+
+```tsx
+import * as Base from 'fumadocs-core/sidebar';
+
+return (
+  <Base.SidebarProvider>
+    <Base.SidebarTrigger />
+    <Base.SidebarList />
+  </Base.SidebarProvider>
+);
+```
+
+### Sidebar Provider
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "SidebarProviderProps"
+}
+```
+
+### Sidebar Trigger
+
+Opens the sidebar on click.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "SidebarTriggerProps"
+}
+```
+
+### Sidebar List
+
+| Data Attribute | Values        | Description        |
+| -------------- | ------------- | ------------------ |
+| `data-open`    | `true, false` | Is sidebar opening |

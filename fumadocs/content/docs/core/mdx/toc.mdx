@@ -1,0 +1,30 @@
+---
+title: Table of Contents
+description: Extract headings from your document
+---
+
+## Usage
+
+It extracts the headings of a MDX document to `vfile.data.toc`. You may write your
+own plugin to convert it into a MDX export.
+
+```ts
+import { remarkHeading } from 'fumadocs-core/mdx-plugins';
+
+export default {
+  remarkPlugins: [remarkHeading],
+};
+```
+
+If your heading doesn't have an id, it will add one automatically.
+
+### Output
+
+An array of `TOCItemType`.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "TOCItemType"
+}
+```
