@@ -1,5 +1,27 @@
 # @t3-oss/env-core
 
+## 0.10.0
+
+### Minor Changes
+
+- [#215](https://github.com/t3-oss/t3-env/pull/215) [`5363e99`](https://github.com/t3-oss/t3-env/commit/5363e997327269d9d6158f79e18bf511a5f603f4) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - BREAKING: make env presets functions
+
+  To migrate:
+
+  ```diff
+    import { vercel } from '@t3-oss/env-core/presets'
+
+    const env = createEnv({
+        /** ... */
+  -     extends: [vercel],
+  +     extends: [vercel()],
+    })
+  ```
+
+### Patch Changes
+
+- [`78585f3`](https://github.com/t3-oss/t3-env/commit/78585f30513294bb46e39fb9a8e64cbfff32df1e) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - fix: support zod@3.23
+
 ## 0.9.2
 
 ### Patch Changes
