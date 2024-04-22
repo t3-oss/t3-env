@@ -1,0 +1,108 @@
+---
+title: Page Tree
+description: The structure of page tree.
+---
+
+Page tree is a tree that includes all the pages, separator and folders.
+
+It will be sent to the client and being referenced in the sidebar or breadcrumb.
+Hence, you shouldn't store any sensitive or large data in page tree.
+
+<Callout title="Note">
+  Unserializable data such as functions can't be passed to page tree.
+</Callout>
+
+## Conventions
+
+### Root
+
+The initial root of page trees.
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "PageTreeRoot"
+}
+```
+
+### Page
+
+It contains a url, an optional icon and display name.
+
+```json
+{
+  "type": "page",
+  "name": "Quick Start",
+  "url": "/docs"
+}
+```
+
+> External urls are also supported
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "PageTreeItem"
+}
+```
+
+### Folder
+
+A folder containing a list of nodes.
+
+```json
+{
+    "type": "folder",
+    "name": "Guide",
+    "index": {
+        "type": "page",
+        ...
+    }
+    "children": [
+        ...
+    ]
+}
+```
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "PageTreeFolder"
+}
+```
+
+#### As Root
+
+To implement multiple page trees, you can add a `root` property to the folder node. The nearest root folder of current page will be used as the root of page tree.
+
+### Separator
+
+A label between items.
+
+```json
+{
+  "type": "separator",
+  "name": "Components"
+}
+```
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/headless/props.ts",
+  "name": "PageTreeSeparator"
+}
+```
+
+## Icons
+
+Icon is a `ReactElement`, supported by pages and folders.
+
+## Type Bindings
+
+You can import the type from server package.
+
+```ts
+import type { PageTree } from 'fumadocs-core/server'
+
+const tree: PageTree = ...
+```

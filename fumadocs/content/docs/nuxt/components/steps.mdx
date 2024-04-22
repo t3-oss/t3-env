@@ -1,0 +1,37 @@
+---
+title: Steps
+description: Adding steps to your docs
+preview: steps
+---
+
+## Usage
+
+Put your steps into the `Steps` container.
+
+```mdx
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<Steps>
+<Step>
+
+### Hello World
+
+</Step>
+
+<Step>
+
+### Hello World
+
+</Step>
+</Steps>
+```
+
+### Without imports
+
+You can directly use the CSS classes without importing it.
+
+```mdx
+<div className="steps">
+  <div className="step" />
+</div>
+```

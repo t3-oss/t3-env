@@ -1,0 +1,5 @@
+{
+  "title": "mdx",
+  "root": true,
+  "pages": ["---Guide---", "index", "..."]
+}

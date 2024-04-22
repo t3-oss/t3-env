@@ -1,0 +1,58 @@
+---
+title: Auto Type Table
+description: Auto-generated type table
+---
+
+<div className="bg-background px-4 rounded-xl">
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "AutoTypeTableExample"
+}
+```
+
+</div>
+
+
+## Usage
+
+```package-install
+fumadocs-typescript
+```
+
+Under the hood, it uses the [Typescript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) to extract type information.
+Your `tsconfig.json` file in the current working directory will be loaded. You may specify compiler settings via `options` prop.
+
+It accepts a `path` prop which should be a typescript file, and `name` for the exported type name.
+
+```mdx
+import { AutoTypeTable } from 'fumadocs-typescript/ui';
+
+<AutoTypeTable path="./path/to/file.ts" name="MyInterface" />
+```
+
+<Callout title="Server Component only" type="warn">
+
+You cannot use this in a client component.
+
+</Callout>
+
+### Functions
+
+Notice that only object type is allowed. For functions, you should wrap them into an object instead.
+
+```ts
+export interface MyInterface {
+  myFn: (input: string) => void;
+}
+```
+
+### Auto Type Table
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "AutoTypeTableProps"
+}
+```

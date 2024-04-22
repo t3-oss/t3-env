@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+  --popover: 0 0% 100%;
+  --card: 0 0% 100%;
+  --muted: 270 20% 98%;
+  --muted: 270 20% 98%;
+  --destructive: 0 100% 50%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --muted-foreground: 252 5% 40.7%;
+}
+
+.dark {
+  --background: 229 85% 8%;
+  --foreground: 228 5% 82%;
+  --popover: 224 71% 4%;
+  --card: 224 71% 4%;
+  --muted: 224 71% 4%;
+  --destructive: 0 63% 31%;
+  --border: 216 34% 17%;
+  --accent: 216 34% 17%;
+  --accent-foreground: 210 40% 98%;
+  --muted-foreground: 213 31% 91%;
+}
+
+.ui {
+  --primary: 220 80% 30%;
+}
+
+.dark .ui {
+  --primary: 220 100% 80%;
+}
+
+.headless {
+  --primary: 250 80% 30%;
+}
+
+.dark .headless {
+  --primary: 250 100% 80%;
+}
+
+.mdx {
+  --primary: 0 0% 9%;
+}
+
+.dark .mdx {
+  --primary: 0 0% 100%;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis-weight: none;
+}

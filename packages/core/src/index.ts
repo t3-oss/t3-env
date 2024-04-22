@@ -297,3 +297,5 @@ export function createEnv<
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   return env as any;
 }
+
+export { version } from "../package.json";

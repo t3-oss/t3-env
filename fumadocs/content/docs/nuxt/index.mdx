@@ -1,0 +1,201 @@
+---
+title: Quick Start
+description: Getting Started with Fumadocs
+icon: Album
+---
+
+Fumadocs UI is the built-in user interface integration for Fumadocs, built on the top of Radix UI.
+
+## Automatic Installation
+
+Create a new app with `create-fumadocs-app`.
+
+```bash title="Terminal"
+npx create-fumadocs-app
+# or
+pnpm create fumadocs-app
+# or
+yarn create fumadocs-app
+```
+
+## Manual Installation
+
+Create a new Next.js application with `create-next-app`, and install required packages.
+
+```package-install
+fumadocs-ui fumadocs-core
+```
+
+### Configuration
+
+Fumadocs UI is unopinionated and doesn't include content management features by default.
+You can choose a source you prefer, such as Contentlayer and Fumadocs MDX.
+
+There is a list of supported sources:
+
+- [Setup Fumadocs MDX](/docs/mdx)
+- [Setup Contentlayer](/docs/headless/contentlayer)
+
+You have to configure the library correctly following their setup guide before continuing.
+
+### Styles
+
+You can import the pre-built stylesheet in the root layout.
+
+```ts
+import 'fumadocs-ui/style.css';
+```
+
+For Tailwind CSS projects, you may use [the official plugin](/docs/ui/theme) instead.
+
+> It doesn't come with a default font, you may choose one from `next/font`.
+
+### Root Layout
+
+Wrap the entire application inside [Root Provider](/docs/ui/blocks/root-provider).
+
+```tsx
+import { RootProvider } from 'fumadocs-ui/provider';
+import type { ReactNode } from 'react';
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <RootProvider>{children}</RootProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### Layout
+
+Create a new catch-all route for our docs, and give it a proper layout.
+
+```tsx title="app/docs/layout.tsx"
+import { DocsLayout } from 'fumadocs-ui/layout';
+import type { ReactNode } from 'react';
+
+export default function RootDocsLayout({ children }: { children: ReactNode }) {
+  return (
+    <DocsLayout tree={tree} nav={{ title: 'My App' }}>
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+> `tree` refers to [Page Tree](/docs/headless/page-tree), which should be provided by your data source.
+
+### Page
+
+For the `page.tsx`, it may vary depending on your source. You should manually configure static rendering with `generateStaticParams` and metadata with `generateMetadata`.
+
+Make sure to wrap your content in the [Page](/docs/ui/blocks/page) component, this will also configure typography styles.
+
+<Accordions>
+<Accordion title="Example with Fumadocs MDX">
+
+{/* ```tsx title="app/docs/[[...slug]]/page.tsx"
+|reference:../../examples/next-mdx/app/docs/[[...slug]]/page.tsx|
+``` */}
+
+</Accordion>
+</Accordions>
+
+### Search
+
+By default, it uses the built-in document search based on Flexsearch. [Learn to configure Document Search](/docs/headless/search/flexsearch) for your data source.
+
+<Accordions>
+<Accordion title="Example with Fumadocs MDX">
+
+{/* ```tsx title="app/api/search/route.ts"
+|reference:../../examples/next-mdx/app/api/search/route.ts|
+``` */}
+
+</Accordion>
+</Accordions>
+
+## Enjoy!
+
+Now, Create your first mdx file in the docs folder.
+
+```mdx title="content/docs/index.mdx"
+---
+title: Hello World
+---
+
+## Yo what's up
+```
+
+Run the app in development mode and see http://localhost:3000/docs.
+
+```bash
+npm run dev
+```
+
+### FAQ
+
+<Accordions>
+<Accordion id='why-fumadocs-ui' title="Why Fumadocs UI?">
+
+Fumadocs UI provides many built-in components, and is more flexible compared to
+other existing frameworks.
+
+And most importantly, it is compatible with Next.js App Router which results in
+a faster page load speed with ~120kb initial Javascript load. You can easily use
+Fumadocs in an existing Next.js project, without refactoring anything.
+
+Feel free to open the demo in CodeSandbox and see if it suits you.
+
+</Accordion>
+<Accordion id='fix-supports-color' title="How to fix 'supports-color' error?">
+
+If you got this error:
+
+```
+Module not found: Can't resolve 'supports-color' in '.../node_modules/debug/src'
+```
+
+Try installing `supports-color@8.1.1`.
+
+</Accordion>
+<Accordion id='fix-dot-map-error' title="How to fix '@/.map' error?">
+
+If you are using Fumadocs MDX, the `.map.ts` file will be generated automatically once you start the dev server.
+
+For more information, see [Setup Guide](/docs/mdx).
+
+</Accordion>
+</Accordions>
+
+### Demo
+
+Open in [CodeSandbox](https://githubbox.com/fuma-nama/fumadocs-ui-template).
+
+## Learn More
+
+<Cards>
+  <Card
+    href="/docs/headless/page-conventions"
+    title="Page Structure"
+    description="Learn how to structure your pages"
+  />
+  <Card
+    href="/docs/ui/internationalization"
+    title="Learn I18n"
+    description="Learn how to implement I18n"
+  />
+  <Card
+    href="/docs/ui/theme"
+    title="Theming"
+    description="Add themes to Fumadocs UI"
+  />
+  <Card
+    href="/docs/ui/components/codeblock"
+    title="Code Block"
+    description="Learn how to use code blocks in MDX"
+  />
+</Cards>

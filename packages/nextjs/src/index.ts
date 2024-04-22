@@ -78,3 +78,5 @@ export function createEnv<
     runtimeEnv,
   });
 }
+
+export { version } from "../package.json";

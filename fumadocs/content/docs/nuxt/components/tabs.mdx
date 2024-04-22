@@ -1,0 +1,72 @@
+---
+title: Tabs
+description:
+  A Tabs component built with Radix UI, with additional features such as
+  persistent and shared value.
+preview: tabs
+---
+
+## Usage
+
+Import it in your MDX documents.
+
+```mdx
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+<Tabs items={['Javascript', 'Rust']}>
+  <Tab value="Javascript">Javascript is weird</Tab>
+  <Tab value="Rust">Rust is fast</Tab>
+</Tabs>
+```
+
+### Shared Value
+
+By passing an `id` property, you can share a value across all tabs with the same
+id.
+
+```mdx
+<Tabs id="language" items={['Javascript', 'Rust']}>
+  <Tab value="Javascript">Javascript is weird</Tab>
+  <Tab value="Rust">Rust is fast</Tab>
+</Tabs>
+```
+
+### Persistent
+
+You can enable persistent by passing a `persist` property. The value will be
+stored in `localStorage`, with its id as the key.
+
+```mdx
+<Tabs id="language" items={['Javascript', 'Rust']} persist>
+  <Tab value="Javascript">Javascript is weird</Tab>
+  <Tab value="Rust">Rust is fast</Tab>
+</Tabs>
+```
+
+> Persistent only works if you have passed an `id`.
+
+### Default Value
+
+Set a default value by passing `defaultIndex`.
+
+```mdx
+<Tabs
+  items={['Javascript', 'Rust']}
+  defaultIndex={1}
+>...</Tab>
+```
+
+### Advanced
+
+You can use the styled Radix UI primitive directly from exported `Primitive`.
+
+```mdx
+import { Primitive } from 'fumadocs-ui/components/tabs';
+
+<Primitive.Tabs>
+  <Primitive.TabsList>
+    <Primitive.TabsTrigger />
+  </Primitive.TabsList>
+  <Primitive.TabsContent />
+</Primitive.Tabs>
+```

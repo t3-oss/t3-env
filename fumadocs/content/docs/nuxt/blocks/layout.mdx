@@ -1,0 +1,62 @@
+---
+title: Layout
+description: The layout of documentation
+---
+
+The layout of documentation pages, it must be nested under the
+[Root Provider](/docs/ui/blocks/root-provider).
+
+> It is a server component, you should not reference it in a client component.
+
+## Usage
+
+Wrap the children and pass your page tree to the component.
+
+```jsx
+import { DocsLayout } from 'fumadocs-ui/layout';
+
+export default function Layout({ children }) {
+  return <DocsLayout tree={tree}>{children}</DocsLayout>;
+}
+```
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "LayoutProps"
+}
+```
+
+### Non-docs Pages
+
+If you want to share navbar and search dialog between other pages, you may use the `Layout` component for non-docs page.
+
+It doesn't contain a sidebar, therefore, a page tree is not required.
+
+```jsx
+import { Layout } from 'fumadocs-ui/layout';
+
+export default function HomeLayout({ children }) {
+  return <Layout>{children}</Layout>;
+}
+```
+
+You can create a [Route Group](https://nextjs.org/docs/app/building-your-application/routing/route-groups) to share the same layout across multiple pages.
+
+### Navbar
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "NavbarProps"
+}
+```
+
+### Sidebar
+
+```json doc-gen:typescript
+{
+  "file": "./content/docs/ui/props.ts",
+  "name": "SidebarProps"
+}
+```

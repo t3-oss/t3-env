@@ -1,0 +1,61 @@
+---
+title: Internationalization
+description: Learn more implement internationalization in Fumadocs UI
+icon: Globe
+---
+
+Please refer to this
+[guide](/docs/headless/internationalization) to setup basic
+configurations and learn how to structure the documents.
+
+Ensure you have your page tree, layout and middleware ready before getting
+started.
+
+## Create Provider
+
+A `I18nProvider` is needed for internationalization features.
+
+Put your pages and layouts under `/app/[lang]`, where the 'lang' parameter is at the second segment.
+Then, wrap the root provider inside of your i18n provider.
+
+```tsx
+import { RootProvider } from 'fumadocs-ui/provider';
+import { I18nProvider } from 'fumadocs-ui/i18n';
+import type { ReactNode } from 'react';
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <I18nProvider>
+      <RootProvider>{children}</RootProvider>
+    </I18nProvider>
+  );
+}
+```
+
+### Adding Translations
+
+We only provide english translation by default, you have to pass your translations to the provider.
+
+```tsx
+<I18nProvider
+  translations={{
+    cn: {
+      name: 'Chinese', // required
+      search: 'Translated Content',
+    },
+  }}
+></I18nProvider>
+```
+
+## Add Language Switch
+
+To allow users changing their language, you can add a `<LanguageSelect />`
+component to your UI, for example, as sidebar footer.
+
+```tsx title="[lang]/docs/layout.tsx"
+import { LanguageSelect } from 'fumadocs-ui/i18n';
+
+export function DocsLayout({ children }: { children: ReactNode }) {
+  return <LanguageSelect />;
+}
+```

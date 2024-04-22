@@ -1,0 +1,22 @@
+{
+  "title": "ui",
+  "root": true,
+  "pages": [
+    "---Guide---",
+    "index",
+    "...",
+    "---Components---",
+    "...components",
+    "---Blocks---",
+    "...blocks",
+    "---Integrations---",
+    "math",
+    "typescript",
+    "twoslash",
+    "openapi",
+    "museum",
+    "---Commands---",
+    "...commands",
+    "[Vercel](https://vercel.com)"
+  ]
+}
