@@ -39,6 +39,6 @@
   "devDependencies": {
     "bunchee": "^5.1.2",
     "typescript": "^5.4.5",
-    "zod": "^3.22.4"
+    "zod": "^3.23.0"
   }
 }
