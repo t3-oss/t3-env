@@ -29,7 +29,6 @@ jobs:
 
       - name: Authenticate to npm and publish
         run: |
-          pnpm build
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
           for dir in packages/*/; do
               npm publish "$dir" --access public --tag canary
