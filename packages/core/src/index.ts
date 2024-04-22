@@ -228,7 +228,8 @@ export function createEnv<
   const client = z.object(_client);
   const server = z.object(_server);
   const shared = z.object(_shared);
-  const isServer = opts.isServer ?? typeof window === "undefined";
+  const isServer =
+    opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
   const allClient = client.merge(shared);
   const allServer = server.merge(shared).merge(client);
