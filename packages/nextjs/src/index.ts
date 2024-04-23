@@ -1,5 +1,5 @@
 import type { ServerClientOptions, StrictOptions } from "@t3-oss/env-core";
-import { createEnv as createEnvCore } from "@t3-oss/env-core";
+import { type CreateEnv, createEnv as createEnvCore } from "@t3-oss/env-core";
 import type { ZodType } from "zod";
 
 const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
@@ -57,7 +57,9 @@ export function createEnv<
   > = NonNullable<unknown>,
   TShared extends Record<string, ZodType> = NonNullable<unknown>,
   const TExtends extends Array<Record<string, unknown>> = [],
->(opts: Options<TServer, TClient, TShared, TExtends>) {
+>(
+  opts: Options<TServer, TClient, TShared, TExtends>,
+): CreateEnv<TServer, TClient, TShared, TExtends> {
   const client = typeof opts.client === "object" ? opts.client : {};
   const server = typeof opts.server === "object" ? opts.server : {};
   const shared = opts.shared;

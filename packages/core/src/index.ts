@@ -1,4 +1,5 @@
-import { type ZodError, type ZodObject, type ZodType, z } from "zod";
+import type { TypeOf, ZodError, ZodObject, ZodType } from "zod";
+import { object } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
@@ -191,22 +192,35 @@ export type EnvOptions<
   | (StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>);
 
-export function createEnv<
-  TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType> = NonNullable<unknown>,
-  TClient extends Record<string, ZodType> = NonNullable<unknown>,
-  TShared extends Record<string, ZodType> = NonNullable<unknown>,
-  const TExtends extends Array<Record<string, unknown>> = [],
->(
-  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>,
-): Readonly<
+type TPrefixFormat = string | undefined;
+type TServerFormat = Record<string, ZodType>;
+type TClientFormat = Record<string, ZodType>;
+type TSharedFormat = Record<string, ZodType>;
+type TExtendsFormat = Array<Record<string, unknown>>;
+
+export type CreateEnv<
+  TServer extends TServerFormat,
+  TClient extends TClientFormat,
+  TShared extends TSharedFormat,
+  TExtends extends TExtendsFormat,
+> = Readonly<
   Simplify<
-    z.infer<ZodObject<TServer>> &
-      z.infer<ZodObject<TClient>> &
-      z.infer<ZodObject<TShared>> &
+    TypeOf<ZodObject<TServer>> &
+      TypeOf<ZodObject<TClient>> &
+      TypeOf<ZodObject<TShared>> &
       UnReadonlyObject<Reduce<TExtends>>
   >
-> {
+>;
+
+export function createEnv<
+  TPrefix extends TPrefixFormat,
+  TServer extends TServerFormat = NonNullable<unknown>,
+  TClient extends TClientFormat = NonNullable<unknown>,
+  TShared extends TSharedFormat = NonNullable<unknown>,
+  const TExtends extends TExtendsFormat = [],
+>(
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>,
+): CreateEnv<TServer, TClient, TShared, TExtends> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const emptyStringAsUndefined = opts.emptyStringAsUndefined ?? false;
@@ -225,9 +239,9 @@ export function createEnv<
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
   const _shared = typeof opts.shared === "object" ? opts.shared : {};
-  const client = z.object(_client);
-  const server = z.object(_server);
-  const shared = z.object(_shared);
+  const client = object(_client);
+  const server = object(_server);
+  const shared = object(_shared);
   const isServer =
     opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
