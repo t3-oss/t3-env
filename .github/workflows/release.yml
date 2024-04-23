@@ -31,3 +31,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Fix formatting
+        if: steps.changeset.outputs.hasChangesets == 'true'
+        run: |
+          git checkout changeset-release/main
+          bun lint:fix
+          git add .
+          git commit -m "chore(release): 📦 fix formatting"
+          git push origin changeset-release/main
