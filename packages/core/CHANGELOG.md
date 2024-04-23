@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.10.1
+
+### Patch Changes
+
+- [#224](https://github.com/t3-oss/t3-env/pull/224) [`bed246c`](https://github.com/t3-oss/t3-env/commit/bed246c493ad0bc6b6224b9f4dc9e2b47c82036f) Thanks [@colinhacks](https://github.com/colinhacks)! - refactor: add explicit return type to make lib more portable
+
 ## 0.10.0
 
 ### Minor Changes
