@@ -6,7 +6,7 @@
   "workspaces": ["docs", "examples/*", "packages/*"],
   "scripts": {
     "build": "turbo build --filter @t3-oss/env*",
-    "dev": "turbo dev --filter @t3-oss/env*",
+    "dev": "turbo watch build --filter @t3-oss/env*",
     "lint": "biome check .",
     "lint:fix": "biome check . --apply",
     "test": "turbo test",
@@ -18,7 +18,7 @@
     "@changesets/cli": "^2.27.1",
     "@types/bun": "^1.0.12",
     "expect-type": "^0.19.0",
-    "turbo": "^1.13.2",
+    "turbo": "canary",
     "typescript": "^5.4.5"
   }
 }

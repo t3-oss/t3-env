@@ -23,7 +23,7 @@
   },
   "files": ["dist", "package.json", "LICENSE", "README.md"],
   "scripts": {
-    "build": "rm -rf dist && bunchee",
+    "build": "bunchee",
     "dev": "bunhcee -w",
     "typecheck": "tsc --noEmit"
   },
