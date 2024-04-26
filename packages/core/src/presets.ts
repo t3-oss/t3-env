@@ -12,23 +12,23 @@ import { createEnv } from "./index";
  * @see https://vercel.com/docs/projects/environment-variables/system-environment-variables#system-environment-variables
  */
 export const vercel = (): Readonly<{
-  VERCEL?: string;
-  VERCEL_ENV?: "development" | "preview" | "production";
-  VERCEL_URL?: string;
-  VERCEL_BRANCH_URL?: string;
-  VERCEL_REGION?: string;
-  VERCEL_AUTOMATION_BYPASS_SECRET?: string;
-  VERCEL_GIT_PROVIDER?: string;
-  VERCEL_GIT_REPO_SLUG?: string;
-  VERCEL_GIT_REPO_OWNER?: string;
-  VERCEL_GIT_REPO_ID?: string;
-  VERCEL_GIT_COMMIT_REF?: string;
-  VERCEL_GIT_COMMIT_SHA?: string;
-  VERCEL_GIT_COMMIT_MESSAGE?: string;
-  VERCEL_GIT_COMMIT_AUTHOR_LOGIN?: string;
-  VERCEL_GIT_COMMIT_AUTHOR_NAME?: string;
-  VERCEL_GIT_PREVIOUS_SHA?: string;
-  VERCEL_GIT_PULL_REQUEST_ID?: string;
+  VERCEL?: string | undefined;
+  VERCEL_ENV?: "development" | "preview" | "production" | undefined;
+  VERCEL_URL?: string | undefined;
+  VERCEL_BRANCH_URL?: string | undefined;
+  VERCEL_REGION?: string | undefined;
+  VERCEL_AUTOMATION_BYPASS_SECRET?: string | undefined;
+  VERCEL_GIT_PROVIDER?: string | undefined;
+  VERCEL_GIT_REPO_SLUG?: string | undefined;
+  VERCEL_GIT_REPO_OWNER?: string | undefined;
+  VERCEL_GIT_REPO_ID?: string | undefined;
+  VERCEL_GIT_COMMIT_REF?: string | undefined;
+  VERCEL_GIT_COMMIT_SHA?: string | undefined;
+  VERCEL_GIT_COMMIT_MESSAGE?: string | undefined;
+  VERCEL_GIT_COMMIT_AUTHOR_LOGIN?: string | undefined;
+  VERCEL_GIT_COMMIT_AUTHOR_NAME?: string | undefined;
+  VERCEL_GIT_PREVIOUS_SHA?: string | undefined;
+  VERCEL_GIT_PULL_REQUEST_ID?: string | undefined;
 }> => {
   return createEnv({
     server: {
@@ -59,7 +59,7 @@ export const vercel = (): Readonly<{
  */
 export const uploadthing = (): Readonly<{
   UPLOADTHING_SECRET: string;
-  UPLOADTHING_APP_ID?: string;
+  UPLOADTHING_APP_ID?: string | undefined;
 }> => {
   return createEnv({
     server: {
