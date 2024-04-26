@@ -1,3 +1,8 @@
+/**
+ * This is the nextjs package of t3-env.
+ * It contains the `createEnv` function that you can use to create your schema.
+ * @module
+ */
 import type {
   CreateEnv,
   ServerClientOptions,
@@ -53,6 +58,9 @@ type Options<
       }
   );
 
+/**
+ * Create a new environment variable schema.
+ */
 export function createEnv<
   TServer extends Record<string, ZodType> = NonNullable<unknown>,
   TClient extends Record<
