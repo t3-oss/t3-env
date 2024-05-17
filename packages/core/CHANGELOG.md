@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.10.2
+
+### Patch Changes
+
+- [#235](https://github.com/t3-oss/t3-env/pull/235) [`204836b`](https://github.com/t3-oss/t3-env/commit/204836be6a47bce1fdbaca7e16c0d249684f9d0c) Thanks [@chribjel](https://github.com/chribjel)! - add `VERCEL_PROJECT_PRODUCTION_URL` to vercel preset
+
 ## 0.10.1
 
 ### Patch Changes
