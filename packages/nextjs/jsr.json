@@ -1,0 +1,10 @@
+{
+  "name": "@t3-oss/env-nextjs",
+  "version": "0.10.1",
+  "exports": {
+    ".": "./src/index.ts",
+    "./presets": "./src/presets.ts"
+  },
+  "include": ["src/**/*.ts", "README.md", "LICENSE", "package.json"],
+  "exclude": ["node_modules", "dist", "test"]
+}
