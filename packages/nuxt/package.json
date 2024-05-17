@@ -24,7 +24,7 @@
   "files": ["dist", "package.json", "LICENSE", "README.md"],
   "scripts": {
     "build": "bunchee",
-    "dev": "bunchee -w",
+    "dev": "bunchee -w --no-clean",
     "typecheck": "tsc --noEmit",
     "prepack": "bun ../../replace-workspace-protocol.ts"
   },

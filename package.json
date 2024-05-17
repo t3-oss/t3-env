@@ -6,7 +6,7 @@
   "workspaces": ["docs", "examples/*", "packages/*"],
   "scripts": {
     "build": "turbo build --filter @t3-oss/env*",
-    "dev": "turbo watch build --filter @t3-oss/env*",
+    "dev": "turbo watch dev --filter @t3-oss/env*",
     "lint": "biome check .",
     "lint:fix": "biome check . --apply",
     "test": "turbo test",
