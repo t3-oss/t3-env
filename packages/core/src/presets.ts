@@ -41,3 +41,26 @@ export const uploadthing = () =>
     },
     runtimeEnv: process.env,
   });
+
+/**
+ * Render System Environment Variables
+ * @see https://docs.render.com/environment-variables#all-runtimes
+ */
+export const render = () =>
+  createEnv({
+    server: {
+      IS_PULL_REQUEST: z.string().optional(),
+      RENDER_DISCOVERY_SERVICE: z.string().optional(),
+      RENDER_EXTERNAL_HOSTNAME: z.string().optional(),
+      RENDER_EXTERNAL_URL: z.string().url().optional(),
+      RENDER_GIT_BRANCH: z.string().optional(),
+      RENDER_GIT_COMMIT: z.string().optional(),
+      RENDER_GIT_REPO_SLUG: z.string().optional(),
+      RENDER_INSTANCE_ID: z.string().optional(),
+      RENDER_SERVICE_ID: z.string().optional(),
+      RENDER_SERVICE_NAME: z.string().optional(),
+      RENDER_SERVICE_TYPE: z.enum(["web", "pserv", "cron", "worker", "static"]).optional(),
+      RENDER: z.string().optional(),
+    },
+    runtimeEnv: process.env,
+  });
