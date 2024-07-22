@@ -59,7 +59,9 @@ export const render = () =>
       RENDER_INSTANCE_ID: z.string().optional(),
       RENDER_SERVICE_ID: z.string().optional(),
       RENDER_SERVICE_NAME: z.string().optional(),
-      RENDER_SERVICE_TYPE: z.enum(["web", "pserv", "cron", "worker", "static"]).optional(),
+      RENDER_SERVICE_TYPE: z
+        .enum(["web", "pserv", "cron", "worker", "static"])
+        .optional(),
       RENDER: z.string().optional(),
     },
     runtimeEnv: process.env,
