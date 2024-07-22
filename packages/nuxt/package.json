@@ -1,8 +1,14 @@
 {
   "name": "@t3-oss/env-nuxt",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "type": "module",
-  "keywords": ["create-t3-app", "environment variables", "zod", "nuxt", "vue"],
+  "keywords": [
+    "create-t3-app",
+    "environment variables",
+    "zod",
+    "nuxt",
+    "vue"
+  ],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -21,7 +27,12 @@
       "default": "./dist/presets.js"
     }
   },
-  "files": ["dist", "package.json", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "build": "bunchee",
     "dev": "bunchee -w --no-clean",

@@ -1,5 +1,13 @@
 # @t3-oss/env-core
 
+## 0.11.0
+
+### Minor Changes
+
+- [#239](https://github.com/t3-oss/t3-env/pull/239) [`8737daf`](https://github.com/t3-oss/t3-env/commit/8737daf90eaabe201fdaccdfe418a0f4f8835623) Thanks [@Gomah](https://github.com/Gomah)! - add render preset
+
+- [#253](https://github.com/t3-oss/t3-env/pull/253) [`870608d`](https://github.com/t3-oss/t3-env/commit/870608d1890581edd82a7fc71419b520dab3464b) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - railway preset
+
 ## 0.10.2
 
 ### Patch Changes
