@@ -66,3 +66,37 @@ export const render = () =>
     },
     runtimeEnv: process.env,
   });
+
+/**
+ * Railway Environment Variables
+ * @see https://docs.railway.app/reference/variables#railway-provided-variables
+ */
+export const railway = () =>
+  createEnv({
+    server: {
+      RAILWAY_PUBLIC_DOMAIN: z.string().optional(),
+      RAILWAY_PRIVATE_DOMAIN: z.string().optional(),
+      RAILWAY_TCP_PROXY_DOMAIN: z.string().optional(),
+      RAILWAY_TCP_PROXY_PORT: z.string().optional(),
+      RAILWAY_TCP_APPLICATION_PORT: z.string().optional(),
+      RAILWAY_PROJECT_NAME: z.string().optional(),
+      RAILWAY_PROJECT_ID: z.string().optional(),
+      RAILWAY_ENVIRONMENT_NAME: z.string().optional(),
+      RAILWAY_ENVIRONMENT_ID: z.string().optional(),
+      RAILWAY_SERVICE_NAME: z.string().optional(),
+      RAILWAY_SERVICE_ID: z.string().optional(),
+      RAILWAY_REPLICA_ID: z.string().optional(),
+      RAILWAY_DEPLOYMENT_ID: z.string().optional(),
+      RAILWAY_SNAPSHOT_ID: z.string().optional(),
+      RAILWAY_VOLUME_NAME: z.string().optional(),
+      RAILWAY_VOLUME_MOUNT_PATH: z.string().optional(),
+      RAILWAY_RUN_UID: z.string().optional(),
+      RAILWAY_GIT_COMMIT_SHA: z.string().optional(),
+      RAILWAY_GIT_AUTHOR_EMAIL: z.string().optional(),
+      RAILWAY_GIT_BRANCH: z.string().optional(),
+      RAILWAY_GIT_REPO_NAME: z.string().optional(),
+      RAILWAY_GIT_REPO_OWNER: z.string().optional(),
+      RAILWAY_GIT_COMMIT_MESSAGE: z.string().optional(),
+    },
+    runtimeEnv: process.env,
+  });
