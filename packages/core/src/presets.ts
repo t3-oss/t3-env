@@ -100,3 +100,25 @@ export const railway = () =>
     },
     runtimeEnv: process.env,
   });
+
+/**
+ * Fly.io Environment Variables
+ * @see https://fly.io/docs/machines/runtime-environment/#environment-variables
+ */
+export const fly = () =>
+  createEnv({
+    server: {
+      FLY_APP_NAME: z.string().optional(),
+      FLY_MACHINE_ID: z.string().optional(),
+      FLY_ALLOC_ID: z.string().optional(),
+      FLY_REGION: z.string().optional(),
+      FLY_PUBLIC_IP: z.string().optional(),
+      FLY_IMAGE_REF: z.string().optional(),
+      FLY_MACHINE_VERSION: z.string().optional(),
+      FLY_PRIVATE_IP: z.string().optional(),
+      FLY_PROCESS_GROUP: z.string().optional(),
+      FLY_VM_MEMORY_MB: z.string().optional(),
+      PRIMARY_REGION: z.string().optional(),
+    },
+    runtimeEnv: process.env,
+  });
