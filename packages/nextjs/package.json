@@ -2,12 +2,7 @@
   "name": "@t3-oss/env-nextjs",
   "version": "0.11.1",
   "type": "module",
-  "keywords": [
-    "create-t3-app",
-    "environment variables",
-    "zod",
-    "nextjs"
-  ],
+  "keywords": ["create-t3-app", "environment variables", "zod", "nextjs"],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -26,12 +21,7 @@
       "default": "./dist/presets.js"
     }
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md"],
   "scripts": {
     "build": "bunchee",
     "dev": "bunchee -w --no-clean",
