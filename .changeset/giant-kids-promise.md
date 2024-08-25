@@ -1,5 +1,5 @@
 ---
-"@t3-oss/env-core": minor
+"@t3-oss/env-core": patch
 ---
 
 fly.io preset
