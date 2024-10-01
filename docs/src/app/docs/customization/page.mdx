@@ -62,6 +62,8 @@ export const env = createEnv({
 });
 ```
 
+If you want to reuse above `isServer` check in multiple places, you can use the [`shared` section](./recipes#isserver).
+
 ## Treat empty strings as undefined
 
 By default, T3 Env will feed the environment variables directly to the Zod validator. This means that if you have an empty string for a value that is supposed to be a number (e.g. `PORT=` in a ".env" file), Zod will flag

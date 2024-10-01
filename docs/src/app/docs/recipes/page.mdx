@@ -82,3 +82,22 @@ const config: StorybookConfig = {
 
 export default config;
 ```
+
+## isServer
+
+Determining whether the code is running on the server or client is a common requirement.
+You can use the `shared` section to define an environment variable that's accessible in both contexts:
+
+```ts
+export const env = createEnv({
+  shared: {
+    IS_SERVER: z.boolean().default(false),
+  },
+  runtimeEnv: {
+    IS_SERVER: typeof window === "undefined",
+  }
+})
+```
+
+Make sure to read the [customization](./customization#tell-when-we're-in-a-server-context) docs to learn how to override the `isServer` value used by the library itself.
+  
