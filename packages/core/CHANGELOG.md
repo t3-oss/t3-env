@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.11.1
+
+### Patch Changes
+
+- [#254](https://github.com/t3-oss/t3-env/pull/254) [`2a74b72`](https://github.com/t3-oss/t3-env/commit/2a74b72de710c179edddddae86bd272f05ec57d7) Thanks [@dburdan](https://github.com/dburdan)! - fly.io preset
+
 ## 0.11.0
 
 ### Minor Changes
