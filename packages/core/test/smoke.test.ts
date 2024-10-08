@@ -17,12 +17,12 @@ test("server vars should not be prefixed", () => {
   ignoreErrors(() => {
     createEnv({
       clientPrefix: "FOO_",
-      server: {
-        // @ts-expect-error - server should not have FOO_ prefix
+      // @ts-expect-error - server should not have FOO_ prefix
+      server: z.object({
         FOO_BAR: z.string(),
         BAR: z.string(),
-      },
-      client: {},
+      }),
+      client: z.object({}),
       runtimeEnv: {},
     });
   });
@@ -32,12 +32,12 @@ test("client vars should be correctly prefixed", () => {
   ignoreErrors(() => {
     createEnv({
       clientPrefix: "FOO_",
-      server: {},
-      client: {
+      server: z.object({}),
+      // @ts-expect-error - no FOO_ prefix
+      client: z.object({
         FOO_BAR: z.string(),
-        // @ts-expect-error - no FOO_ prefix
         BAR: z.string(),
-      },
+      }),
       runtimeEnv: {},
     });
   });
@@ -46,36 +46,36 @@ test("client vars should be correctly prefixed", () => {
 test("runtimeEnvStrict enforces all keys", () => {
   createEnv({
     clientPrefix: "FOO_",
-    server: {},
-    client: {},
+    server: z.object({}),
+    client: z.object({}),
     runtimeEnvStrict: {},
   });
 
   createEnv({
     clientPrefix: "FOO_",
-    server: {},
-    client: { FOO_BAR: z.string() },
+    server: z.object({}),
+    client: z.object({ FOO_BAR: z.string() }),
     runtimeEnvStrict: { FOO_BAR: "foo" },
   });
 
   createEnv({
     clientPrefix: "FOO_",
-    server: { BAR: z.string() },
-    client: {},
+    server: z.object({ BAR: z.string() }),
+    client: z.object({}),
     runtimeEnvStrict: { BAR: "foo" },
   });
 
   createEnv({
     clientPrefix: "FOO_",
-    server: { BAR: z.string() },
-    client: { FOO_BAR: z.string() },
+    server: z.object({ BAR: z.string() }),
+    client: z.object({ FOO_BAR: z.string() }),
     runtimeEnvStrict: { BAR: "foo", FOO_BAR: "foo" },
   });
 
   createEnv({
     clientPrefix: "FOO_",
-    server: {},
-    client: { FOO_BAR: z.string() },
+    server: z.object({}),
+    client: z.object({ FOO_BAR: z.string() }),
     runtimeEnvStrict: {
       FOO_BAR: "foo",
       // @ts-expect-error - FOO_BAZ is extraneous
@@ -86,8 +86,8 @@ test("runtimeEnvStrict enforces all keys", () => {
   ignoreErrors(() => {
     createEnv({
       clientPrefix: "FOO_",
-      server: { BAR: z.string() },
-      client: { FOO_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ FOO_BAR: z.string() }),
       // @ts-expect-error - BAR is missing
       runtimeEnvStrict: {
         FOO_BAR: "foo",
@@ -100,8 +100,8 @@ describe("return type is correctly inferred", () => {
   test("simple", () => {
     const env = createEnv({
       clientPrefix: "FOO_",
-      server: { BAR: z.string() },
-      client: { FOO_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ FOO_BAR: z.string() }),
       runtimeEnvStrict: {
         BAR: "bar",
         FOO_BAR: "foo",
@@ -124,8 +124,8 @@ describe("return type is correctly inferred", () => {
   test("with transforms", () => {
     const env = createEnv({
       clientPrefix: "FOO_",
-      server: { BAR: z.string().transform(Number) },
-      client: { FOO_BAR: z.string() },
+      server: z.object({ BAR: z.string().transform(Number) }),
+      client: z.object({ FOO_BAR: z.string() }),
       runtimeEnvStrict: {
         BAR: "123",
         FOO_BAR: "foo",
@@ -148,8 +148,8 @@ describe("return type is correctly inferred", () => {
   test("without client vars", () => {
     const env = createEnv({
       clientPrefix: "FOO_",
-      server: { BAR: z.string() },
-      client: {},
+      server: z.object({ BAR: z.string() }),
+      client: z.object({}),
       runtimeEnvStrict: {
         BAR: "bar",
       },
@@ -170,11 +170,11 @@ describe("return type is correctly inferred", () => {
 test("can pass number and booleans", () => {
   const env = createEnv({
     clientPrefix: "FOO_",
-    server: {
+    server: z.object({
       PORT: z.number(),
       IS_DEV: z.boolean(),
-    },
-    client: {},
+    }),
+    client: z.object({}),
     runtimeEnvStrict: {
       PORT: 123,
       IS_DEV: true,
@@ -199,8 +199,8 @@ describe("errors when validation fails", () => {
     expect(() =>
       createEnv({
         clientPrefix: "FOO_",
-        server: { BAR: z.string() },
-        client: { FOO_BAR: z.string() },
+        server: z.object({ BAR: z.string() }),
+        client: z.object({ FOO_BAR: z.string() }),
         runtimeEnv: {},
       }),
     ).toThrow("Invalid environment variables");
@@ -210,8 +210,10 @@ describe("errors when validation fails", () => {
     expect(() =>
       createEnv({
         clientPrefix: "FOO_",
-        server: { BAR: z.string().transform(Number).pipe(z.number()) },
-        client: { FOO_BAR: z.string() },
+        server: z.object({
+          BAR: z.string().transform(Number).pipe(z.number()),
+        }),
+        client: z.object({ FOO_BAR: z.string() }),
         runtimeEnv: {
           BAR: "123abc",
           FOO_BAR: "foo",
@@ -224,8 +226,10 @@ describe("errors when validation fails", () => {
     expect(() =>
       createEnv({
         clientPrefix: "FOO_",
-        server: { BAR: z.string().transform(Number).pipe(z.number()) },
-        client: { FOO_BAR: z.string() },
+        server: z.object({
+          BAR: z.string().transform(Number).pipe(z.number()),
+        }),
+        client: z.object({ FOO_BAR: z.string() }),
         runtimeEnv: {
           BAR: "123abc",
           FOO_BAR: "foo",
@@ -243,8 +247,8 @@ describe("errors when server var is accessed on client", () => {
   test("with default handler", () => {
     const env = createEnv({
       clientPrefix: "FOO_",
-      server: { BAR: z.string() },
-      client: { FOO_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ FOO_BAR: z.string() }),
       runtimeEnvStrict: {
         BAR: "bar",
         FOO_BAR: "foo",
@@ -260,8 +264,8 @@ describe("errors when server var is accessed on client", () => {
   test("with custom handler", () => {
     const env = createEnv({
       clientPrefix: "FOO_",
-      server: { BAR: z.string() },
-      client: { FOO_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ FOO_BAR: z.string() }),
       runtimeEnvStrict: {
         BAR: "bar",
         FOO_BAR: "foo",
@@ -280,9 +284,9 @@ describe("client/server only mode", () => {
   test("client only", () => {
     const env = createEnv({
       clientPrefix: "FOO_",
-      client: {
+      client: z.object({
         FOO_BAR: z.string(),
-      },
+      }),
       runtimeEnv: { FOO_BAR: "foo" },
     });
 
@@ -292,9 +296,9 @@ describe("client/server only mode", () => {
 
   test("server only", () => {
     const env = createEnv({
-      server: {
+      server: z.object({
         BAR: z.string(),
-      },
+      }),
       runtimeEnv: { BAR: "bar" },
     });
 
@@ -308,7 +312,7 @@ describe("client/server only mode", () => {
         // @ts-expect-error - incomplete client config - client not present
         {
           clientPrefix: "FOO_",
-          server: {},
+          server: z.object({}),
           runtimeEnv: {},
         },
       );
@@ -319,8 +323,8 @@ describe("client/server only mode", () => {
     ignoreErrors(() => {
       // @ts-expect-error - incomplete client config - clientPrefix not present
       createEnv({
-        client: {},
-        server: {},
+        client: z.object({}),
+        server: z.object({}),
         runtimeEnv: {},
       });
     });
@@ -336,12 +340,12 @@ describe("shared can be accessed on both server and client", () => {
 
   function lazyCreateEnv() {
     return createEnv({
-      shared: {
+      shared: z.object({
         NODE_ENV: z.enum(["development", "production", "test"]),
-      },
+      }),
       clientPrefix: "FOO_",
-      server: { BAR: z.string() },
-      client: { FOO_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ FOO_BAR: z.string() }),
       runtimeEnv: process.env,
     });
   }
@@ -389,7 +393,7 @@ describe("shared can be accessed on both server and client", () => {
 
 test("envs are readonly", () => {
   const env = createEnv({
-    server: { BAR: z.string() },
+    server: z.object({ BAR: z.string() }),
     runtimeEnv: { BAR: "bar" },
   });
 
@@ -421,20 +425,20 @@ describe("extending presets", () => {
 
     function lazyCreateEnv() {
       const preset = createEnv({
-        server: {
+        server: z.object({
           PRESET_ENV: z.string(),
-        },
+        }),
         runtimeEnv: processEnv,
       });
 
       return createEnv({
-        server: {
+        server: z.object({
           SERVER_ENV: z.string(),
-        },
+        }),
         clientPrefix: "CLIENT_",
-        client: {
+        client: z.object({
           CLIENT_ENV: z.string(),
-        },
+        }),
         extends: [preset],
         runtimeEnv: processEnv,
       });
@@ -465,23 +469,23 @@ describe("extending presets", () => {
 
     function lazyCreateEnv() {
       const preset = createEnv({
-        server: {
+        server: z.object({
           PRESET_ENV: z.enum(["preset"]),
-        },
+        }),
         runtimeEnv: processEnv,
       });
 
       return createEnv({
-        server: {
+        server: z.object({
           SERVER_ENV: z.string(),
-        },
-        shared: {
+        }),
+        shared: z.object({
           SHARED_ENV: z.string(),
-        },
+        }),
         clientPrefix: "CLIENT_",
-        client: {
+        client: z.object({
           CLIENT_ENV: z.string(),
-        },
+        }),
         extends: [preset],
         runtimeEnv: processEnv,
       });
@@ -542,30 +546,30 @@ describe("extending presets", () => {
 
     function lazyCreateEnv() {
       const preset1 = createEnv({
-        server: {
+        server: z.object({
           PRESET_ENV1: z.enum(["preset"]),
-        },
+        }),
         runtimeEnv: processEnv,
       });
 
       const preset2 = createEnv({
-        server: {
+        server: z.object({
           PRESET_ENV2: z.number(),
-        },
+        }),
         runtimeEnv: processEnv,
       });
 
       return createEnv({
-        server: {
+        server: z.object({
           SERVER_ENV: z.string(),
-        },
-        shared: {
+        }),
+        shared: z.object({
           SHARED_ENV: z.string(),
-        },
+        }),
         clientPrefix: "CLIENT_",
-        client: {
+        client: z.object({
           CLIENT_ENV: z.string(),
-        },
+        }),
         extends: [preset1, preset2],
         runtimeEnv: processEnv,
       });

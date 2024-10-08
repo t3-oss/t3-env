@@ -1,4 +1,11 @@
-import type { TypeOf, ZodError, ZodObject, ZodType } from "zod";
+import type {
+  TypeOf,
+  UnknownKeysParam,
+  ZodError,
+  ZodObject,
+  ZodRawShape,
+  ZodTypeAny,
+} from "zod";
 import { object } from "zod";
 
 export type ErrorMessage<T extends string> = T;
@@ -25,7 +32,7 @@ type Reduce<
     : never;
 
 export interface BaseOptions<
-  TShared extends Record<string, ZodType>,
+  TShared extends SchemaObject,
   TExtends extends Array<Record<string, unknown>>,
 > {
   /**
@@ -80,7 +87,7 @@ export interface BaseOptions<
 }
 
 export interface LooseOptions<
-  TShared extends Record<string, ZodType>,
+  TShared extends SchemaObject,
   TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   runtimeEnvStrict?: never;
@@ -95,9 +102,9 @@ export interface LooseOptions<
 
 export interface StrictOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>,
+  TServer extends SchemaObject,
+  TClient extends SchemaObject,
+  TShared extends SchemaObject,
   TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   /**
@@ -106,22 +113,24 @@ export interface StrictOptions<
    */
   runtimeEnvStrict: Record<
     | {
-        [TKey in keyof TClient]: TPrefix extends undefined
+        [TKey in keyof SchemaShape<TClient>]: TPrefix extends undefined
           ? never
           : TKey extends `${TPrefix}${string}`
             ? TKey
             : never;
-      }[keyof TClient]
+      }[keyof SchemaShape<TClient>]
     | {
-        [TKey in keyof TServer]: TPrefix extends undefined
+        [TKey in keyof SchemaShape<TServer>]: TPrefix extends undefined
           ? TKey
           : TKey extends `${TPrefix}${string}`
             ? never
             : TKey;
-      }[keyof TServer]
+      }[keyof SchemaShape<TServer>]
     | {
-        [TKey in keyof TShared]: TKey extends string ? TKey : never;
-      }[keyof TShared],
+        [TKey in keyof SchemaShape<TShared>]: TKey extends string
+          ? TKey
+          : never;
+      }[keyof SchemaShape<TShared>],
     string | boolean | number | undefined
   >;
   runtimeEnv?: never;
@@ -129,7 +138,7 @@ export interface StrictOptions<
 
 export interface ClientOptions<
   TPrefix extends string | undefined,
-  TClient extends Record<string, ZodType>,
+  TClientSchema extends SchemaObject,
 > {
   /**
    * The prefix that client-side variables must have. This is enforced both at
@@ -141,40 +150,82 @@ export interface ClientOptions<
    * Specify your client-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  client: Partial<{
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
-  }>;
+  client: TClientSchema extends ZodObject<
+    infer R1,
+    infer R2,
+    infer R3,
+    infer R4,
+    unknown
+  >
+    ? TClientSchema extends never
+      ? TClientSchema
+      : ZodObject<
+          R1,
+          R2,
+          R3,
+          R4,
+          {
+            [TKey in keyof TClientSchema["_input"]]: TKey extends `${TPrefix}${string}`
+              ? TClientSchema[TKey]
+              : ErrorMessage<`${TKey extends string
+                  ? TKey
+                  : never} is not prefixed with ${TPrefix}.`>;
+          }
+        >
+    : never;
 }
+
+export type SchemaShape<T extends SchemaObject> = T["_input"]; // extends Schema<any, any, infer Shape> ? Shape : never
+
+export type SchemaObject = ZodObject<
+  ZodRawShape,
+  UnknownKeysParam,
+  ZodTypeAny,
+  {},
+  {}
+>;
 
 export interface ServerOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
+  TServerSchema extends SchemaObject,
 > {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  server: Partial<{
-    [TKey in keyof TServer]: TPrefix extends undefined
-      ? TServer[TKey]
-      : TPrefix extends ""
-        ? TServer[TKey]
-        : TKey extends `${TPrefix}${string}`
-          ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
-              ? TKey
-              : never} should not prefixed with ${TPrefix}.`>
-          : TServer[TKey];
-  }>;
+  server: TServerSchema extends ZodObject<
+    infer R1,
+    infer R2,
+    infer R3,
+    infer R4,
+    unknown
+  >
+    ? TServerSchema extends never
+      ? TServerSchema
+      : TPrefix extends undefined
+        ? TServerSchema
+        : TPrefix extends ""
+          ? TServerSchema
+          : ZodObject<
+              R1,
+              R2,
+              R3,
+              R4,
+              {
+                [TKey in keyof TServerSchema["_input"]]: TKey extends `${TPrefix}${string}`
+                  ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
+                      ? TKey
+                      : never} should not prefixed with ${TPrefix}.`>
+                  : TServerSchema["_input"][TKey];
+              }
+            >
+    : never;
 }
 
 export type ServerClientOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>,
+  TServer extends SchemaObject,
+  TClient extends SchemaObject,
 > =
   | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
   | (ServerOptions<TPrefix, TServer> & Impossible<ClientOptions<never, never>>)
@@ -182,20 +233,22 @@ export type ServerClientOptions<
 
 export type EnvOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>,
+  TServer extends SchemaObject,
+  TClient extends SchemaObject,
+  TShared extends SchemaObject,
   TExtends extends Array<Record<string, unknown>>,
 > =
   | (LooseOptions<TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>)
-  | (StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
-      ServerClientOptions<TPrefix, TServer, TClient>);
+  | ((StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
+      ServerClientOptions<TPrefix, TServer, TClient>) & {
+      a?: ServerClientOptions<TPrefix, TServer, TClient>["client"];
+    });
 
 type TPrefixFormat = string | undefined;
-type TServerFormat = Record<string, ZodType>;
-type TClientFormat = Record<string, ZodType>;
-type TSharedFormat = Record<string, ZodType>;
+type TServerFormat = SchemaObject;
+type TClientFormat = SchemaObject;
+type TSharedFormat = SchemaObject;
 type TExtendsFormat = Array<Record<string, unknown>>;
 
 export type CreateEnv<
@@ -205,18 +258,18 @@ export type CreateEnv<
   TExtends extends TExtendsFormat,
 > = Readonly<
   Simplify<
-    TypeOf<ZodObject<TServer>> &
-      TypeOf<ZodObject<TClient>> &
-      TypeOf<ZodObject<TShared>> &
+    TypeOf<TServer> &
+      TypeOf<TClient> &
+      TypeOf<TShared> &
       UnReadonlyObject<Reduce<TExtends>>
   >
 >;
 
 export function createEnv<
   TPrefix extends TPrefixFormat,
-  TServer extends TServerFormat = NonNullable<unknown>,
-  TClient extends TClientFormat = NonNullable<unknown>,
-  TShared extends TSharedFormat = NonNullable<unknown>,
+  TServer extends TServerFormat = SchemaObject,
+  TClient extends TClientFormat = SchemaObject,
+  TShared extends TSharedFormat = SchemaObject,
   const TExtends extends TExtendsFormat = [],
 >(
   opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>,
@@ -236,12 +289,9 @@ export function createEnv<
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   if (skip) return runtimeEnv as any;
 
-  const _client = typeof opts.client === "object" ? opts.client : {};
-  const _server = typeof opts.server === "object" ? opts.server : {};
-  const _shared = typeof opts.shared === "object" ? opts.shared : {};
-  const client = object(_client);
-  const server = object(_server);
-  const shared = object(_shared);
+  const client = typeof opts.client === "object" ? opts.client : object({});
+  const server = typeof opts.server === "object" ? opts.server : object({});
+  const shared = typeof opts.shared === "object" ? opts.shared : object({});
   const isServer =
     opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
