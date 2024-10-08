@@ -7,7 +7,7 @@ import { createEnv } from ".";
  */
 export const vercel = () =>
   createEnv({
-    server: {
+    server: z.object({
       VERCEL: z.string().optional(),
       VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
       VERCEL_URL: z.string().optional(),
@@ -26,7 +26,7 @@ export const vercel = () =>
       VERCEL_GIT_COMMIT_AUTHOR_NAME: z.string().optional(),
       VERCEL_GIT_PREVIOUS_SHA: z.string().optional(),
       VERCEL_GIT_PULL_REQUEST_ID: z.string().optional(),
-    },
+    }),
     runtimeEnv: process.env,
   });
 
@@ -35,10 +35,10 @@ export const vercel = () =>
  */
 export const uploadthing = () =>
   createEnv({
-    server: {
+    server: z.object({
       UPLOADTHING_SECRET: z.string(),
       UPLOADTHING_APP_ID: z.string().optional(),
-    },
+    }),
     runtimeEnv: process.env,
   });
 
@@ -48,7 +48,7 @@ export const uploadthing = () =>
  */
 export const render = () =>
   createEnv({
-    server: {
+    server: z.object({
       IS_PULL_REQUEST: z.string().optional(),
       RENDER_DISCOVERY_SERVICE: z.string().optional(),
       RENDER_EXTERNAL_HOSTNAME: z.string().optional(),
@@ -63,7 +63,7 @@ export const render = () =>
         .enum(["web", "pserv", "cron", "worker", "static"])
         .optional(),
       RENDER: z.string().optional(),
-    },
+    }),
     runtimeEnv: process.env,
   });
 
@@ -73,7 +73,7 @@ export const render = () =>
  */
 export const railway = () =>
   createEnv({
-    server: {
+    server: z.object({
       RAILWAY_PUBLIC_DOMAIN: z.string().optional(),
       RAILWAY_PRIVATE_DOMAIN: z.string().optional(),
       RAILWAY_TCP_PROXY_DOMAIN: z.string().optional(),
@@ -97,7 +97,7 @@ export const railway = () =>
       RAILWAY_GIT_REPO_NAME: z.string().optional(),
       RAILWAY_GIT_REPO_OWNER: z.string().optional(),
       RAILWAY_GIT_COMMIT_MESSAGE: z.string().optional(),
-    },
+    }),
     runtimeEnv: process.env,
   });
 
@@ -107,7 +107,7 @@ export const railway = () =>
  */
 export const fly = () =>
   createEnv({
-    server: {
+    server: z.object({
       FLY_APP_NAME: z.string().optional(),
       FLY_MACHINE_ID: z.string().optional(),
       FLY_ALLOC_ID: z.string().optional(),
@@ -119,6 +119,6 @@ export const fly = () =>
       FLY_PROCESS_GROUP: z.string().optional(),
       FLY_VM_MEMORY_MB: z.string().optional(),
       PRIMARY_REGION: z.string().optional(),
-    },
+    }),
     runtimeEnv: process.env,
   });

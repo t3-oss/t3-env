@@ -16,12 +16,12 @@ function ignoreErrors(cb: () => void) {
 test("server vars should not be prefixed", () => {
   ignoreErrors(() => {
     createEnv({
-      server: {
-        // @ts-expect-error - server should not have NEXT_PUBLIC_ prefix
+      // @ts-expect-error - server should not have NEXT_PUBLIC_ prefix
+      server: z.object({
         NEXT_PUBLIC_BAR: z.string(),
         BAR: z.string(),
-      },
-      client: {},
+      }),
+      client: z.object({}),
       runtimeEnv: {
         BAR: "foo",
       },
@@ -32,12 +32,12 @@ test("server vars should not be prefixed", () => {
 test("client vars should be correctly prefixed", () => {
   ignoreErrors(() => {
     createEnv({
-      server: {},
-      client: {
+      server: z.object({}),
+      // @ts-expect-error - no NEXT_PUBLIC_ prefix
+      client: z.object({
         NEXT_PUBLIC_BAR: z.string(),
-        // @ts-expect-error - no NEXT_PUBLIC_ prefix
         BAR: z.string(),
-      },
+      }),
       runtimeEnv: {
         NEXT_PUBLIC_BAR: "foo",
       },
@@ -47,20 +47,20 @@ test("client vars should be correctly prefixed", () => {
 
 test("runtimeEnv enforces all keys", () => {
   createEnv({
-    server: {},
-    client: { NEXT_PUBLIC_BAR: z.string() },
+    server: z.object({}),
+    client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
     runtimeEnv: { NEXT_PUBLIC_BAR: "foo" },
   });
 
   createEnv({
-    server: { BAR: z.string() },
-    client: { NEXT_PUBLIC_BAR: z.string() },
+    server: z.object({ BAR: z.string() }),
+    client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
     runtimeEnv: { BAR: "foo", NEXT_PUBLIC_BAR: "foo" },
   });
 
   createEnv({
-    server: {},
-    client: { NEXT_PUBLIC_BAR: z.string() },
+    server: z.object({}),
+    client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
     runtimeEnv: {
       NEXT_PUBLIC_BAR: "foo",
       // @ts-expect-error - FOO_BAZ is extraneous
@@ -70,8 +70,8 @@ test("runtimeEnv enforces all keys", () => {
 
   ignoreErrors(() => {
     createEnv({
-      server: { BAR: z.string() },
-      client: { NEXT_PUBLIC_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
       // @ts-expect-error - BAR is missing
       runtimeEnvStrict: {
         NEXT_PUBLIC_BAR: "foo",
@@ -83,14 +83,14 @@ test("runtimeEnv enforces all keys", () => {
 test("new experimental runtime option only requires client vars", () => {
   ignoreErrors(() => {
     createEnv({
-      server: { BAR: z.string() },
-      client: { NEXT_PUBLIC_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
       // @ts-expect-error - NEXT_PUBLIC_BAR is missing
       experimental__runtimeEnv: {},
     });
     createEnv({
-      server: { BAR: z.string() },
-      client: { NEXT_PUBLIC_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
       experimental__runtimeEnv: {
         // @ts-expect-error - BAR should not be specified
         BAR: "bar",
@@ -105,11 +105,11 @@ test("new experimental runtime option only requires client vars", () => {
   };
 
   const env = createEnv({
-    shared: {
+    shared: z.object({
       NODE_ENV: z.enum(["development", "production"]),
-    },
-    server: { BAR: z.string() },
-    client: { NEXT_PUBLIC_BAR: z.string() },
+    }),
+    server: z.object({ BAR: z.string() }),
+    client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
     experimental__runtimeEnv: {
       NODE_ENV: process.env.NODE_ENV,
       NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
@@ -134,8 +134,8 @@ test("new experimental runtime option only requires client vars", () => {
 describe("return type is correctly inferred", () => {
   test("simple", () => {
     const env = createEnv({
-      server: { BAR: z.string() },
-      client: { NEXT_PUBLIC_BAR: z.string() },
+      server: z.object({ BAR: z.string() }),
+      client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
       runtimeEnv: {
         BAR: "bar",
         NEXT_PUBLIC_BAR: "foo",
@@ -157,8 +157,8 @@ describe("return type is correctly inferred", () => {
 
   test("with transforms", () => {
     const env = createEnv({
-      server: { BAR: z.string().transform(Number) },
-      client: { NEXT_PUBLIC_BAR: z.string() },
+      server: z.object({ BAR: z.string().transform(Number) }),
+      client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
       runtimeEnv: {
         BAR: "123",
         NEXT_PUBLIC_BAR: "foo",
@@ -181,7 +181,7 @@ describe("return type is correctly inferred", () => {
 
 test("can specify only server", () => {
   const onlyServer = createEnv({
-    server: { BAR: z.string() },
+    server: z.object({ BAR: z.string() }),
     runtimeEnv: { BAR: "FOO" },
   });
 
@@ -196,7 +196,7 @@ test("can specify only server", () => {
 
 test("can specify only client", () => {
   const onlyClient = createEnv({
-    client: { NEXT_PUBLIC_BAR: z.string() },
+    client: z.object({ NEXT_PUBLIC_BAR: z.string() }),
     runtimeEnv: { NEXT_PUBLIC_BAR: "FOO" },
   });
 
@@ -218,19 +218,19 @@ describe("extending presets", () => {
 
     function lazyCreateEnv() {
       const preset = createEnv({
-        server: {
+        server: z.object({
           PRESET_ENV: z.string(),
-        },
+        }),
         experimental__runtimeEnv: processEnv,
       });
 
       return createEnv({
-        server: {
+        server: z.object({
           SERVER_ENV: z.string(),
-        },
-        client: {
+        }),
+        client: z.object({
           NEXT_PUBLIC_ENV: z.string(),
-        },
+        }),
         extends: [preset],
         runtimeEnv: processEnv,
       });
@@ -261,22 +261,22 @@ describe("extending presets", () => {
 
     function lazyCreateEnv() {
       const preset = createEnv({
-        server: {
+        server: z.object({
           PRESET_ENV: z.enum(["preset"]),
-        },
+        }),
         runtimeEnv: processEnv,
       });
 
       return createEnv({
-        server: {
+        server: z.object({
           SERVER_ENV: z.string(),
-        },
-        shared: {
+        }),
+        shared: z.object({
           SHARED_ENV: z.string(),
-        },
-        client: {
+        }),
+        client: z.object({
           NEXT_PUBLIC_ENV: z.string(),
-        },
+        }),
         extends: [preset],
         runtimeEnv: processEnv,
       });

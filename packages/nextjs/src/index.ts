@@ -1,18 +1,26 @@
+import {
+  type UnknownKeysParam,
+  type ZodObject,
+  type ZodRawShape,
+  type ZodTypeAny,
+  object,
+} from "zod";
 import type {
   CreateEnv,
+  SchemaObject,
+  SchemaShape,
   ServerClientOptions,
   StrictOptions,
-} from "@t3-oss/env-core";
-import { createEnv as createEnvCore } from "@t3-oss/env-core";
-import type { ZodType } from "zod";
+} from "../../core/src/index";
+import { createEnv as createEnvCore } from "../../core/src/index";
 
 const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
 type ClientPrefix = typeof CLIENT_PREFIX;
 
 type Options<
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<`${ClientPrefix}${string}`, ZodType>,
-  TShared extends Record<string, ZodType>,
+  TServer extends SchemaObject,
+  TClient extends SchemaObject,
+  TShared extends SchemaObject,
   TExtends extends Array<Record<string, unknown>>,
 > = Omit<
   StrictOptions<ClientPrefix, TServer, TClient, TShared, TExtends> &
@@ -41,31 +49,48 @@ type Options<
          */
         experimental__runtimeEnv: Record<
           | {
-              [TKey in keyof TClient]: TKey extends `${ClientPrefix}${string}`
+              [TKey in keyof SchemaShape<TClient>]: TKey extends `${ClientPrefix}${string}`
                 ? TKey
                 : never;
-            }[keyof TClient]
+            }[keyof SchemaShape<TClient>]
           | {
-              [TKey in keyof TShared]: TKey extends string ? TKey : never;
-            }[keyof TShared],
+              [TKey in keyof SchemaShape<TShared>]: TKey extends string
+                ? TKey
+                : never;
+            }[keyof SchemaShape<TShared>],
           string | boolean | number | undefined
         >;
       }
   );
 
 export function createEnv<
-  TServer extends Record<string, ZodType> = NonNullable<unknown>,
-  TClient extends Record<
-    `${ClientPrefix}${string}`,
-    ZodType
-  > = NonNullable<unknown>,
-  TShared extends Record<string, ZodType> = NonNullable<unknown>,
+  TServer extends SchemaObject = SchemaObject,
+  TClient extends SchemaObject = SchemaObject,
+  TShared extends SchemaObject = SchemaObject,
   const TExtends extends Array<Record<string, unknown>> = [],
 >(
   opts: Options<TServer, TClient, TShared, TExtends>,
 ): CreateEnv<TServer, TClient, TShared, TExtends> {
-  const client = typeof opts.client === "object" ? opts.client : {};
-  const server = typeof opts.server === "object" ? opts.server : {};
+  const client =
+    typeof opts.client === "object"
+      ? opts.client
+      : (object({}) as ZodObject<
+          ZodRawShape,
+          UnknownKeysParam,
+          ZodTypeAny,
+          {},
+          {}
+        >);
+  const server =
+    typeof opts.server === "object"
+      ? opts.server
+      : (object({}) as ZodObject<
+          ZodRawShape,
+          UnknownKeysParam,
+          ZodTypeAny,
+          {},
+          {}
+        >);
   const shared = opts.shared;
 
   const runtimeEnv = opts.runtimeEnv
@@ -75,7 +100,10 @@ export function createEnv<
         ...opts.experimental__runtimeEnv,
       };
 
-  return createEnvCore<ClientPrefix, TServer, TClient, TShared, TExtends>({
+  type TClient2 = typeof client;
+  type TServer2 = typeof server;
+
+  return createEnvCore<ClientPrefix, TServer2, TClient2, TShared, TExtends>({
     ...opts,
     shared,
     client,
