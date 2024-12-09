@@ -1,5 +1,5 @@
-import type { TypeOf, ZodError, ZodObject, ZodType } from "zod";
-import { object } from "zod";
+import type { TypeOf, ZodError, ZodObject, ZodType, AnyZodObject } from "zod";
+import { object, ZodDefault } from "zod";
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
@@ -212,6 +212,16 @@ export type CreateEnv<
   >
 >;
 
+const getDefaults = <Schema extends AnyZodObject>(schema: Schema) => {
+  return Object.fromEntries(
+    Object.entries(schema.shape).map(([key, value]) => {
+      if (value instanceof ZodDefault)
+        return [key, value._def.defaultValue()];
+            return [key, undefined]
+        })
+    )
+}
+
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,
@@ -232,9 +242,6 @@ export function createEnv<
     }
   }
 
-  const skip = !!opts.skipValidation;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  if (skip) return runtimeEnv as any;
 
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
@@ -247,6 +254,17 @@ export function createEnv<
 
   const allClient = client.merge(shared);
   const allServer = server.merge(shared).merge(client);
+
+  const skip = !!opts.skipValidation;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  if (skip) {
+    return {
+      ...getDefaults(allServer),
+      ...runtimeEnv,
+    } as any;
+  }
+
+
   const parsed = isServer
     ? allServer.safeParse(runtimeEnv) // on server we can validate all env vars
     : allClient.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed

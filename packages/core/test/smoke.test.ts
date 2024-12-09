@@ -620,3 +620,25 @@ describe("extending presets", () => {
     });
   });
 });
+
+describe("skipping validation", () => {
+  test("returns values when present", () => {
+    const env = createEnv({
+      server: { BAR: z.string().default("bar") },
+      runtimeEnv: { BAR: "foo" },
+      skipValidation: true,
+    });
+
+    expect(env).toMatchObject({ BAR: "foo" });
+  });
+
+  test("returns defaults when values missing", () => {
+    const env = createEnv({
+      server: { BAR: z.string().default("bar") },
+      runtimeEnv: {},
+      skipValidation: true,
+    });
+
+    expect(env).toMatchObject({ BAR: "bar" });
+  });
+});
