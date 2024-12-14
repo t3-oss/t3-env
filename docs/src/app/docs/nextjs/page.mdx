@@ -110,12 +110,11 @@ export const env = createEnv({
 We recommend you importing your newly created file in your `next.config.js`. This will make sure your environment variables are validated at build time which will save you a lot of time and headaches down the road. You can use [unjs/jiti](https://github.com/unjs/jiti) to import TypeScript files in your `next.config.js`:
 
 ```js title="next.config.js" {6}
-import { fileURLToPath } from "node:url";
-import createJiti from "jiti";
-const jiti = createJiti(fileURLToPath(import.meta.url));
+import { createJiti } from "jiti";
+const jiti = createJiti(new URL(import.meta.url).pathname);
 
 // Import env here to validate during build. Using jiti we can import .ts files :)
-jiti("./app/env");
+await jiti.import("./app/env");
 
 /** @type {import('next').NextConfig} */
 export default {
