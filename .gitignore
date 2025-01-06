@@ -12,3 +12,4 @@ dist
 env.d.ts
 next-env.d.ts
 **/.vscode
+**/.zed
