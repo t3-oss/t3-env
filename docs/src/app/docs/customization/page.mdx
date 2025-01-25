@@ -34,10 +34,10 @@ import { createEnv } from "@t3-oss/env-core";
 export const env = createEnv({
   // ...
   // Called when the schema validation fails.
-  onValidationError: (error: ZodError) => {
+  onValidationError: (issues: StandardSchemaV1.Issue[]) => {
     console.error(
       "❌ Invalid environment variables:",
-      error.flatten().fieldErrors
+      issues
     );
     throw new Error("Invalid environment variables");
   },
