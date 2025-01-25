@@ -30,7 +30,6 @@ export const vercel = () =>
     runtimeEnv: process.env,
   });
 
-
 /**
  * Neon for Vercel Environment Variables
  * @see https://neon.tech/docs/guides/vercel-native-integration#environment-variables-set-by-the-integration

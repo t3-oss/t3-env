@@ -22,6 +22,10 @@
     "typescript": "^5.4.5"
   },
   "trustedDependencies": [
-    "@biomejs/biome"
+    "@biomejs/biome",
+    "@swc/core",
+    "esbuild",
+    "sharp",
+    "vue-demi"
   ]
 }
