@@ -13,3 +13,4 @@ env.d.ts
 next-env.d.ts
 **/.vscode
 **/.zed
+*.tsbuildinfo
