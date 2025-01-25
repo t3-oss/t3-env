@@ -19,6 +19,10 @@
     "./presets-zod": {
       "types": "./dist/presets-zod.d.ts",
       "default": "./dist/presets-zod.js"
+    },
+    "./presets-valibot": {
+      "types": "./dist/presets-valibot.d.ts",
+      "default": "./dist/presets-valibot.js"
     }
   },
   "files": ["dist", "package.json", "LICENSE", "README.md"],
@@ -29,13 +33,17 @@
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
-    "zod": "^3.24.0"
+    "zod": "^3.24.0",
+    "valibot": "^1.0.0-beta.7 || ^1.0.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
       "optional": true
     },
     "zod": {
+      "optional": true
+    },
+    "valibot": {
       "optional": true
     }
   },
