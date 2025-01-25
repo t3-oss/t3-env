@@ -15,10 +15,6 @@
     },
     "lint": { "cache": false },
     "lint:fix": { "cache": false },
-    "test": {
-      "dependsOn": ["build"],
-      "outputs": []
-    },
     "typecheck": {
       "dependsOn": ["^topo", "^build"],
       "outputs": []
