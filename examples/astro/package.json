@@ -9,13 +9,13 @@
     "start": "astro dev"
   },
   "dependencies": {
-    "@astrojs/solid-js": "^2.1.0",
+    "@astrojs/solid-js": "^5.0.4",
     "@t3-oss/env-core": "workspace:*",
-    "astro": "^2.3.0",
-    "solid-js": "^1.4.3",
-    "zod": "^3.24.0"
+    "astro": "^5.1.9",
+    "solid-js": "^1.9.4",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "vite": "^4.3.1"
+    "vite": "^6.0.1"
   }
 }
