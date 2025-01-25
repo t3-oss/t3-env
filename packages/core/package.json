@@ -2,11 +2,7 @@
   "name": "@t3-oss/env-core",
   "version": "0.12.0",
   "type": "module",
-  "keywords": [
-    "create-t3-app",
-    "environment variables",
-    "zod"
-  ],
+  "keywords": ["create-t3-app", "environment variables", "zod"],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -29,12 +25,7 @@
       "default": "./dist/presets-valibot.js"
     }
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md"],
   "scripts": {
     "build": "bunchee",
     "dev": "bunchee -w --no-clean",
