@@ -37,8 +37,8 @@
     }
   },
   "devDependencies": {
-    "bunchee": "^5.1.2",
-    "typescript": "^5.4.5",
-    "zod": "^3.23.0"
+    "bunchee": "^6.3.2",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.1"
   }
 }
