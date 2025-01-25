@@ -232,7 +232,7 @@ describe("errors when validation fails", () => {
         },
         onValidationError: (issues) => {
           const barError = issues.find(
-            (issue) => issue.path?.[1] === "BAR",
+            (issue) => issue.path?.[0] === "BAR",
           )?.message;
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
@@ -457,7 +457,7 @@ describe("extending presets", () => {
       [
         expect.objectContaining({
           message: expect.any(String),
-          path: ["server", "PRESET_ENV"],
+          path: ["PRESET_ENV"],
         }),
       ],
     ]);

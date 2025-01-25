@@ -244,29 +244,18 @@ export function createEnv<
   const isServer =
     opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
-  const schemasWithNames: [string, StandardSchemaDictionary][] = isServer
-    ? [
-        ["server", _server],
-        ["shared", _shared],
-        ["client", _client],
-      ]
-    : [
-        ["client", _client],
-        ["shared", _shared],
-      ];
+  const finalSchema = isServer
+    ? {
+        ..._server,
+        ..._shared,
+        ..._client,
+      }
+    : {
+        ..._client,
+        ..._shared,
+      };
 
-  const result: Record<string, unknown> = {};
-  const issues: StandardSchemaV1.Issue[] = [];
-
-  for (const [key, schemaDict] of schemasWithNames) {
-    if (!schemaDict) continue;
-    const parsed = parseWithDictionary(schemaDict, runtimeEnv, key);
-    if (parsed.issues) {
-      issues.push(...parsed.issues);
-      continue;
-    }
-    Object.assign(result, parsed.value);
-  }
+  const parsed = parseWithDictionary(finalSchema, runtimeEnv);
 
   const onValidationError =
     opts.onValidationError ??
@@ -283,8 +272,8 @@ export function createEnv<
       );
     });
 
-  if (issues.length) {
-    onValidationError(issues);
+  if (parsed.issues) {
+    return onValidationError(parsed.issues);
   }
 
   const isServerAccess = (prop: string) => {
@@ -301,7 +290,7 @@ export function createEnv<
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
     return Object.assign(acc, curr);
   }, {});
-  const fullObj = Object.assign(result, extendedObj);
+  const fullObj = Object.assign(parsed.value, extendedObj);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
