@@ -15,13 +15,16 @@ pnpm add @t3-oss/env-core zod
 pnpm add @t3-oss/env-nextjs zod
 ```
 
-> Currently only supports Zod (which you'll need to install separately). Bring your own validation library is on the roadmap.
+> [!NOTE]
+>
+> You may use any Standard Schema compliant validator of your choice. This example uses Zod
+
 
 ## Usage
 
 > For full documentation, see https://env.t3.gg
 
-This package supports the full power of Zod, meaning you can use `transforms` and `default` values.
+This package supports the full power of Zod/Valibot etc, meaning you can use `transforms` and `default` values.
 
 ### Define your schema
 
