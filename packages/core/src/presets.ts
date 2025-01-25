@@ -9,11 +9,14 @@ export const vercel = () =>
   createEnv({
     server: {
       VERCEL: z.string().optional(),
+      CI: z.string().optional(),
       VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
       VERCEL_URL: z.string().optional(),
       VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
       VERCEL_BRANCH_URL: z.string().optional(),
       VERCEL_REGION: z.string().optional(),
+      VERCEL_DEPLOYMENT_ID: z.string().optional(),
+      VERCEL_SKEW_PROTECTION_ENABLED: z.string().optional(),
       VERCEL_AUTOMATION_BYPASS_SECRET: z.string().optional(),
       VERCEL_GIT_PROVIDER: z.string().optional(),
       VERCEL_GIT_REPO_SLUG: z.string().optional(),
