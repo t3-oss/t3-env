@@ -105,6 +105,24 @@ export const env = createEnv({
 
 </Callout>
 
+<Callout type="info">
+
+If you're using the `standalone` output in your `next.config.ts`, make sure to include the following:  
+
+```ts title="next.config.ts"
+import type { NextConfig } from "next"
+
+const nextConfig: NextConfig = {
+  output: "standalone",
+  // Add the packages in transpilePackages
+  transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
+}
+
+export default nextConfig
+```
+
+</Callout>
+
 ### Validate schema on build (recommended)
 
 We recommend you importing your newly created file in your `next.config.js`. This will make sure your environment variables are validated at build time which will save you a lot of time and headaches down the road. You can use [unjs/jiti](https://github.com/unjs/jiti) to import TypeScript files in your `next.config.js`:
@@ -114,7 +132,7 @@ import { fileURLToPath } from "node:url";
 import createJiti from "jiti";
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
-// Import env here to validate during build. Using jiti we can import .ts files :)
+// Import env here to validate during build. Using jiti@^1 we can import .ts files :)
 jiti("./app/env");
 
 /** @type {import('next').NextConfig} */
@@ -122,6 +140,8 @@ export default {
   /** ... */
 };
 ```
+
+We do not recommend using `next.config.ts` as it does not support loading ESM. 
 
 ### Use your schema
 
