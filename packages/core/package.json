@@ -16,9 +16,9 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./presets": {
-      "types": "./dist/presets.d.ts",
-      "default": "./dist/presets.js"
+    "./presets-zod": {
+      "types": "./dist/presets-zod.d.ts",
+      "default": "./dist/presets-zod.js"
     }
   },
   "files": ["dist", "package.json", "LICENSE", "README.md"],
