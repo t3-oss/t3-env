@@ -1,0 +1,21 @@
+{
+  "name": "@examples/astro-valibot",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "astro build",
+    "dev": "astro dev",
+    "preview": "astro preview",
+    "start": "astro dev"
+  },
+  "dependencies": {
+    "@astrojs/solid-js": "^5.0.4",
+    "@t3-oss/env-core": "workspace:*",
+    "astro": "^5.1.9",
+    "solid-js": "^1.9.4",
+    "valibot": "^1.0.0-beta.14"
+  },
+  "devDependencies": {
+    "vite": "^6.0.1"
+  }
+}

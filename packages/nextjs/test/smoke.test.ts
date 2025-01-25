@@ -248,7 +248,15 @@ describe("extending presets", () => {
     expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
-      { PRESET_ENV: ["Required"] },
+      [
+        {
+          code: "invalid_type",
+          expected: "string",
+          message: "Required",
+          path: ["PRESET_ENV"],
+          received: "undefined",
+        },
+      ],
     ]);
   });
   describe("single preset", () => {

@@ -1,18 +1,18 @@
 import type {
   CreateEnv,
   ServerClientOptions,
+  StandardSchemaV1,
   StrictOptions,
 } from "@t3-oss/env-core";
 import { createEnv as createEnvCore } from "@t3-oss/env-core";
-import type { ZodType } from "zod";
 
 const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
 type ClientPrefix = typeof CLIENT_PREFIX;
 
 type Options<
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<`${ClientPrefix}${string}`, ZodType>,
-  TShared extends Record<string, ZodType>,
+  TServer extends Record<string, StandardSchemaV1>,
+  TClient extends Record<`${ClientPrefix}${string}`, StandardSchemaV1>,
+  TShared extends Record<string, StandardSchemaV1>,
   TExtends extends Array<Record<string, unknown>>,
 > = Omit<
   StrictOptions<ClientPrefix, TServer, TClient, TShared, TExtends> &
@@ -54,12 +54,12 @@ type Options<
   );
 
 export function createEnv<
-  TServer extends Record<string, ZodType> = NonNullable<unknown>,
+  TServer extends Record<string, StandardSchemaV1> = NonNullable<unknown>,
   TClient extends Record<
     `${ClientPrefix}${string}`,
-    ZodType
+    StandardSchemaV1
   > = NonNullable<unknown>,
-  TShared extends Record<string, ZodType> = NonNullable<unknown>,
+  TShared extends Record<string, StandardSchemaV1> = NonNullable<unknown>,
   const TExtends extends Array<Record<string, unknown>> = [],
 >(
   opts: Options<TServer, TClient, TShared, TExtends>,
