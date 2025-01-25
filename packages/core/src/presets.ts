@@ -37,7 +37,7 @@ export const vercel = () =>
  * Neon for Vercel Environment Variables
  * @see https://neon.tech/docs/guides/vercel-native-integration#environment-variables-set-by-the-integration
  */
-export const neon_vercel = () =>
+export const neonVercel = () =>
   createEnv({
     server: {
       DATABASE_URL: z.string(),
@@ -60,13 +60,23 @@ export const neon_vercel = () =>
   });
 
 /**
+ * @see https://v6.docs.uploadthing.com/getting-started/nuxt#add-env-variables
+ */
+export const uploadthingV6 = () =>
+  createEnv({
+    server: {
+      UPLOADTHING_TOKEN: z.string(),
+    },
+    runtimeEnv: process.env,
+  });
+
+/**
  * @see https://docs.uploadthing.com/getting-started/appdir#add-env-variables
  */
 export const uploadthing = () =>
   createEnv({
     server: {
-      UPLOADTHING_SECRET: z.string(),
-      UPLOADTHING_APP_ID: z.string().optional(),
+      UPLOADTHING_TOKEN: z.string(),
     },
     runtimeEnv: process.env,
   });
