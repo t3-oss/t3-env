@@ -161,3 +161,27 @@ export const fly = () =>
     },
     runtimeEnv: process.env,
   });
+
+/**
+ * Netlify Environment Variables
+ * @see https://docs.netlify.com/configure-builds/environment-variables
+ */
+export const netlify = () =>
+  createEnv({
+    server: {
+      NETLIFY: z.string().optional(),
+      BUILD_ID: z.string().optional(),
+      CONTEXT: z
+        .enum(["production", "deploy-preview", "branch-deploy", "dev"])
+        .optional(),
+      REPOSITORY_URL: z.string().optional(),
+      BRANCH: z.string().optional(),
+      URL: z.string().optional(),
+      DEPLOY_URL: z.string().optional(),
+      DEPLOY_PRIME_URL: z.string().optional(),
+      DEPLOY_ID: z.string().optional(),
+      SITE_NAME: z.string().optional(),
+      SITE_ID: z.string().optional(),
+    },
+    runtimeEnv: process.env,
+  });
