@@ -9,7 +9,7 @@
     "dev": "turbo watch dev --filter @t3-oss/env*",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
-    "test": "turbo test",
+    "test": "bun test",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {

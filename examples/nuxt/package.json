@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.10",
-    "nuxt": "^3.11.2"
+    "nuxt": "^3.15.3"
   },
   "dependencies": {
     "@t3-oss/env-nuxt": "workspace:*",
