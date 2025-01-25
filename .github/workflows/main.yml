@@ -51,5 +51,5 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./.github/setup
 
-      - run: turbo run build --filter=@t3-oss/env*
+      - run: bun turbo run build --filter=@t3-oss/env*
       - run: bun test
