@@ -78,7 +78,7 @@ export namespace StandardSchemaDictionary {
     Input extends Record<string, any>,
     Output extends Record<keyof Input, any> = Input,
   > = {
-    [K in keyof Input]: StandardSchemaV1<Input[K], Output[K]>;
+    [K in keyof Input]-?: StandardSchemaV1<Input[K], Output[K]>;
   };
   export type InferInput<T extends StandardSchemaDictionary> = {
     [K in keyof T]: StandardSchemaV1.InferInput<T[K]>;
