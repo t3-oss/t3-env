@@ -238,20 +238,27 @@ export function createEnv<
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   if (skip) return runtimeEnv as any;
 
+  const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
+  const _shared = typeof opts.shared === "object" ? opts.shared : {};
   const isServer =
     opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
-  const schemas = {
-    server: isServer && _server,
-    client: typeof opts.client === "object" ? opts.client : {},
-    shared: typeof opts.shared === "object" ? opts.shared : {},
-  };
+  const schemasWithNames: [string, StandardSchemaDictionary][] = isServer
+    ? [
+        ["server", _server],
+        ["shared", _shared],
+        ["client", _client],
+      ]
+    : [
+        ["client", _client],
+        ["shared", _shared],
+      ];
 
   const result: Record<string, unknown> = {};
   const issues: StandardSchemaV1.Issue[] = [];
 
-  for (const [key, schemaDict] of Object.entries(schemas)) {
+  for (const [key, schemaDict] of schemasWithNames) {
     if (!schemaDict) continue;
     const parsed = parseWithDictionary(schemaDict, runtimeEnv, key);
     if (parsed.issues) {
@@ -282,7 +289,7 @@ export function createEnv<
 
   const isServerAccess = (prop: string) => {
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !(prop in schemas.shared);
+    return !prop.startsWith(opts.clientPrefix) && !(prop in _shared);
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
