@@ -230,8 +230,10 @@ describe("errors when validation fails", () => {
           BAR: "123abc",
           FOO_BAR: "foo",
         },
-        onValidationError: (err) => {
-          const barError = err.flatten().fieldErrors.BAR?.[0] as string;
+        onValidationError: (issues) => {
+          const barError = issues.find(
+            (issue) => issue.path?.[1] === "BAR",
+          )?.message;
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),
@@ -452,7 +454,12 @@ describe("extending presets", () => {
     expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
-      { PRESET_ENV: ["Required"] },
+      [
+        expect.objectContaining({
+          message: expect.any(String),
+          path: ["server", "PRESET_ENV"],
+        }),
+      ],
     ]);
   });
   describe("single preset", () => {

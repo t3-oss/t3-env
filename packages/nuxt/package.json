@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
-    "zod": "^3.0.0"
+    "zod": "^3.24.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
@@ -43,6 +43,6 @@
   "devDependencies": {
     "bunchee": "^5.1.2",
     "typescript": "^5.4.5",
-    "zod": "^3.23.0"
+    "zod": "^3.24.0"
   }
 }

@@ -1,5 +1,7 @@
-import type { TypeOf, ZodError, ZodObject, ZodType } from "zod";
-import { object } from "zod";
+import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard";
+import { parseWithDictionary } from "./standard";
+
+export type { StandardSchemaV1, StandardSchemaDictionary };
 
 export type ErrorMessage<T extends string> = T;
 export type Simplify<T> = {
@@ -25,7 +27,7 @@ type Reduce<
     : never;
 
 export interface BaseOptions<
-  TShared extends Record<string, ZodType>,
+  TShared extends Record<string, StandardSchemaV1>,
   TExtends extends Array<Record<string, unknown>>,
 > {
   /**
@@ -49,7 +51,7 @@ export interface BaseOptions<
    * Called when validation fails. By default the error is logged,
    * and an error is thrown telling what environment variables are invalid.
    */
-  onValidationError?: (error: ZodError) => never;
+  onValidationError?: (issues: readonly StandardSchemaV1.Issue[]) => never;
 
   /**
    * Called when a server-side environment variable is accessed on the client.
@@ -80,7 +82,7 @@ export interface BaseOptions<
 }
 
 export interface LooseOptions<
-  TShared extends Record<string, ZodType>,
+  TShared extends Record<string, StandardSchemaV1>,
   TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   runtimeEnvStrict?: never;
@@ -95,9 +97,9 @@ export interface LooseOptions<
 
 export interface StrictOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>,
+  TServer extends Record<string, StandardSchemaV1>,
+  TClient extends Record<string, StandardSchemaV1>,
+  TShared extends Record<string, StandardSchemaV1>,
   TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   /**
@@ -129,7 +131,7 @@ export interface StrictOptions<
 
 export interface ClientOptions<
   TPrefix extends string | undefined,
-  TClient extends Record<string, ZodType>,
+  TClient extends Record<string, StandardSchemaV1>,
 > {
   /**
    * The prefix that client-side variables must have. This is enforced both at
@@ -152,7 +154,7 @@ export interface ClientOptions<
 
 export interface ServerOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
+  TServer extends Record<string, StandardSchemaV1>,
 > {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
@@ -173,8 +175,8 @@ export interface ServerOptions<
 
 export type ServerClientOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>,
+  TServer extends Record<string, StandardSchemaV1>,
+  TClient extends Record<string, StandardSchemaV1>,
 > =
   | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
   | (ServerOptions<TPrefix, TServer> & Impossible<ClientOptions<never, never>>)
@@ -182,9 +184,9 @@ export type ServerClientOptions<
 
 export type EnvOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, ZodType>,
-  TClient extends Record<string, ZodType>,
-  TShared extends Record<string, ZodType>,
+  TServer extends Record<string, StandardSchemaV1>,
+  TClient extends Record<string, StandardSchemaV1>,
+  TShared extends Record<string, StandardSchemaV1>,
   TExtends extends Array<Record<string, unknown>>,
 > =
   | (LooseOptions<TShared, TExtends> &
@@ -193,9 +195,9 @@ export type EnvOptions<
       ServerClientOptions<TPrefix, TServer, TClient>);
 
 type TPrefixFormat = string | undefined;
-type TServerFormat = Record<string, ZodType>;
-type TClientFormat = Record<string, ZodType>;
-type TSharedFormat = Record<string, ZodType>;
+type TServerFormat = Record<string, StandardSchemaV1>;
+type TClientFormat = Record<string, StandardSchemaV1>;
+type TSharedFormat = Record<string, StandardSchemaV1>;
 type TExtendsFormat = Array<Record<string, unknown>>;
 
 export type CreateEnv<
@@ -205,9 +207,9 @@ export type CreateEnv<
   TExtends extends TExtendsFormat,
 > = Readonly<
   Simplify<
-    TypeOf<ZodObject<TServer>> &
-      TypeOf<ZodObject<TClient>> &
-      TypeOf<ZodObject<TShared>> &
+    StandardSchemaDictionary.InferOutput<TServer> &
+      StandardSchemaDictionary.InferOutput<TClient> &
+      StandardSchemaDictionary.InferOutput<TShared> &
       UnReadonlyObject<Reduce<TExtends>>
   >
 >;
@@ -236,46 +238,51 @@ export function createEnv<
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   if (skip) return runtimeEnv as any;
 
-  const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
-  const _shared = typeof opts.shared === "object" ? opts.shared : {};
-  const client = object(_client);
-  const server = object(_server);
-  const shared = object(_shared);
   const isServer =
     opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
-  const allClient = client.merge(shared);
-  const allServer = server.merge(shared).merge(client);
-  const parsed = isServer
-    ? allServer.safeParse(runtimeEnv) // on server we can validate all env vars
-    : allClient.safeParse(runtimeEnv); // on client we can only validate the ones that are exposed
+  const schemas = {
+    server: isServer && _server,
+    client: typeof opts.client === "object" ? opts.client : {},
+    shared: typeof opts.shared === "object" ? opts.shared : {},
+  };
+
+  const result: Record<string, unknown> = {};
+  const issues: StandardSchemaV1.Issue[] = [];
+
+  for (const [key, schemaDict] of Object.entries(schemas)) {
+    if (!schemaDict) continue;
+    const parsed = parseWithDictionary(schemaDict, runtimeEnv, key);
+    if (parsed.issues) {
+      issues.push(...parsed.issues);
+      continue;
+    }
+    Object.assign(result, parsed.value);
+  }
 
   const onValidationError =
     opts.onValidationError ??
-    ((error: ZodError) => {
-      console.error(
-        "❌ Invalid environment variables:",
-        error.flatten().fieldErrors,
-      );
+    ((issues) => {
+      console.error("❌ Invalid environment variables:", issues);
       throw new Error("Invalid environment variables");
     });
 
   const onInvalidAccess =
     opts.onInvalidAccess ??
-    ((_variable: string) => {
+    (() => {
       throw new Error(
         "❌ Attempted to access a server-side environment variable on the client",
       );
     });
 
-  if (parsed.success === false) {
-    return onValidationError(parsed.error);
+  if (issues.length) {
+    onValidationError(issues);
   }
 
   const isServerAccess = (prop: string) => {
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !(prop in shared.shape);
+    return !prop.startsWith(opts.clientPrefix) && !(prop in schemas.shared);
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
@@ -287,7 +294,7 @@ export function createEnv<
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
     return Object.assign(acc, curr);
   }, {});
-  const fullObj = Object.assign(parsed.data, extendedObj);
+  const fullObj = Object.assign(result, extendedObj);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
