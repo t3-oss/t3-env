@@ -33,16 +33,19 @@
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
-    "zod": "^3.0.0"
+    "zod": "^3.24.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
       "optional": true
+    },
+    "zod": {
+      "optional": true
     }
   },
   "devDependencies": {
-    "bunchee": "^5.1.2",
-    "typescript": "^5.4.5",
-    "zod": "^3.23.0"
+    "bunchee": "^6.3.2",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.1"
   }
 }

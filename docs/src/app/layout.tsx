@@ -3,9 +3,9 @@ import { SiteHeader } from "@/components/site-header";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { cn } from "@/lib/cn";
 import "@/styles/globals.css";
-import { ThemeProvider } from "@juliusmarminge/next-themes";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
+import { ThemeProvider } from "next-themes";
 import { ViewTransitions } from "next-view-transitions";
 
 import { Inter, JetBrains_Mono } from "next/font/google";

@@ -34,6 +34,32 @@ export const vercel = () =>
   });
 
 /**
+ * Neon for Vercel Environment Variables
+ * @see https://neon.tech/docs/guides/vercel-native-integration#environment-variables-set-by-the-integration
+ */
+export const neon_vercel = () =>
+  createEnv({
+    server: {
+      DATABASE_URL: z.string(),
+      DATABASE_URL_UNPOOLED: z.string().optional(),
+      PGHOST: z.string().optional(),
+      PGHOST_UNPOOLED: z.string().optional(),
+      PGUSER: z.string().optional(),
+      PGDATABASE: z.string().optional(),
+      PGPASSWORD: z.string().optional(),
+      POSTGRES_URL: z.string().url().optional(),
+      POSTGRES_URL_NON_POOLING: z.string().url().optional(),
+      POSTGRES_USER: z.string().optional(),
+      POSTGRES_HOST: z.string().optional(),
+      POSTGRES_PASSWORD: z.string().optional(),
+      POSTGRES_DATABASE: z.string().optional(),
+      POSTGRES_URL_NO_SSL: z.string().url().optional(),
+      POSTGRES_PRISMA_URL: z.string().url().optional(),
+    },
+    runtimeEnv: process.env,
+  });
+
+/**
  * @see https://docs.uploadthing.com/getting-started/appdir#add-env-variables
  */
 export const uploadthing = () =>

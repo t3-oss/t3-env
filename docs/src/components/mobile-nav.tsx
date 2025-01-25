@@ -4,11 +4,16 @@ import { Link } from "next-view-transitions";
 import * as React from "react";
 
 import { Button } from "./ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
 
 import { cn } from "@/lib/cn";
-import { PopoverClose } from "@radix-ui/react-popover";
+
 import { usePathname } from "next/navigation";
 import { Icons } from "./icons";
 import type { NavItem } from "./main-nav";
