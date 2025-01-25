@@ -75,8 +75,8 @@ export namespace StandardSchemaDictionary {
    * A dictionary of Standard Schemas that match the input and output types.
    */
   export type Matching<
-    Input extends Record<string, any>,
-    Output extends Record<keyof Input, any> = Input,
+    Input,
+    Output extends Record<keyof Input, unknown> = Input,
   > = {
     [K in keyof Input]-?: StandardSchemaV1<Input[K], Output[K]>;
   };
