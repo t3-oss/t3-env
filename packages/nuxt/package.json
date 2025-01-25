@@ -38,6 +38,9 @@
   "peerDependenciesMeta": {
     "typescript": {
       "optional": true
+    },
+    "zod": {
+      "optional": true
     }
   },
   "devDependencies": {
