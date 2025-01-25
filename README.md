@@ -76,4 +76,4 @@ export const GET = (req: Request) => {
 
 ## Roadmap
 
-- [ ] Bring your own validation library - currently only supports Zod.
+- [x] Bring your own validation library - now supports any [Standard Schema library](https://github.com/standard-schema/standard-schema?tab=readme-ov-file#what-schema-libraries-implement-the-spec)
