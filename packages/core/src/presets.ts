@@ -171,7 +171,9 @@ export const netlify = () =>
     server: {
       NETLIFY: z.string().optional(),
       BUILD_ID: z.string().optional(),
-      CONTEXT: z.enum(["production", "deploy-preview", "branch-deploy", "dev"]).optional(),
+      CONTEXT: z
+        .enum(["production", "deploy-preview", "branch-deploy", "dev"])
+        .optional(),
       REPOSITORY_URL: z.string().optional(),
       BRANCH: z.string().optional(),
       URL: z.string().optional(),
@@ -183,4 +185,3 @@ export const netlify = () =>
     },
     runtimeEnv: process.env,
   });
-
