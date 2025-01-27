@@ -627,3 +627,111 @@ describe("extending presets", () => {
     });
   });
 });
+
+describe("createFinalSchema", () => {
+  test("custom schema combiner", () => {
+    const env = createEnv({
+      server: {
+        SERVER_ENV: z.string(),
+      },
+      shared: {
+        SHARED_ENV: z.string(),
+      },
+      clientPrefix: "CLIENT_",
+      client: {
+        CLIENT_ENV: z.string(),
+      },
+      runtimeEnv: {
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        CLIENT_ENV: "client",
+      },
+      createFinalSchema: z.object,
+    });
+
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        SHARED_ENV: string;
+        CLIENT_ENV: string;
+      }>
+    >();
+
+    expect(env).toMatchObject({
+      SERVER_ENV: "server",
+      SHARED_ENV: "shared",
+      CLIENT_ENV: "client",
+    });
+  });
+  test("schema combiner with further refinement", () => {
+    const env = createEnv({
+      server: {
+        SERVER_ENV: z.string(),
+      },
+      shared: {
+        SHARED_ENV: z.string(),
+      },
+      clientPrefix: "CLIENT_",
+      client: {
+        CLIENT_ENV: z.string(),
+      },
+      runtimeEnv: {
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        CLIENT_ENV: "client",
+      },
+      createFinalSchema: (shape) =>
+        z.object(shape).refine((env) => {
+          expectTypeOf(env).toEqualTypeOf<{
+            SERVER_ENV: string;
+            SHARED_ENV: string;
+            CLIENT_ENV: string;
+          }>();
+          return env.CLIENT_ENV.startsWith("c");
+        }),
+    });
+    expect(env).toMatchObject({
+      SERVER_ENV: "server",
+      SHARED_ENV: "shared",
+      CLIENT_ENV: "client",
+    });
+  });
+  test("schema combiner that changes the type", () => {
+    const env = createEnv({
+      server: {
+        SERVER_ENV: z.string(),
+      },
+      shared: {
+        SHARED_ENV: z.string(),
+      },
+      clientPrefix: "CLIENT_",
+      client: {
+        CLIENT_ENV: z.string(),
+      },
+      runtimeEnv: {
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        CLIENT_ENV: "client",
+      },
+      createFinalSchema: (shape) =>
+        z.object(shape).transform((env) => ({
+          ...env,
+          SERVER_ONLY_ENV: env.SERVER_ENV.toUpperCase(),
+        })),
+    });
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        SHARED_ENV: string;
+        CLIENT_ENV: string;
+        SERVER_ONLY_ENV: string;
+      }>
+    >();
+    expect(env).toMatchObject({
+      SERVER_ENV: "server",
+      SHARED_ENV: "shared",
+      CLIENT_ENV: "client",
+      SERVER_ONLY_ENV: "SERVER",
+    });
+  });
+});

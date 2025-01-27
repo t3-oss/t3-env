@@ -8,6 +8,8 @@ export type Simplify<T> = {
   [P in keyof T]: T[P];
 } & {};
 
+type NoInfer<T> = { [K in keyof T]: T[K] } & unknown;
+
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
@@ -188,11 +190,21 @@ export type EnvOptions<
   TClient extends Record<string, StandardSchemaV1>,
   TShared extends Record<string, StandardSchemaV1>,
   TExtends extends Array<Record<string, unknown>>,
-> =
+  FinalSchema extends StandardSchemaV1<{}, {}>,
+> = (
   | (LooseOptions<TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>)
   | (StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
-      ServerClientOptions<TPrefix, TServer, TClient>);
+      ServerClientOptions<TPrefix, TServer, TClient>)
+) & {
+  /**
+   * A custom function to combine the schemas.
+   * Can be used to add further refinement or transformation.
+   */
+  createFinalSchema?: (
+    shape: NoInfer<TServer> & NoInfer<TClient> & NoInfer<TShared>,
+  ) => FinalSchema;
+};
 
 type TPrefixFormat = string | undefined;
 type TServerFormat = Record<string, StandardSchemaV1>;
@@ -200,18 +212,13 @@ type TClientFormat = Record<string, StandardSchemaV1>;
 type TSharedFormat = Record<string, StandardSchemaV1>;
 type TExtendsFormat = Array<Record<string, unknown>>;
 
-export type CreateEnv<
+export type DefaultCombinedSchema<
   TServer extends TServerFormat,
   TClient extends TClientFormat,
   TShared extends TSharedFormat,
-  TExtends extends TExtendsFormat,
-> = Readonly<
-  Simplify<
-    StandardSchemaDictionary.InferOutput<TServer> &
-      StandardSchemaDictionary.InferOutput<TClient> &
-      StandardSchemaDictionary.InferOutput<TShared> &
-      UnReadonlyObject<Reduce<TExtends>>
-  >
+> = StandardSchemaV1<
+  StandardSchemaDictionary.InferInput<TServer & TClient & TShared>,
+  StandardSchemaDictionary.InferOutput<TServer & TClient & TShared>
 >;
 
 export function createEnv<
@@ -220,9 +227,19 @@ export function createEnv<
   TClient extends TClientFormat = NonNullable<unknown>,
   TShared extends TSharedFormat = NonNullable<unknown>,
   const TExtends extends TExtendsFormat = [],
+  FinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<
+    TServer,
+    TClient,
+    TShared
+  >,
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends>,
-): CreateEnv<TServer, TClient, TShared, TExtends> {
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends, FinalSchema>,
+): Readonly<
+  Simplify<
+    StandardSchemaV1.InferOutput<FinalSchema> &
+      UnReadonlyObject<Reduce<TExtends>>
+  >
+> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const emptyStringAsUndefined = opts.emptyStringAsUndefined ?? false;
@@ -244,7 +261,7 @@ export function createEnv<
   const isServer =
     opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
-  const finalSchema = isServer
+  const finalSchemaShape = isServer
     ? {
         ..._server,
         ..._shared,
@@ -255,7 +272,15 @@ export function createEnv<
         ..._shared,
       };
 
-  const parsed = parseWithDictionary(finalSchema, runtimeEnv);
+  const parsed = opts.createFinalSchema
+    ? opts
+        .createFinalSchema(finalSchemaShape as never)
+        ["~standard"].validate(runtimeEnv)
+    : parseWithDictionary(finalSchemaShape, runtimeEnv);
+
+  if (parsed instanceof Promise) {
+    throw new Error("Validation must be synchronous");
+  }
 
   const onValidationError =
     opts.onValidationError ??
