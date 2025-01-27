@@ -191,7 +191,10 @@ export interface CreateSchemaOptions<
    * A custom function to combine the schemas.
    * Can be used to add further refinement or transformation.
    */
-  createFinalSchema?: (shape: TServer & TClient & TShared) => TFinalSchema;
+  createFinalSchema?: (
+    shape: TServer & TClient & TShared,
+    isServer: boolean,
+  ) => TFinalSchema;
 }
 
 export type ServerClientOptions<
@@ -291,7 +294,7 @@ export function createEnv<
 
   const parsed = opts.createFinalSchema
     ? opts
-        .createFinalSchema(finalSchemaShape as never)
+        .createFinalSchema(finalSchemaShape as never, isServer)
         ["~standard"].validate(runtimeEnv)
     : parseWithDictionary(finalSchemaShape, runtimeEnv);
 

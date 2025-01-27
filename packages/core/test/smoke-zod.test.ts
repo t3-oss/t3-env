@@ -630,6 +630,7 @@ describe("extending presets", () => {
 
 describe("createFinalSchema", () => {
   test("custom schema combiner", () => {
+    let receivedIsServer = false;
     const env = createEnv({
       server: {
         SERVER_ENV: z.string(),
@@ -646,7 +647,11 @@ describe("createFinalSchema", () => {
         SHARED_ENV: "shared",
         CLIENT_ENV: "client",
       },
-      createFinalSchema: z.object,
+      createFinalSchema: (shape, isServer) => {
+        expectTypeOf(isServer).toEqualTypeOf<boolean>();
+        if (typeof isServer === "boolean") receivedIsServer = true;
+        return z.object(shape);
+      },
     });
 
     expectTypeOf(env).toEqualTypeOf<
@@ -662,6 +667,8 @@ describe("createFinalSchema", () => {
       SHARED_ENV: "shared",
       CLIENT_ENV: "client",
     });
+
+    expect(receivedIsServer).toBe(true);
   });
   test("schema combiner with further refinement", () => {
     const env = createEnv({

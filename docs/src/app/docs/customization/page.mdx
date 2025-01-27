@@ -142,9 +142,9 @@ export const env = createEnv({
     PASSWORD: z.string().min(1).optional(),
   },
   // ...
-  createFinalSchema: (shape) =>
+  createFinalSchema: (shape, isServer) =>
     z.object(shape).transform((env, ctx) => {
-      if (env.SKIP_AUTH) return { SKIP_AUTH: true } as const;
+      if (env.SKIP_AUTH || !isServer) return { SKIP_AUTH: true } as const;
       if (!env.EMAIL || !env.PASSWORD) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,

@@ -632,6 +632,7 @@ describe("extending presets", () => {
 
 describe("createFinalSchema", () => {
   test("custom schema combiner", () => {
+    let receivedIsServer = false;
     const env = createEnv({
       server: {
         SERVER_ENV: v.string(),
@@ -648,8 +649,11 @@ describe("createFinalSchema", () => {
         SHARED_ENV: "shared",
         CLIENT_ENV: "client",
       },
-      // doesn't work if provided directly, for some reason
-      createFinalSchema: (shape) => v.object(shape),
+      createFinalSchema: (shape, isServer) => {
+        expectTypeOf(isServer).toEqualTypeOf<boolean>();
+        if (typeof isServer === "boolean") receivedIsServer = true;
+        return v.object(shape);
+      },
     });
     expectTypeOf(env).toEqualTypeOf<
       Readonly<{
@@ -663,6 +667,7 @@ describe("createFinalSchema", () => {
       SHARED_ENV: "shared",
       CLIENT_ENV: "client",
     });
+    expect(receivedIsServer).toBe(true);
   });
   test("schema combiner with further refinement", () => {
     const env = createEnv({
