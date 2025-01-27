@@ -185,9 +185,7 @@ export interface CreateSchemaOptions<
    * A custom function to combine the schemas.
    * Can be used to add further refinement or transformation.
    */
-  createFinalSchema?: (
-    shape: NoInfer<TServer> & NoInfer<TClient> & NoInfer<TShared>,
-  ) => TFinalSchema;
+  createFinalSchema?: (shape: TServer & TClient & TShared) => TFinalSchema;
 }
 
 export type ServerClientOptions<

@@ -667,85 +667,72 @@ describe("createFinalSchema", () => {
   test("schema combiner with further refinement", () => {
     const env = createEnv({
       server: {
-        SERVER_ENV: v.string(),
-      },
-      shared: {
-        SHARED_ENV: v.string(),
-      },
-      clientPrefix: "CLIENT_",
-      client: {
-        CLIENT_ENV: v.string(),
+        SKIP_AUTH: v.optional(v.boolean()),
+        EMAIL: v.optional(v.pipe(v.string(), v.email())),
+        PASSWORD: v.optional(v.pipe(v.string(), v.minLength(1))),
       },
       runtimeEnv: {
-        SERVER_ENV: "server",
-        SHARED_ENV: "shared",
-        CLIENT_ENV: "client",
+        SKIP_AUTH: true,
       },
       createFinalSchema: (shape) =>
         v.pipe(
           v.object(shape),
-          v.check((env) => {
-            expectTypeOf(env).toEqualTypeOf<{
-              SERVER_ENV: string;
-              SHARED_ENV: string;
-              CLIENT_ENV: string;
-            }>();
-            return env.CLIENT_ENV.startsWith("c");
-          }),
+          v.check((env) => env.SKIP_AUTH || !!(env.EMAIL && env.PASSWORD)),
         ),
-    });
-    expect(env).toMatchObject({
-      SERVER_ENV: "server",
-      SHARED_ENV: "shared",
-      CLIENT_ENV: "client",
     });
     expectTypeOf(env).toEqualTypeOf<
       Readonly<{
-        SERVER_ENV: string;
-        SHARED_ENV: string;
-        CLIENT_ENV: string;
+        SKIP_AUTH?: boolean;
+        EMAIL?: string;
+        PASSWORD?: string;
       }>
     >();
+    expect(env).toMatchObject({ SKIP_AUTH: true });
   });
   test("schema combiner that changes the type", () => {
     const env = createEnv({
       server: {
-        SERVER_ENV: v.string(),
-      },
-      shared: {
-        SHARED_ENV: v.string(),
-      },
-      clientPrefix: "CLIENT_",
-      client: {
-        CLIENT_ENV: v.string(),
+        SKIP_AUTH: v.optional(v.boolean()),
+        EMAIL: v.optional(v.pipe(v.string(), v.email())),
+        PASSWORD: v.optional(v.pipe(v.string(), v.minLength(1))),
       },
       runtimeEnv: {
-        SERVER_ENV: "server",
-        SHARED_ENV: "shared",
-        CLIENT_ENV: "client",
+        SKIP_AUTH: true,
       },
       createFinalSchema: (shape) =>
         v.pipe(
           v.object(shape),
-          v.transform((env) => ({
-            ...env,
-            SERVER_ONLY_ENV: env.SERVER_ENV.toUpperCase(),
-          })),
+          v.rawTransform(({ addIssue, dataset, NEVER }) => {
+            const env = dataset.value;
+            if (env.SKIP_AUTH) return { SKIP_AUTH: true } as const;
+            if (!env.EMAIL || !env.PASSWORD) {
+              addIssue({
+                message:
+                  "EMAIL and PASSWORD are required if SKIP_AUTH is false",
+              });
+              return NEVER;
+            }
+            return {
+              EMAIL: env.EMAIL,
+              PASSWORD: env.PASSWORD,
+            };
+          }),
         ),
     });
     expectTypeOf(env).toEqualTypeOf<
-      Readonly<{
-        SERVER_ENV: string;
-        SHARED_ENV: string;
-        CLIENT_ENV: string;
-        SERVER_ONLY_ENV: string;
-      }>
+      Readonly<
+        | {
+            readonly SKIP_AUTH: true;
+            EMAIL?: undefined;
+            PASSWORD?: undefined;
+          }
+        | {
+            readonly SKIP_AUTH?: undefined;
+            EMAIL: string;
+            PASSWORD: string;
+          }
+      >
     >();
-    expect(env).toMatchObject({
-      SERVER_ENV: "server",
-      SHARED_ENV: "shared",
-      CLIENT_ENV: "client",
-      SERVER_ONLY_ENV: "SERVER",
-    });
+    expect(env).toMatchObject({ SKIP_AUTH: true });
   });
 });

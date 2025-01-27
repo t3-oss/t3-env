@@ -140,12 +140,22 @@ export const env = createEnv({
     SKIP_AUTH: z.boolean().optional(),
     EMAIL: z.string().email().optional(),
     PASSWORD: z.string().min(1).optional(),
-  }
+  },
   // ...
   createFinalSchema: (shape) =>
-    z.object(shape).refine((env) => {
-      if (env.SKIP_AUTH) return true;
-      return env.EMAIL && env.PASSWORD;
+    z.object(shape).transform((env, ctx) => {
+      if (env.SKIP_AUTH) return { SKIP_AUTH: true } as const;
+      if (!env.EMAIL || !env.PASSWORD) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "EMAIL and PASSWORD are required if SKIP_AUTH is false",
+        });
+        return z.NEVER;
+      }
+      return {
+        EMAIL: env.EMAIL,
+        PASSWORD: env.PASSWORD,
+      };
     }),
 });
 ```
