@@ -670,6 +670,9 @@ describe("createFinalSchema", () => {
         EMAIL: z.string().email().optional(),
         PASSWORD: z.string().min(1).optional(),
       },
+      runtimeEnv: {
+        SKIP_AUTH: true,
+      },
       createFinalSchema: (shape) =>
         z.object(shape).refine((env) => {
           expectTypeOf(env).toEqualTypeOf<{

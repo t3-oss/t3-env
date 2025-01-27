@@ -8,7 +8,13 @@ export type Simplify<T> = {
   [P in keyof T]: T[P];
 } & {};
 
-type NoInfer<T> = { [K in keyof T]: T[K] } & unknown;
+type IfPossiblyUndefined<T, True, False> = undefined extends T ? True : False;
+
+type MakePossiblyUndefinedKeysOptional<T extends Record<string, unknown>> = {
+  [K in keyof T as IfPossiblyUndefined<T[K], K, never>]?: T[K];
+} & {
+  [K in keyof T as IfPossiblyUndefined<T[K], never, K>]: T[K];
+};
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type Impossible<T extends Record<string, any>> = Partial<
@@ -223,8 +229,10 @@ export type DefaultCombinedSchema<
   TClient extends TClientFormat,
   TShared extends TSharedFormat,
 > = StandardSchemaV1<
-  StandardSchemaDictionary.InferInput<TServer & TClient & TShared>,
-  StandardSchemaDictionary.InferOutput<TServer & TClient & TShared>
+  {},
+  MakePossiblyUndefinedKeysOptional<
+    StandardSchemaDictionary.InferOutput<TServer & TClient & TShared>
+  >
 >;
 
 export type CreateEnv<
