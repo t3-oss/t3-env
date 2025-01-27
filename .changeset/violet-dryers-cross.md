@@ -11,3 +11,4 @@ Combination of schemas can now be customised using the `createFinalSchema` optio
 This comes with a type-only breaking change:
 
 - `CreateEnv` now has the signature `CreateEnv<TFinalSchema, TExtends>`, instead of the previous `CreateEnv<TServer, TClient, TShared, TExtends>`.
+  - Previous behaviour can be achieved by using `DefaultCombinedSchema<TServer, TClient, TShared>` as the type for `TFinalSchema`.
