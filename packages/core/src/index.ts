@@ -175,6 +175,21 @@ export interface ServerOptions<
   }>;
 }
 
+export interface CreateSchemaOptions<
+  TServer extends Record<string, StandardSchemaV1>,
+  TClient extends Record<string, StandardSchemaV1>,
+  TShared extends Record<string, StandardSchemaV1>,
+  TFinalSchema extends StandardSchemaV1<{}, {}>,
+> {
+  /**
+   * A custom function to combine the schemas.
+   * Can be used to add further refinement or transformation.
+   */
+  createFinalSchema?: (
+    shape: NoInfer<TServer> & NoInfer<TClient> & NoInfer<TShared>,
+  ) => TFinalSchema;
+}
+
 export type ServerClientOptions<
   TPrefix extends string | undefined,
   TServer extends Record<string, StandardSchemaV1>,
@@ -190,21 +205,14 @@ export type EnvOptions<
   TClient extends Record<string, StandardSchemaV1>,
   TShared extends Record<string, StandardSchemaV1>,
   TExtends extends Array<Record<string, unknown>>,
-  FinalSchema extends StandardSchemaV1<{}, {}>,
+  TFinalSchema extends StandardSchemaV1<{}, {}>,
 > = (
   | (LooseOptions<TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>)
   | (StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>)
-) & {
-  /**
-   * A custom function to combine the schemas.
-   * Can be used to add further refinement or transformation.
-   */
-  createFinalSchema?: (
-    shape: NoInfer<TServer> & NoInfer<TClient> & NoInfer<TShared>,
-  ) => FinalSchema;
-};
+) &
+  CreateSchemaOptions<TServer, TClient, TShared, TFinalSchema>;
 
 type TPrefixFormat = string | undefined;
 type TServerFormat = Record<string, StandardSchemaV1>;
@@ -221,25 +229,28 @@ export type DefaultCombinedSchema<
   StandardSchemaDictionary.InferOutput<TServer & TClient & TShared>
 >;
 
+export type CreateEnv<
+  TFinalSchema extends StandardSchemaV1<{}, {}>,
+  TExtends extends TExtendsFormat,
+> = Readonly<
+  StandardSchemaV1.InferOutput<TFinalSchema> &
+    UnReadonlyObject<Reduce<TExtends>>
+>;
+
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,
   TClient extends TClientFormat = NonNullable<unknown>,
   TShared extends TSharedFormat = NonNullable<unknown>,
   const TExtends extends TExtendsFormat = [],
-  FinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<
+  TFinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<
     TServer,
     TClient,
     TShared
   >,
 >(
-  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends, FinalSchema>,
-): Readonly<
-  Simplify<
-    StandardSchemaV1.InferOutput<FinalSchema> &
-      UnReadonlyObject<Reduce<TExtends>>
-  >
-> {
+  opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends, TFinalSchema>,
+): CreateEnv<TFinalSchema, TExtends> {
   const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const emptyStringAsUndefined = opts.emptyStringAsUndefined ?? false;
