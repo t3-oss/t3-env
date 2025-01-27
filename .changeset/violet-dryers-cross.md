@@ -1,0 +1,13 @@
+---
+"@t3-oss/env-nextjs": minor
+"@t3-oss/env-core": minor
+"@t3-oss/env-nuxt": minor
+---
+
+feat!: added ability to customise schema combination
+
+Combination of schemas can now be customised using the `createFinalSchema` option. This allows further refinement or transformation of the environment variables.
+
+This comes with a type-only breaking change:
+
+- `CreateEnv` now has the signature `CreateEnv<TFinalSchema, TExtends>`, instead of the previous `CreateEnv<TServer, TClient, TShared, TExtends>`.
