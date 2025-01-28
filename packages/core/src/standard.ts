@@ -88,6 +88,15 @@ export namespace StandardSchemaDictionary {
   };
 }
 
+export function ensureSynchronous<T>(
+  value: T | Promise<T>,
+  message: string,
+): asserts value is T {
+  if (value instanceof Promise) {
+    throw new Error(message);
+  }
+}
+
 export function parseWithDictionary<TDict extends StandardSchemaDictionary>(
   dictionary: TDict,
   value: Record<string, unknown>,
@@ -95,14 +104,13 @@ export function parseWithDictionary<TDict extends StandardSchemaDictionary>(
   const result: Record<string, unknown> = {};
   const issues: StandardSchemaV1.Issue[] = [];
   for (const key in dictionary) {
-    const schema = dictionary[key];
-    const prop = value[key];
-    const propResult = schema["~standard"].validate(prop);
-    if (propResult instanceof Promise) {
-      throw new Error(
-        `Validation must be synchronous, but ${key} returned a Promise.`,
-      );
-    }
+    const propResult = dictionary[key]["~standard"].validate(value[key]);
+
+    ensureSynchronous(
+      propResult,
+      `Validation must be synchronous, but ${key} returned a Promise.`,
+    );
+
     if (propResult.issues) {
       issues.push(
         ...propResult.issues.map((issue) => ({

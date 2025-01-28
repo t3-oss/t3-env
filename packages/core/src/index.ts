@@ -1,5 +1,5 @@
 import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard";
-import { parseWithDictionary } from "./standard";
+import { ensureSynchronous, parseWithDictionary } from "./standard";
 
 export type { StandardSchemaV1, StandardSchemaDictionary };
 
@@ -292,12 +292,13 @@ export function createEnv<
         ..._shared,
       };
 
-  const parsed = opts.createFinalSchema?.(finalSchemaShape as never, isServer)["~standard"].validate(runtimeEnv)
-        ?? parseWithDictionary(finalSchemaShape, runtimeEnv)
+  const parsed =
+    opts
+      .createFinalSchema?.(finalSchemaShape as never, isServer)
+      ["~standard"].validate(runtimeEnv) ??
+    parseWithDictionary(finalSchemaShape, runtimeEnv);
 
-  if (parsed instanceof Promise) {
-    throw new Error("Validation must be synchronous");
-  }
+  ensureSynchronous(parsed, "Validation must be synchronous");
 
   const onValidationError =
     opts.onValidationError ??
