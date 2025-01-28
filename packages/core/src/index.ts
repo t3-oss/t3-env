@@ -292,11 +292,8 @@ export function createEnv<
         ..._shared,
       };
 
-  const parsed = opts.createFinalSchema
-    ? opts
-        .createFinalSchema(finalSchemaShape as never, isServer)
-        ["~standard"].validate(runtimeEnv)
-    : parseWithDictionary(finalSchemaShape, runtimeEnv);
+  const parsed = opts.createFinalSchema?.(finalSchemaShape as never, isServer)["~standard"].validate(runtimeEnv)
+        ?? parseWithDictionary(finalSchemaShape, runtimeEnv)
 
   if (parsed instanceof Promise) {
     throw new Error("Validation must be synchronous");
