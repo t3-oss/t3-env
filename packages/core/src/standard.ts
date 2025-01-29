@@ -69,17 +69,14 @@ export declare namespace StandardSchemaV1 {
   >["output"];
 }
 
-export type StandardSchemaDictionary = Record<string, StandardSchemaV1>;
+export type StandardSchemaDictionary<
+  Input = Record<string, unknown>,
+  Output extends Record<keyof Input, unknown> = Input,
+> = {
+  [K in keyof Input]-?: StandardSchemaV1<Input[K], Output[K]>;
+};
+
 export namespace StandardSchemaDictionary {
-  /**
-   * A dictionary of Standard Schemas that match the input and output types.
-   */
-  export type Matching<
-    Input,
-    Output extends Record<keyof Input, unknown> = Input,
-  > = {
-    [K in keyof Input]-?: StandardSchemaV1<Input[K], Output[K]>;
-  };
   export type InferInput<T extends StandardSchemaDictionary> = {
     [K in keyof T]: StandardSchemaV1.InferInput<T[K]>;
   };
