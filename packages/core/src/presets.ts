@@ -116,3 +116,8 @@ export interface NetlifyEnv {
   SITE_NAME?: string;
   SITE_ID?: string;
 }
+
+export interface UpstashRedisEnv {
+  UPSTASH_REDIS_REST_URL: string;
+  UPSTASH_REDIS_REST_TOKEN: string;
+}

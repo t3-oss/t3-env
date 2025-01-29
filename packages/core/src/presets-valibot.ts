@@ -9,6 +9,7 @@ import type {
   RenderEnv,
   UploadThingEnv,
   UploadThingV6Env,
+  UpstashRedisEnv,
   VercelEnv,
 } from "./presets";
 
@@ -194,5 +195,18 @@ export const netlify = () =>
       SITE_NAME: optional(string()),
       SITE_ID: optional(string()),
     } satisfies StandardSchemaDictionary.Matching<NetlifyEnv>,
+    runtimeEnv: process.env,
+  });
+
+/**
+ * Upstash redis Environment Variables
+ * @see https://upstash.com/docs/redis/howto/connectwithupstashredis
+ */
+export const upstashRedis = () =>
+  createEnv({
+    server: {
+      UPSTASH_REDIS_REST_URL: pipe(string(), url()),
+      UPSTASH_REDIS_REST_TOKEN: string(),
+    } satisfies StandardSchemaDictionary.Matching<UpstashRedisEnv>,
     runtimeEnv: process.env,
   });
