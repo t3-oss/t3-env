@@ -8,13 +8,12 @@ export type Simplify<T> = {
   [P in keyof T]: T[P];
 } & {};
 
-type IfPossiblyUndefined<T, True, False> = undefined extends T ? True : False;
+type PossiblyUndefinedKeys<T> = {
+  [K in keyof T]: undefined extends T[K] ? K : never;
+}[keyof T];
 
-type MakePossiblyUndefinedKeysOptional<T extends Record<string, unknown>> = {
-  [K in keyof T as IfPossiblyUndefined<T[K], K, never>]?: T[K];
-} & {
-  [K in keyof T as IfPossiblyUndefined<T[K], never, K>]: T[K];
-};
+type UndefinedOptional<T> = Partial<Pick<T, PossiblyUndefinedKeys<T>>> &
+  Omit<T, PossiblyUndefinedKeys<T>>;
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type Impossible<T extends Record<string, any>> = Partial<
@@ -233,7 +232,7 @@ export type DefaultCombinedSchema<
   TShared extends TSharedFormat,
 > = StandardSchemaV1<
   {},
-  MakePossiblyUndefinedKeysOptional<
+  UndefinedOptional<
     StandardSchemaDictionary.InferOutput<TServer & TClient & TShared>
   >
 >;
@@ -242,8 +241,10 @@ export type CreateEnv<
   TFinalSchema extends StandardSchemaV1<{}, {}>,
   TExtends extends TExtendsFormat,
 > = Readonly<
-  StandardSchemaV1.InferOutput<TFinalSchema> &
-    UnReadonlyObject<Reduce<TExtends>>
+  Simplify<
+    StandardSchemaV1.InferOutput<TFinalSchema> &
+      UnReadonlyObject<Reduce<TExtends>>
+  >
 >;
 
 export function createEnv<
