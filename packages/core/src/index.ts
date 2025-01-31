@@ -223,7 +223,7 @@ const makeInternalProp = <T>(name: string) => {
   };
 };
 
-const serverKeysProp = makeInternalProp<Set<string>>("serverKeys");
+const serverKeysProp = makeInternalProp<string[]>("serverKeys");
 
 export function createEnv<
   TPrefix extends TPrefixFormat,
@@ -268,8 +268,6 @@ export function createEnv<
 
   const parsed = parseWithDictionary(finalSchema, runtimeEnv);
 
-  const serverKeys = new Set(Object.keys(_server));
-
   const onValidationError =
     opts.onValidationError ??
     ((issues) => {
@@ -301,6 +299,8 @@ export function createEnv<
   };
 
   // a map of keys to the preset we got them from
+  const serverKeys = Object.keys(_server);
+
   const presetsByKey: Record<string, Record<string, unknown> | undefined> = {};
 
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
@@ -308,10 +308,10 @@ export function createEnv<
       presetsByKey[key] = curr;
       acc[key] = curr[key];
     }
-    const serverKeys = serverKeysProp.getValue(curr);
-    if (serverKeys) {
+    const presetServerKeys = serverKeysProp.getValue(curr);
+    if (presetServerKeys) {
       // these are keys that the proxy should handle but won't be exposed on the client
-      for (const key of serverKeys) {
+      for (const key of presetServerKeys) {
         presetsByKey[key] = curr;
       }
     }
