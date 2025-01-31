@@ -465,6 +465,7 @@ describe("extending presets", () => {
   describe("single preset", () => {
     const processEnv = {
       PRESET_ENV: "preset",
+      PRESET_SHARED_ENV: "shared_preset",
       SHARED_ENV: "shared",
       SERVER_ENV: "server",
       CLIENT_ENV: "client",
@@ -474,6 +475,9 @@ describe("extending presets", () => {
       const preset = createEnv({
         server: {
           PRESET_ENV: z.enum(["preset"]),
+        },
+        shared: {
+          PRESET_SHARED_ENV: z.string(),
         },
         runtimeEnv: processEnv,
       });
@@ -500,6 +504,7 @@ describe("extending presets", () => {
         SHARED_ENV: string;
         CLIENT_ENV: string;
         PRESET_ENV: "preset";
+        PRESET_SHARED_ENV: string;
       }>
     >();
 
@@ -514,6 +519,7 @@ describe("extending presets", () => {
         SHARED_ENV: "shared",
         CLIENT_ENV: "client",
         PRESET_ENV: "preset",
+        PRESET_SHARED_ENV: "shared_preset",
       });
 
       globalThis.window = window;
@@ -533,6 +539,7 @@ describe("extending presets", () => {
       );
       expect(env.SHARED_ENV).toBe("shared");
       expect(env.CLIENT_ENV).toBe("client");
+      expect(env.PRESET_SHARED_ENV).toBe("shared_preset");
 
       globalThis.window = window;
     });

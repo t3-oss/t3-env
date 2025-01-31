@@ -214,6 +214,10 @@ export type CreateEnv<
   >
 >;
 
+const SHARED_KEYS = Symbol.for("@t3/env/shared-keys");
+const getSharedKeys = (obj: Record<string, unknown>) =>
+  (obj as { [SHARED_KEYS]?: Set<string> })[SHARED_KEYS];
+
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,
@@ -272,13 +276,15 @@ export function createEnv<
       );
     });
 
+  const sharedKeys = new Set(Object.keys(_shared));
+
   if (parsed.issues) {
     return onValidationError(parsed.issues);
   }
 
   const isServerAccess = (prop: string) => {
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !(prop in _shared);
+    return !prop.startsWith(opts.clientPrefix) && !sharedKeys.has(prop);
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
@@ -288,12 +294,19 @@ export function createEnv<
   };
 
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
+    const presetSharedKeys = getSharedKeys(curr);
+    if (presetSharedKeys) {
+      for (const key of presetSharedKeys) {
+        sharedKeys.add(key);
+      }
+    }
     return Object.assign(acc, curr);
   }, {});
   const fullObj = Object.assign(parsed.value, extendedObj);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
+      if (prop === SHARED_KEYS) return sharedKeys;
       if (typeof prop !== "string") return undefined;
       if (ignoreProp(prop)) return undefined;
       if (!isValidServerAccess(prop)) return onInvalidAccess(prop);
