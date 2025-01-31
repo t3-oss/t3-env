@@ -413,7 +413,7 @@ export function createEnv<
   const serverKeys = isServer ? undefined : Object.keys(_server);
 
   // a map of keys to the preset we got them from
-  const presetsByKey: Record<string, Record<string, unknown> | undefined> = {};
+  const presetsByKey: Record<string, TExtendsFormat[number] | undefined> = {};
 
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
     for (const key in curr) {
