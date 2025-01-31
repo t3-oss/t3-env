@@ -464,9 +464,9 @@ describe("extending presets", () => {
   });
   describe("single preset", () => {
     const processEnv = {
-      SERVER_PRESET_ENV: "server_preset",
-      SHARED_PRESET_ENV: "shared_preset",
-      CLIENT_PRESET_ENV: "client_preset",
+      PRESET_SERVER_ENV: "server_preset",
+      PRESET_SHARED_ENV: "shared_preset",
+      PRESET_CLIENT_ENV: "client_preset",
       SHARED_ENV: "shared",
       SERVER_ENV: "server",
       CLIENT_ENV: "client",
@@ -475,14 +475,14 @@ describe("extending presets", () => {
     function lazyCreateEnv() {
       const preset = createEnv({
         server: {
-          SERVER_PRESET_ENV: z.literal("server_preset"),
+          PRESET_SERVER_ENV: z.literal("server_preset"),
         },
         shared: {
-          SHARED_PRESET_ENV: z.string(),
+          PRESET_SHARED_ENV: z.string(),
         },
-        clientPrefix: "CLIENT_",
+        clientPrefix: "PRESET_CLIENT_",
         client: {
-          CLIENT_PRESET_ENV: z.string(),
+          PRESET_CLIENT_ENV: z.string(),
         },
         onInvalidAccess(variable) {
           throw new Error(
@@ -518,9 +518,9 @@ describe("extending presets", () => {
         SERVER_ENV: string;
         SHARED_ENV: string;
         CLIENT_ENV: string;
-        SERVER_PRESET_ENV: "server_preset";
-        SHARED_PRESET_ENV: string;
-        CLIENT_PRESET_ENV: string;
+        PRESET_SERVER_ENV: "server_preset";
+        PRESET_SHARED_ENV: string;
+        PRESET_CLIENT_ENV: string;
       }>
     >();
 
@@ -534,9 +534,9 @@ describe("extending presets", () => {
         SERVER_ENV: "server",
         SHARED_ENV: "shared",
         CLIENT_ENV: "client",
-        SERVER_PRESET_ENV: "server_preset",
-        SHARED_PRESET_ENV: "shared_preset",
-        CLIENT_PRESET_ENV: "client_preset",
+        PRESET_SERVER_ENV: "server_preset",
+        PRESET_SHARED_ENV: "shared_preset",
+        PRESET_CLIENT_ENV: "client_preset",
       });
 
       globalThis.window = window;
@@ -551,13 +551,13 @@ describe("extending presets", () => {
       expect(() => env.SERVER_ENV).toThrow(
         "Attempted to access variable SERVER_ENV on the client",
       );
-      expect(() => env.SERVER_PRESET_ENV).toThrow(
-        "Attempted to access preset variable SERVER_PRESET_ENV on the client",
+      expect(() => env.PRESET_SERVER_ENV).toThrow(
+        "Attempted to access preset variable PRESET_SERVER_ENV on the client",
       );
       expect(env.SHARED_ENV).toBe("shared");
       expect(env.CLIENT_ENV).toBe("client");
-      expect(env.SHARED_PRESET_ENV).toBe("shared_preset");
-      expect(env.CLIENT_PRESET_ENV).toBe("client_preset");
+      expect(env.PRESET_SHARED_ENV).toBe("shared_preset");
+      expect(env.PRESET_CLIENT_ENV).toBe("client_preset");
 
       globalThis.window = window;
     });
