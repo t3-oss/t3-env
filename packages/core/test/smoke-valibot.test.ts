@@ -466,8 +466,9 @@ describe("extending presets", () => {
   });
   describe("single preset", () => {
     const processEnv = {
-      PRESET_ENV: "preset",
-      PRESET_SHARED_ENV: "shared_preset",
+      SERVER_PRESET_ENV: "server_preset",
+      SHARED_PRESET_ENV: "shared_preset",
+      CLIENT_PRESET_ENV: "client_preset",
       SHARED_ENV: "shared",
       SERVER_ENV: "server",
       CLIENT_ENV: "client",
@@ -476,10 +477,14 @@ describe("extending presets", () => {
     function lazyCreateEnv() {
       const preset = createEnv({
         server: {
-          PRESET_ENV: v.picklist(["preset"]),
+          SERVER_PRESET_ENV: v.literal("server_preset"),
         },
+        clientPrefix: "CLIENT_",
         shared: {
-          PRESET_SHARED_ENV: v.string(),
+          SHARED_PRESET_ENV: v.string(),
+        },
+        client: {
+          CLIENT_PRESET_ENV: v.string(),
         },
         runtimeEnv: processEnv,
       });
@@ -505,8 +510,9 @@ describe("extending presets", () => {
         SERVER_ENV: string;
         SHARED_ENV: string;
         CLIENT_ENV: string;
-        PRESET_ENV: "preset";
-        PRESET_SHARED_ENV: string;
+        SERVER_PRESET_ENV: "server_preset";
+        SHARED_PRESET_ENV: string;
+        CLIENT_PRESET_ENV: string;
       }>
     >();
 
@@ -520,8 +526,9 @@ describe("extending presets", () => {
         SERVER_ENV: "server",
         SHARED_ENV: "shared",
         CLIENT_ENV: "client",
-        PRESET_ENV: "preset",
-        PRESET_SHARED_ENV: "shared_preset",
+        SERVER_PRESET_ENV: "server_preset",
+        SHARED_PRESET_ENV: "shared_preset",
+        CLIENT_PRESET_ENV: "client_preset",
       });
 
       globalThis.window = window;
@@ -536,12 +543,13 @@ describe("extending presets", () => {
       expect(() => env.SERVER_ENV).toThrow(
         "❌ Attempted to access a server-side environment variable on the client",
       );
-      expect(() => env.PRESET_ENV).toThrow(
+      expect(() => env.SERVER_PRESET_ENV).toThrow(
         "❌ Attempted to access a server-side environment variable on the client",
       );
       expect(env.SHARED_ENV).toBe("shared");
       expect(env.CLIENT_ENV).toBe("client");
-      expect(env.PRESET_SHARED_ENV).toBe("shared_preset");
+      expect(env.SHARED_PRESET_ENV).toBe("shared_preset");
+      expect(env.CLIENT_PRESET_ENV).toBe("client_preset");
 
       globalThis.window = window;
     });

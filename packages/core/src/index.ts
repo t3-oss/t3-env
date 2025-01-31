@@ -315,13 +315,6 @@ export type CreateEnv<
   Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>
 >;
 
-/**
- * Create a new environment variable schema.
- */
-const SHARED_KEYS = Symbol.for("@t3/env/shared-keys");
-const getSharedKeys = (obj: Record<string, unknown>) =>
-  (obj as { [SHARED_KEYS]?: Set<string> })[SHARED_KEYS];
-
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,
@@ -391,15 +384,13 @@ export function createEnv<
       );
     });
 
-  const sharedKeys = new Set(Object.keys(_shared));
-
   if (parsed.issues) {
     return onValidationError(parsed.issues);
   }
 
   const isServerAccess = (prop: string) => {
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !sharedKeys.has(prop);
+    return !prop.startsWith(opts.clientPrefix) && !(prop in _shared);
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
@@ -408,21 +399,24 @@ export function createEnv<
     return prop === "__esModule" || prop === "$$typeof";
   };
 
+  // a map of keys to the preset we got them from
+  const presetsByKey: Record<string, Record<string, unknown> | undefined> = {};
+
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
-    const presetSharedKeys = getSharedKeys(curr);
-    if (presetSharedKeys) {
-      for (const key of presetSharedKeys) {
-        sharedKeys.add(key);
-      }
+    for (const key in curr) {
+      presetsByKey[key] = curr;
+      acc[key] = curr[key];
     }
-    return Object.assign(acc, curr);
+    return acc;
   }, {});
   const fullObj = Object.assign(extendedObj, parsed.value);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
-      if (prop === SHARED_KEYS) return sharedKeys;
       if (typeof prop !== "string") return undefined;
+      // pass off handling to the original proxy from the preset
+      const preset = presetsByKey[prop];
+      if (preset) return preset[prop];
       if (ignoreProp(prop)) return undefined;
       if (!isValidServerAccess(prop)) return onInvalidAccess(prop);
       return Reflect.get(target, prop);
