@@ -214,6 +214,17 @@ export type CreateEnv<
   >
 >;
 
+const makeInternalProp = <T>(name: string) => {
+  const symbol = Symbol(name);
+  return {
+    matches: (prop: string | symbol) => prop === symbol,
+    getValue: (obj: Record<string, unknown>) =>
+      (obj as { [symbol]?: T })[symbol],
+  };
+};
+
+const serverKeysProp = makeInternalProp<Set<string>>("serverKeys");
+
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,
@@ -257,6 +268,8 @@ export function createEnv<
 
   const parsed = parseWithDictionary(finalSchema, runtimeEnv);
 
+  const serverKeys = new Set(Object.keys(_server));
+
   const onValidationError =
     opts.onValidationError ??
     ((issues) => {
@@ -295,12 +308,22 @@ export function createEnv<
       presetsByKey[key] = curr;
       acc[key] = curr[key];
     }
+    const serverKeys = serverKeysProp.getValue(curr);
+    if (serverKeys) {
+      // these are keys that the proxy should handle but won't be exposed on the client
+      for (const key of serverKeys) {
+        presetsByKey[key] = curr;
+      }
+    }
     return acc;
   }, {});
+
   const fullObj = Object.assign(parsed.value, extendedObj);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
+      // we need to expose these on the client side so we know to pass them off to the right proxy
+      if (serverKeysProp.matches(prop) && !isServer) return serverKeys;
       if (typeof prop !== "string") return undefined;
       // pass off handling to the original proxy from the preset
       const preset = presetsByKey[prop];
