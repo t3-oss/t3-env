@@ -481,6 +481,11 @@ describe("extending presets", () => {
         client: {
           CLIENT_PRESET_ENV: z.string(),
         },
+        onInvalidAccess(variable) {
+          throw new Error(
+            `Attempted to access preset variable ${variable} on the client`,
+          );
+        },
         runtimeEnv: processEnv,
       });
 
@@ -494,6 +499,11 @@ describe("extending presets", () => {
         clientPrefix: "CLIENT_",
         client: {
           CLIENT_ENV: z.string(),
+        },
+        onInvalidAccess(variable) {
+          throw new Error(
+            `Attempted to access variable ${variable} on the client`,
+          );
         },
         extends: [preset],
         runtimeEnv: processEnv,
@@ -536,10 +546,10 @@ describe("extending presets", () => {
       const env = lazyCreateEnv();
 
       expect(() => env.SERVER_ENV).toThrow(
-        "❌ Attempted to access a server-side environment variable on the client",
+        "Attempted to access variable SERVER_ENV on the client",
       );
       expect(() => env.SERVER_PRESET_ENV).toThrow(
-        "❌ Attempted to access a server-side environment variable on the client",
+        "Attempted to access preset variable SERVER_PRESET_ENV on the client",
       );
       expect(env.SHARED_ENV).toBe("shared");
       expect(env.CLIENT_ENV).toBe("client");
