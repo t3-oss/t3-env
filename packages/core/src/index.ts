@@ -410,9 +410,9 @@ export function createEnv<
     return prop === "__esModule" || prop === "$$typeof";
   };
 
-  // a map of keys to the preset we got them from
-  const serverKeys = Object.keys(_server);
+  const serverKeys = isServer ? undefined : Object.keys(_server);
 
+  // a map of keys to the preset we got them from
   const presetsByKey: Record<string, Record<string, unknown> | undefined> = {};
 
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
@@ -435,7 +435,7 @@ export function createEnv<
   const env = new Proxy(fullObj, {
     get(target, prop) {
       // we need to expose these on the client side so we know to pass them off to the right proxy
-      if (serverKeysProp.matches(prop) && !isServer) return serverKeys;
+      if (serverKeysProp.matches(prop)) return serverKeys;
       if (typeof prop !== "string") return undefined;
       // pass off handling to the original proxy from the preset
       const preset = presetsByKey[prop];
