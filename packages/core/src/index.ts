@@ -34,7 +34,7 @@ type Reduce<
     : never;
 
 export interface BaseOptions<
-  TShared extends Record<string, StandardSchemaV1>,
+  TShared extends StandardSchemaDictionary,
   TExtends extends Array<Record<string, unknown>>,
 > {
   /**
@@ -89,7 +89,7 @@ export interface BaseOptions<
 }
 
 export interface LooseOptions<
-  TShared extends Record<string, StandardSchemaV1>,
+  TShared extends StandardSchemaDictionary,
   TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   runtimeEnvStrict?: never;
@@ -104,9 +104,9 @@ export interface LooseOptions<
 
 export interface StrictOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, StandardSchemaV1>,
-  TClient extends Record<string, StandardSchemaV1>,
-  TShared extends Record<string, StandardSchemaV1>,
+  TServer extends StandardSchemaDictionary,
+  TClient extends StandardSchemaDictionary,
+  TShared extends StandardSchemaDictionary,
   TExtends extends Array<Record<string, unknown>>,
 > extends BaseOptions<TShared, TExtends> {
   /**
@@ -138,7 +138,7 @@ export interface StrictOptions<
 
 export interface ClientOptions<
   TPrefix extends string | undefined,
-  TClient extends Record<string, StandardSchemaV1>,
+  TClient extends StandardSchemaDictionary,
 > {
   /**
    * The prefix that client-side variables must have. This is enforced both at
@@ -161,7 +161,7 @@ export interface ClientOptions<
 
 export interface ServerOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, StandardSchemaV1>,
+  TServer extends StandardSchemaDictionary,
 > {
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
@@ -181,9 +181,9 @@ export interface ServerOptions<
 }
 
 export interface CreateSchemaOptions<
-  TServer extends Record<string, StandardSchemaV1>,
-  TClient extends Record<string, StandardSchemaV1>,
-  TShared extends Record<string, StandardSchemaV1>,
+  TServer extends StandardSchemaDictionary,
+  TClient extends StandardSchemaDictionary,
+  TShared extends StandardSchemaDictionary,
   TFinalSchema extends StandardSchemaV1<{}, {}>,
 > {
   /**
@@ -198,8 +198,8 @@ export interface CreateSchemaOptions<
 
 export type ServerClientOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, StandardSchemaV1>,
-  TClient extends Record<string, StandardSchemaV1>,
+  TServer extends StandardSchemaDictionary,
+  TClient extends StandardSchemaDictionary,
 > =
   | (ClientOptions<TPrefix, TClient> & ServerOptions<TPrefix, TServer>)
   | (ServerOptions<TPrefix, TServer> & Impossible<ClientOptions<never, never>>)
@@ -207,9 +207,9 @@ export type ServerClientOptions<
 
 export type EnvOptions<
   TPrefix extends string | undefined,
-  TServer extends Record<string, StandardSchemaV1>,
-  TClient extends Record<string, StandardSchemaV1>,
-  TShared extends Record<string, StandardSchemaV1>,
+  TServer extends StandardSchemaDictionary,
+  TClient extends StandardSchemaDictionary,
+  TShared extends StandardSchemaDictionary,
   TExtends extends Array<Record<string, unknown>>,
   TFinalSchema extends StandardSchemaV1<{}, {}>,
 > = (
@@ -221,9 +221,9 @@ export type EnvOptions<
   CreateSchemaOptions<TServer, TClient, TShared, TFinalSchema>;
 
 type TPrefixFormat = string | undefined;
-type TServerFormat = Record<string, StandardSchemaV1>;
-type TClientFormat = Record<string, StandardSchemaV1>;
-type TSharedFormat = Record<string, StandardSchemaV1>;
+type TServerFormat = StandardSchemaDictionary;
+type TClientFormat = StandardSchemaDictionary;
+type TSharedFormat = StandardSchemaDictionary;
 type TExtendsFormat = Array<Record<string, unknown>>;
 
 export type DefaultCombinedSchema<

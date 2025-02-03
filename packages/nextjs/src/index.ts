@@ -3,6 +3,7 @@ import type {
   CreateSchemaOptions,
   DefaultCombinedSchema,
   ServerClientOptions,
+  StandardSchemaDictionary,
   StandardSchemaV1,
   StrictOptions,
 } from "@t3-oss/env-core";
@@ -12,9 +13,9 @@ const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
 type ClientPrefix = typeof CLIENT_PREFIX;
 
 type Options<
-  TServer extends Record<string, StandardSchemaV1>,
+  TServer extends StandardSchemaDictionary,
   TClient extends Record<`${ClientPrefix}${string}`, StandardSchemaV1>,
-  TShared extends Record<string, StandardSchemaV1>,
+  TShared extends StandardSchemaDictionary,
   TExtends extends Array<Record<string, unknown>>,
   TFinalSchema extends StandardSchemaV1<{}, {}>,
 > = Omit<
@@ -58,12 +59,12 @@ type Options<
   );
 
 export function createEnv<
-  TServer extends Record<string, StandardSchemaV1> = NonNullable<unknown>,
+  TServer extends StandardSchemaDictionary = NonNullable<unknown>,
   TClient extends Record<
     `${ClientPrefix}${string}`,
     StandardSchemaV1
   > = NonNullable<unknown>,
-  TShared extends Record<string, StandardSchemaV1> = NonNullable<unknown>,
+  TShared extends StandardSchemaDictionary = NonNullable<unknown>,
   const TExtends extends Array<Record<string, unknown>> = [],
   TFinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<
     TServer,
