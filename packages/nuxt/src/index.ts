@@ -6,6 +6,13 @@ import type {
 } from "@t3-oss/env-core";
 import { createEnv as createEnvCore } from "@t3-oss/env-core";
 
+export type {
+  StandardSchemaV1,
+  StandardSchemaDictionary,
+  ErrorMessage,
+  Simplify,
+} from "@t3-oss/env-core";
+
 const CLIENT_PREFIX = "NUXT_PUBLIC_" as const;
 type ClientPrefix = typeof CLIENT_PREFIX;
 
