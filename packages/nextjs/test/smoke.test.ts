@@ -250,11 +250,18 @@ describe("extending presets", () => {
       "❌ Invalid environment variables:",
       [
         {
-          code: "invalid_type",
+          abortEarly: undefined,
+          abortPipeEarly: undefined,
           expected: "string",
-          message: "Required",
+          input: undefined,
+          issues: undefined,
+          kind: "schema",
+          lang: undefined,
+          message: "Invalid type: Expected string but received undefined",
           path: ["PRESET_ENV"],
           received: "undefined",
+          requirement: undefined,
+          type: "string",
         },
       ],
     ]);
