@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/mdx": "^2.0.13",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.14.1",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
     "postcss": "^8.4.38",
