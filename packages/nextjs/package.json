@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nextjs",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "type": "module",
   "keywords": [
     "create-t3-app",
