@@ -1,5 +1,22 @@
 # @t3-oss/env-core
 
+## 0.13.0
+
+### Minor Changes
+
+- [#313](https://github.com/t3-oss/t3-env/pull/313) [`35577fc`](https://github.com/t3-oss/t3-env/commit/35577fca8fa0752f2542759ed11d8386d868c2a5) Thanks [@EskiMojo14](https://github.com/EskiMojo14)! - feat!: added ability to customise schema combination
+
+  Combination of schemas can now be customised using the `createFinalSchema` option. This allows further refinement or transformation of the environment variables.
+
+  For 99% of users, this is a non-breaking change. If you were relying on internal types, there's a type-only breaking change:
+
+  - `CreateEnv` now has the signature `CreateEnv<TFinalSchema, TExtends>`, instead of the previous `CreateEnv<TServer, TClient, TShared, TExtends>`.
+    - Previous behaviour can be achieved by using `DefaultCombinedSchema<TServer, TClient, TShared>` as the type for `TFinalSchema`.
+
+### Patch Changes
+
+- [#312](https://github.com/t3-oss/t3-env/pull/312) [`00c35f2`](https://github.com/t3-oss/t3-env/commit/00c35f2f26cb4f07ba16680e6c965128bdb5b9a7) Thanks [@Abdalrhman-Almarakeby](https://github.com/Abdalrhman-Almarakeby)! - add preset for upstash redis environment variables
+
 ## 0.12.0
 
 ### Minor Changes
