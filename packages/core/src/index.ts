@@ -130,7 +130,7 @@ export interface StrictOptions<
 }
 
 export interface ClientOptions<
-  TPrefix extends string | undefined,
+  TPrefix extends string | string[] | undefined,
   TClient extends Record<string, StandardSchemaV1>,
 > {
   /**
@@ -144,11 +144,21 @@ export interface ClientOptions<
    * built with invalid env vars.
    */
   client: Partial<{
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
+    [TKey in keyof TClient]: TPrefix extends string
+      ? TKey extends `${TPrefix}${string}`
+        ? TClient[TKey]
+        : ErrorMessage<`${TKey extends string
+            ? TKey
+            : never} is not prefixed with ${TPrefix}.`>
+      : TPrefix extends string[]
+        ? TKey extends `${infer Prefix}${string}`
+          ? Prefix extends TPrefix[number]
+            ? TClient[TKey]
+            : ErrorMessage<`${TKey extends string
+                ? TKey
+                : never} is not prefixed with any of ${TPrefix[number]}.`>
+          : never
+        : never;
   }>;
 }
 
@@ -282,7 +292,14 @@ export function createEnv<
 
   const isServerAccess = (prop: string) => {
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !(prop in _shared);
+
+    const prefixes = Array.isArray(opts.clientPrefix)
+      ? opts.clientPrefix
+      : [opts.clientPrefix];
+
+    return !prefixes.some(
+      (prefix) => prop.startsWith(prefix) && prop in _shared,
+    );
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
