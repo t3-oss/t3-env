@@ -2,7 +2,13 @@
   "name": "@t3-oss/env-nuxt",
   "version": "0.12.0",
   "type": "module",
-  "keywords": ["create-t3-app", "environment variables", "zod", "nuxt", "vue"],
+  "keywords": [
+    "create-t3-app",
+    "environment variables",
+    "zod",
+    "nuxt",
+    "vue"
+  ],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -25,19 +31,24 @@
       "default": "./dist/presets-valibot.js"
     }
   },
-  "files": ["dist", "package.json", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "build": "bunchee",
-    "dev": "bunchee -w --no-clean",
+    "dev": "bunchee --no-clean",
     "typecheck": "tsc --noEmit",
-    "prepack": "bun ../../replace-workspace-protocol.ts"
+    "prepack": "bun ../../.github/replace-workspace-protocol.ts"
   },
   "dependencies": {
     "@t3-oss/env-core": "workspace:*"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
-    "zod": "^3.24.0",
+    "zod": "^3.24.0 || ^4.0.0-beta.0",
     "valibot": "^1.0.0-beta.7 || ^1.0.0"
   },
   "peerDependenciesMeta": {
@@ -52,8 +63,8 @@
     }
   },
   "devDependencies": {
-    "bunchee": "^6.3.2",
-    "typescript": "^5.7.3",
-    "zod": "^3.24.1"
+    "bunchee": "6.5.1",
+    "typescript": "5.8.3",
+    "zod": "3.24.3"
   }
 }

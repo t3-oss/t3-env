@@ -627,3 +627,28 @@ describe("extending presets", () => {
     });
   });
 });
+
+test("empty 'extends' array should not cause type errors", () => {
+  const env = createEnv({
+    clientPrefix: "FOO_",
+    server: { BAR: z.string() },
+    client: { FOO_BAR: z.string() },
+    runtimeEnvStrict: {
+      BAR: "bar",
+      FOO_BAR: "foo",
+    },
+    extends: [],
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      BAR: string;
+      FOO_BAR: string;
+    }>
+  >();
+
+  expect(env).toMatchObject({
+    BAR: "bar",
+    FOO_BAR: "foo",
+  });
+});
