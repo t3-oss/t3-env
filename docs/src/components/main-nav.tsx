@@ -1,11 +1,10 @@
 "use client";
 
+import { useSelectedLayoutSegment } from "next/navigation";
 import { Link } from "next-view-transitions";
 import * as React from "react";
-
 import type { Icons } from "@/components/icons";
 import { cn } from "@/lib/cn";
-import { useSelectedLayoutSegment } from "next/navigation";
 
 export interface NavItem {
   title: string;

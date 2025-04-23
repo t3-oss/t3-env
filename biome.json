@@ -1,7 +1,11 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true
+  "$schema": "https://biomejs.dev/schemas/2.0.0-beta.1/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "formatter": {
     "enabled": true,
@@ -11,7 +15,30 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "style": {
+        "useImportType": "error",
+        "useExportType": "error",
+        "useLiteralEnumMembers": "error",
+        "noCommaOperator": "error",
+        "useNodejsImportProtocol": "error",
+        "useAsConstAssertion": "error",
+        "useNumericLiterals": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useConst": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "useExponentiationOperator": "error",
+        "useTemplate": "error",
+        "noParameterAssign": "error",
+        "noNonNullAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "noArguments": "error",
+        "noUselessElse": "error",
+        "useShorthandFunctionType": "error"
+      },
       "a11y": {
         "noSvgWithoutTitle": "off",
         "useButtonType": "off",
@@ -19,16 +46,12 @@
       },
       "complexity": {
         "noBannedTypes": "off"
-      },
-      "style": {
-        "useImportType": "error",
-        "useExportType": "error"
       }
     }
   },
   "overrides": [
     {
-      "include": ["**/*.test.ts"],
+      "includes": ["**/*.test.ts"],
       "linter": {
         "rules": {
           "suspicious": {

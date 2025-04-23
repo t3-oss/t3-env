@@ -3,7 +3,11 @@
   "packageManager": "bun@1.2.0",
   "private": true,
   "type": "module",
-  "workspaces": ["docs", "examples/*", "packages/*"],
+  "workspaces": [
+    "docs",
+    "examples/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo build --filter @t3-oss/env*",
     "dev": "turbo watch dev --filter @t3-oss/env*",
@@ -13,12 +17,12 @@
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.1",
-    "@types/bun": "^1.2.0",
-    "expect-type": "^1.1.0",
-    "turbo": "2.3.4",
-    "typescript": "^5.7.3"
+    "@biomejs/biome": "2.0.0-beta.1",
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.2",
+    "@types/bun": "^1.2.10",
+    "expect-type": "^1.2.1",
+    "turbo": "2.5.1",
+    "typescript": "5.8.3"
   }
 }
