@@ -207,6 +207,6 @@ export const upstashRedis = () =>
     server: {
       UPSTASH_REDIS_REST_URL: pipe(string(), url()),
       UPSTASH_REDIS_REST_TOKEN: string(),
-    } satisfies StandardSchemaDictionary.Matching<UpstashRedisEnv>,
+    } satisfies StandardSchemaDictionary<UpstashRedisEnv>,
     runtimeEnv: process.env,
   });
