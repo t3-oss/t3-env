@@ -7,6 +7,7 @@ import type {
   NetlifyEnv,
   RailwayEnv,
   RenderEnv,
+  SupabaseVercelEnv,
   UploadThingEnv,
   UploadThingV6Env,
   UpstashRedisEnv,
@@ -68,6 +69,30 @@ export const neonVercel = () =>
       POSTGRES_URL_NO_SSL: optional(pipe(string(), url())),
       POSTGRES_PRISMA_URL: optional(pipe(string(), url())),
     } satisfies StandardSchemaDictionary<NeonVercelEnv>,
+    runtimeEnv: process.env,
+  });
+
+/**
+ * Supabase for Vercel Environment Variables
+ * @see https://vercel.com/marketplace/supabase
+ */
+export const supabaseVercel = () =>
+  createEnv({
+    server: {
+      POSTGRES_URL: pipe(string(), url()),
+      POSTGRES_PRISMA_URL: pipe(string(), url()),
+      POSTGRES_URL_NON_POOLING: pipe(string(), url()),
+      POSTGRES_USER: string(),
+      POSTGRES_HOST: string(),
+      POSTGRES_PASSWORD: string(),
+      POSTGRES_DATABASE: string(),
+      SUPABASE_SERVICE_ROLE_KEY: string(),
+      SUPABASE_ANON_KEY: string(),
+      SUPABASE_URL: pipe(string(), url()),
+      SUPABASE_JWT_SECRET: string(),
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: string(),
+      NEXT_PUBLIC_SUPABASE_URL: pipe(string(), url()),
+    } satisfies StandardSchemaDictionary.Matching<SupabaseVercelEnv>,
     runtimeEnv: process.env,
   });
 
