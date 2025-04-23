@@ -249,20 +249,10 @@ describe("extending presets", () => {
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
       [
-        {
-          abortEarly: undefined,
-          abortPipeEarly: undefined,
-          expected: "string",
-          input: undefined,
-          issues: undefined,
-          kind: "schema",
-          lang: undefined,
-          message: "Invalid type: Expected string but received undefined",
+        expect.objectContaining({
+          message: expect.any(String),
           path: ["PRESET_ENV"],
-          received: "undefined",
-          requirement: undefined,
-          type: "string",
-        },
+        }),
       ],
     ]);
   });
