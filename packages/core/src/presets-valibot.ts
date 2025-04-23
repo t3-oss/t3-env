@@ -1,4 +1,4 @@
-import { url, optional, picklist, pipe, string } from "valibot";
+import { optional, picklist, pipe, string, url } from "valibot";
 import type { StandardSchemaDictionary } from ".";
 import { createEnv } from ".";
 import type {
@@ -9,6 +9,7 @@ import type {
   RenderEnv,
   UploadThingEnv,
   UploadThingV6Env,
+  UpstashRedisEnv,
   VercelEnv,
 } from "./presets";
 
@@ -194,5 +195,18 @@ export const netlify = () =>
       SITE_NAME: optional(string()),
       SITE_ID: optional(string()),
     } satisfies StandardSchemaDictionary<NetlifyEnv>,
+    runtimeEnv: process.env,
+  });
+
+/**
+ * Upstash redis Environment Variables
+ * @see https://upstash.com/docs/redis/howto/connectwithupstashredis
+ */
+export const upstashRedis = () =>
+  createEnv({
+    server: {
+      UPSTASH_REDIS_REST_URL: pipe(string(), url()),
+      UPSTASH_REDIS_REST_TOKEN: string(),
+    } satisfies StandardSchemaDictionary.Matching<UpstashRedisEnv>,
     runtimeEnv: process.env,
   });

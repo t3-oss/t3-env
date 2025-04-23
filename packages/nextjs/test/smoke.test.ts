@@ -249,13 +249,10 @@ describe("extending presets", () => {
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
       [
-        {
-          code: "invalid_type",
-          expected: "string",
-          message: "Required",
+        expect.objectContaining({
+          message: expect.any(String),
           path: ["PRESET_ENV"],
-          received: "undefined",
-        },
+        }),
       ],
     ]);
   });

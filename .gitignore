@@ -1,5 +1,6 @@
 node_modules
 dist
+.cache
 
 .astro
 .next
@@ -13,4 +14,3 @@ env.d.ts
 next-env.d.ts
 **/.vscode
 **/.zed
-*.tsbuildinfo

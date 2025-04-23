@@ -35,8 +35,15 @@ jobs:
       - name: Fix formatting
         if: steps.changeset.outputs.hasChangesets == 'true'
         run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
           git checkout changeset-release/main
           bun lint:fix
           git add .
-          git commit -m "chore(release): 📦 fix formatting"
-          git push origin changeset-release/main
+          # Check if there are staged changes before committing and pushing
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(release): 📦 fix formatting"
+            git push origin changeset-release/main
+          else
+            echo "No formatting changes to commit."
+          fi

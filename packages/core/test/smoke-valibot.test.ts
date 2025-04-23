@@ -741,3 +741,54 @@ describe("createFinalSchema", () => {
     expect(env).toMatchObject({ SKIP_AUTH: true });
   });
 });
+test("empty 'extends' array should not cause type errors", () => {
+  const env = createEnv({
+    clientPrefix: "FOO_",
+    server: { BAR: v.string() },
+    client: { FOO_BAR: v.string() },
+    runtimeEnvStrict: {
+      BAR: "bar",
+      FOO_BAR: "foo",
+    },
+    extends: [],
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      BAR: string;
+      FOO_BAR: string;
+    }>
+  >();
+
+  expect(env).toMatchObject({
+    BAR: "bar",
+    FOO_BAR: "foo",
+  });
+});
+
+test("overriding preset env var", () => {
+  const preset = createEnv({
+    server: {
+      PRESET_ENV: v.string(),
+    },
+    runtimeEnv: { PRESET_ENV: "preset" },
+  });
+
+  const env = createEnv({
+    server: {
+      PRESET_ENV: v.union([
+        v.pipe(v.string(), v.transform(Number)),
+        v.number(),
+      ]),
+    },
+    extends: [preset],
+    runtimeEnv: { PRESET_ENV: 123 },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      PRESET_ENV: number;
+    }>
+  >();
+  expect(env.PRESET_ENV).toBe(123);
+});

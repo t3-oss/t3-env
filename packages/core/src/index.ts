@@ -23,13 +23,13 @@ type Impossible<T extends Record<string, any>> = Partial<
 type UnReadonlyObject<T> = T extends Readonly<infer U> ? U : T;
 
 type Reduce<
-  TArr extends Array<Record<string, unknown>>,
-  TAcc = {},
+  TArr extends Record<string, unknown>[],
+  TAcc = object,
 > = TArr extends []
   ? TAcc
   : TArr extends [infer Head, ...infer Tail]
-    ? Tail extends Array<Record<string, unknown>>
-      ? Head & Reduce<Tail, TAcc>
+    ? Tail extends Record<string, unknown>[]
+      ? UnReadonlyObject<Head> & Omit<Reduce<Tail, TAcc>, keyof Head>
       : never
     : never;
 
@@ -241,10 +241,7 @@ export type CreateEnv<
   TFinalSchema extends StandardSchemaV1<{}, {}>,
   TExtends extends TExtendsFormat,
 > = Readonly<
-  Simplify<
-    StandardSchemaV1.InferOutput<TFinalSchema> &
-      UnReadonlyObject<Reduce<TExtends>>
-  >
+  Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>
 >;
 
 export function createEnv<
@@ -334,7 +331,7 @@ export function createEnv<
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
     return Object.assign(acc, curr);
   }, {});
-  const fullObj = Object.assign(parsed.value, extendedObj);
+  const fullObj = Object.assign(extendedObj, parsed.value);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
