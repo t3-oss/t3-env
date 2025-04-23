@@ -41,7 +41,7 @@ export const vercel = () =>
       VERCEL_GIT_COMMIT_AUTHOR_NAME: optional(string()),
       VERCEL_GIT_PREVIOUS_SHA: optional(string()),
       VERCEL_GIT_PULL_REQUEST_ID: optional(string()),
-    } satisfies StandardSchemaDictionary.Matching<VercelEnv>,
+    } satisfies StandardSchemaDictionary<VercelEnv>,
     runtimeEnv: process.env,
   });
 
@@ -67,7 +67,7 @@ export const neonVercel = () =>
       POSTGRES_DATABASE: optional(string()),
       POSTGRES_URL_NO_SSL: optional(pipe(string(), url())),
       POSTGRES_PRISMA_URL: optional(pipe(string(), url())),
-    } satisfies StandardSchemaDictionary.Matching<NeonVercelEnv>,
+    } satisfies StandardSchemaDictionary<NeonVercelEnv>,
     runtimeEnv: process.env,
   });
 
@@ -78,7 +78,7 @@ export const uploadthingV6 = () =>
   createEnv({
     server: {
       UPLOADTHING_TOKEN: string(),
-    } satisfies StandardSchemaDictionary.Matching<UploadThingV6Env>,
+    } satisfies StandardSchemaDictionary<UploadThingV6Env>,
     runtimeEnv: process.env,
   });
 
@@ -89,7 +89,7 @@ export const uploadthing = () =>
   createEnv({
     server: {
       UPLOADTHING_TOKEN: string(),
-    } satisfies StandardSchemaDictionary.Matching<UploadThingEnv>,
+    } satisfies StandardSchemaDictionary<UploadThingEnv>,
     runtimeEnv: process.env,
   });
 
@@ -114,7 +114,7 @@ export const render = () =>
         picklist(["web", "pserv", "cron", "worker", "static"]),
       ),
       RENDER: optional(string()),
-    } satisfies StandardSchemaDictionary.Matching<RenderEnv>,
+    } satisfies StandardSchemaDictionary<RenderEnv>,
     runtimeEnv: process.env,
   });
 
@@ -148,7 +148,7 @@ export const railway = () =>
       RAILWAY_GIT_REPO_NAME: optional(string()),
       RAILWAY_GIT_REPO_OWNER: optional(string()),
       RAILWAY_GIT_COMMIT_MESSAGE: optional(string()),
-    } satisfies StandardSchemaDictionary.Matching<RailwayEnv>,
+    } satisfies StandardSchemaDictionary<RailwayEnv>,
     runtimeEnv: process.env,
   });
 
@@ -170,7 +170,7 @@ export const fly = () =>
       FLY_PROCESS_GROUP: optional(string()),
       FLY_VM_MEMORY_MB: optional(string()),
       PRIMARY_REGION: optional(string()),
-    } satisfies StandardSchemaDictionary.Matching<FlyEnv>,
+    } satisfies StandardSchemaDictionary<FlyEnv>,
     runtimeEnv: process.env,
   });
 
@@ -194,7 +194,7 @@ export const netlify = () =>
       DEPLOY_ID: optional(string()),
       SITE_NAME: optional(string()),
       SITE_ID: optional(string()),
-    } satisfies StandardSchemaDictionary.Matching<NetlifyEnv>,
+    } satisfies StandardSchemaDictionary<NetlifyEnv>,
     runtimeEnv: process.env,
   });
 
@@ -207,6 +207,6 @@ export const upstashRedis = () =>
     server: {
       UPSTASH_REDIS_REST_URL: pipe(string(), url()),
       UPSTASH_REDIS_REST_TOKEN: string(),
-    } satisfies StandardSchemaDictionary.Matching<UpstashRedisEnv>,
+    } satisfies StandardSchemaDictionary<UpstashRedisEnv>,
     runtimeEnv: process.env,
   });

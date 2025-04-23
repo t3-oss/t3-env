@@ -628,6 +628,120 @@ describe("extending presets", () => {
   });
 });
 
+describe("createFinalSchema", () => {
+  test("custom schema combiner", () => {
+    let receivedIsServer = false;
+    const env = createEnv({
+      server: {
+        SERVER_ENV: z.string(),
+      },
+      shared: {
+        SHARED_ENV: z.string(),
+      },
+      clientPrefix: "CLIENT_",
+      client: {
+        CLIENT_ENV: z.string(),
+      },
+      runtimeEnv: {
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        CLIENT_ENV: "client",
+      },
+      createFinalSchema: (shape, isServer) => {
+        expectTypeOf(isServer).toEqualTypeOf<boolean>();
+        if (typeof isServer === "boolean") receivedIsServer = true;
+        return z.object(shape);
+      },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        SHARED_ENV: string;
+        CLIENT_ENV: string;
+      }>
+    >();
+
+    expect(env).toMatchObject({
+      SERVER_ENV: "server",
+      SHARED_ENV: "shared",
+      CLIENT_ENV: "client",
+    });
+
+    expect(receivedIsServer).toBe(true);
+  });
+  test("schema combiner with further refinement", () => {
+    const env = createEnv({
+      server: {
+        SKIP_AUTH: z.boolean().optional(),
+        EMAIL: z.string().email().optional(),
+        PASSWORD: z.string().min(1).optional(),
+      },
+      runtimeEnv: {
+        SKIP_AUTH: true,
+      },
+      createFinalSchema: (shape) =>
+        z.object(shape).refine((env) => {
+          expectTypeOf(env).toEqualTypeOf<{
+            SKIP_AUTH?: boolean;
+            EMAIL?: string;
+            PASSWORD?: string;
+          }>();
+          return env.SKIP_AUTH || (env.EMAIL && env.PASSWORD);
+        }),
+    });
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        SKIP_AUTH?: boolean;
+        EMAIL?: string;
+        PASSWORD?: string;
+      }>
+    >();
+    expect(env).toMatchObject({ SKIP_AUTH: true });
+  });
+  test("schema combiner that changes the type", () => {
+    const env = createEnv({
+      server: {
+        SKIP_AUTH: z.boolean().optional(),
+        EMAIL: z.string().email().optional(),
+        PASSWORD: z.string().min(1).optional(),
+      },
+      createFinalSchema: (shape) =>
+        z.object(shape).transform((env, ctx) => {
+          if (env.SKIP_AUTH) return { SKIP_AUTH: true } as const;
+          if (!env.EMAIL || !env.PASSWORD) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "EMAIL and PASSWORD are required if SKIP_AUTH is false",
+            });
+            return z.NEVER;
+          }
+          return {
+            EMAIL: env.EMAIL,
+            PASSWORD: env.PASSWORD,
+          };
+        }),
+      runtimeEnv: {
+        SKIP_AUTH: true,
+      },
+    });
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<
+        | {
+            readonly SKIP_AUTH: true;
+            EMAIL?: undefined;
+            PASSWORD?: undefined;
+          }
+        | {
+            readonly SKIP_AUTH?: undefined;
+            EMAIL: string;
+            PASSWORD: string;
+          }
+      >
+    >();
+    expect(env).toMatchObject({ SKIP_AUTH: true });
+  });
+});
 test("empty 'extends' array should not cause type errors", () => {
   const env = createEnv({
     clientPrefix: "FOO_",
