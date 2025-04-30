@@ -37,7 +37,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to JSR
-        if: steps.changesets.outputs.published == 'true'
+        if: steps.changeset.outputs.published == 'true'
         run: bun run scripts/jsr-publish.ts
 
       - name: Fix formatting
