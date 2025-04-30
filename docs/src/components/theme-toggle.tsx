@@ -1,6 +1,6 @@
 "use client";
 
-import { useTheme } from "@juliusmarminge/next-themes";
+import { useTheme } from "next-themes";
 import * as React from "react";
 
 import { Icons } from "@/components/icons";

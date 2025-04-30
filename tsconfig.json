@@ -20,8 +20,9 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "tsBuildInfoFile": "${configDir}/.cache/tsbuildinfo.json"
   },
-  "include": ["*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "packages"]
 }

@@ -75,6 +75,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     pre: Codeblock,
 
+    // biome-ignore lint/nursery/noImgElement: <explanation>
     img: (props) => <img {...props} className="rounded-lg" />,
 
     // Add custom components.

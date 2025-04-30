@@ -1,5 +1,6 @@
 node_modules
 dist
+.cache
 
 .astro
 .next
@@ -12,3 +13,4 @@ dist
 env.d.ts
 next-env.d.ts
 **/.vscode
+**/.zed

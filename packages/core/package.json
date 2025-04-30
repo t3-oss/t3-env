@@ -1,8 +1,12 @@
 {
   "name": "@t3-oss/env-core",
-  "version": "0.9.2",
+  "version": "0.13.0",
   "type": "module",
-  "keywords": ["create-t3-app", "environment variables", "zod"],
+  "keywords": [
+    "create-t3-app",
+    "environment variables",
+    "zod"
+  ],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -16,29 +20,48 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./presets": {
-      "types": "./dist/presets.d.ts",
-      "default": "./dist/presets.js"
+    "./presets-zod": {
+      "types": "./dist/presets-zod.d.ts",
+      "default": "./dist/presets-zod.js"
+    },
+    "./presets-valibot": {
+      "types": "./dist/presets-valibot.d.ts",
+      "default": "./dist/presets-valibot.js"
     }
   },
-  "files": ["dist", "package.json", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
-    "build": "rm -rf dist && bunchee",
-    "dev": "bunhcee -w",
+    "build": "bunchee",
+    "dev": "bunchee --no-clean",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
-    "zod": "^3.0.0"
+    "arktype": "^2.1.0",
+    "zod": "^3.24.0 || ^4.0.0-beta.0",
+    "valibot": "^1.0.0-beta.7 || ^1.0.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
       "optional": true
+    },
+    "zod": {
+      "optional": true
+    },
+    "valibot": {
+      "optional": true
     }
   },
   "devDependencies": {
-    "bunchee": "^5.1.2",
-    "typescript": "^5.4.5",
-    "zod": "^3.22.4"
+    "arktype": "2.1.0",
+    "bunchee": "6.5.1",
+    "typescript": "5.8.3",
+    "zod": "3.24.3",
+    "valibot": "1.0.0"
   }
 }
