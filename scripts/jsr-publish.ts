@@ -29,10 +29,12 @@ for (const pkg of packages) {
 }
 
 /**
- * 4. Commit and push
+ * 4. Commit and push (if on main)
  */
-await Bun.$`git config user.name "t3-release-bot"`;
-await Bun.$`git config user.email "t3-release-bot@users.noreply.github.com"`;
-await Bun.$`git add .`;
-await Bun.$`git commit -m "chore(release): 📦 publish to JSR"`;
-await Bun.$`git push origin main`;
+if (process.env.GITHUB_REF === "refs/heads/main") {
+  await Bun.$`git config user.name "t3-release-bot"`;
+  await Bun.$`git config user.email "t3-release-bot@users.noreply.github.com"`;
+  await Bun.$`git add .`;
+  await Bun.$`git commit -m "chore(release): 📦 publish to JSR"`;
+  await Bun.$`git push origin main`;
+}
