@@ -1,3 +1,8 @@
+/**
+ * This is the Nuxt package of t3-env.
+ * It contains the `createEnv` function that you can use to create your schema.
+ * @module
+ */
 import type {
   CreateEnv,
   CreateSchemaOptions,
@@ -25,6 +30,9 @@ type Options<
   "runtimeEnvStrict" | "runtimeEnv" | "clientPrefix"
 >;
 
+/**
+ * Create a new environment variable schema.
+ */
 export function createEnv<
   TServer extends StandardSchemaDictionary = NonNullable<unknown>,
   TClient extends Record<

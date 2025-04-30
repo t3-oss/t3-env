@@ -1,27 +1,74 @@
-import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard";
-import { ensureSynchronous, parseWithDictionary } from "./standard";
+/**
+ * This is the core package of t3-env.
+ * It contains the `createEnv` function that you can use to create your schema.
+ * @module
+ */
+import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard.ts";
+import { ensureSynchronous, parseWithDictionary } from "./standard.ts";
 
-export type { StandardSchemaV1, StandardSchemaDictionary };
+export type {
+  /**
+   * The Standard Schema Interface
+   * @see https://github.com/standard-schema/standard-schema
+   * @internal
+   */
+  StandardSchemaV1,
+  /**
+   * A record with values being Standard Schema validators
+   * @see https://github.com/standard-schema/standard-schema
+   * @internal
+   */
+  StandardSchemaDictionary,
+};
 
-export type ErrorMessage<T extends string> = T;
-export type Simplify<T> = {
+/**
+ * Symbol for indicating type errors
+ * @internal
+ */
+type ErrorMessage<T extends string> = T;
+
+/**
+ * Simplify a type
+ * @internal
+ */
+type Simplify<T> = {
   [P in keyof T]: T[P];
 } & {};
 
+/**
+ * Get the keys of the possibly undefined values
+ * @internal
+ */
 type PossiblyUndefinedKeys<T> = {
   [K in keyof T]: undefined extends T[K] ? K : never;
 }[keyof T];
 
+/**
+ * Make the keys of the type possibly undefined
+ * @internal
+ */
 type UndefinedOptional<T> = Partial<Pick<T, PossiblyUndefinedKeys<T>>> &
   Omit<T, PossiblyUndefinedKeys<T>>;
 
+/**
+ * Make the keys of the type impossible
+ * @internal
+ */
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-type UnReadonlyObject<T> = T extends Readonly<infer U> ? U : T;
+/**
+ * Reverse a Readonly object to be mutable
+ * @internal
+ */
+type Mutable<T> = T extends Readonly<infer U> ? U : T;
 
+/**
+ * Reduce an array of records to a single object where later keys override earlier ones
+ * @internal
+ */
 type Reduce<
   TArr extends Record<string, unknown>[],
   TAcc = object,
@@ -29,10 +76,13 @@ type Reduce<
   ? TAcc
   : TArr extends [infer Head, ...infer Tail]
     ? Tail extends Record<string, unknown>[]
-      ? UnReadonlyObject<Head> & Omit<Reduce<Tail, TAcc>, keyof Head>
+      ? Mutable<Head> & Omit<Reduce<Tail, TAcc>, keyof Head>
       : never
     : never;
 
+/**
+ * The options that can be passed to the `createEnv` function.
+ */
 export interface BaseOptions<
   TShared extends StandardSchemaDictionary,
   TExtends extends Array<Record<string, unknown>>,
@@ -88,6 +138,11 @@ export interface BaseOptions<
   emptyStringAsUndefined?: boolean;
 }
 
+/**
+ * Using this interface doesn't validate all environment variables are specified
+ * in the `runtimeEnv` object. You may want to use `StrictOptions` instead if
+ * your framework performs static analysis and tree-shakes unused variables.
+ */
 export interface LooseOptions<
   TShared extends StandardSchemaDictionary,
   TExtends extends Array<Record<string, unknown>>,
@@ -102,6 +157,12 @@ export interface LooseOptions<
   runtimeEnv: Record<string, string | boolean | number | undefined>;
 }
 
+/**
+ * Using this interface validates all environment variables are specified
+ * in the `runtimeEnv` object. If you miss one, you'll get a type error. Useful
+ * if you want to make sure all environment variables are set for frameworks that
+ * perform static analysis and tree-shakes unused variables.
+ */
 export interface StrictOptions<
   TPrefix extends string | undefined,
   TServer extends StandardSchemaDictionary,
@@ -136,6 +197,12 @@ export interface StrictOptions<
   runtimeEnv?: never;
 }
 
+/**
+ * This interface is used to define the client-side environment variables.
+ * It's used in conjunction with the `clientPrefix` option to ensure
+ * that all client-side variables are prefixed with the same string.
+ * Common examples of prefixes are `NEXT_PUBLIC_`, `NUXT_PUBLIC` or `PUBLIC_`.
+ */
 export interface ClientOptions<
   TPrefix extends string | undefined,
   TClient extends StandardSchemaDictionary,
@@ -159,6 +226,10 @@ export interface ClientOptions<
   }>;
 }
 
+/**
+ * This interface is used to define the schema for your
+ * server-side environment variables.
+ */
 export interface ServerOptions<
   TPrefix extends string | undefined,
   TServer extends StandardSchemaDictionary,
@@ -244,6 +315,9 @@ export type CreateEnv<
   Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>
 >;
 
+/**
+ * Create a new environment variable schema.
+ */
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,

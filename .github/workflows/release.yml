@@ -12,6 +12,10 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -31,6 +35,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to JSR
+        if: steps.changesets.outputs.published == 'true'
+        run: bun run scripts/jsr-publish.ts
 
       - name: Fix formatting
         if: steps.changeset.outputs.hasChangesets == 'true'

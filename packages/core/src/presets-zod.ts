@@ -1,5 +1,10 @@
+/**
+ * Presets for Zod
+ * @see https://env.t3.gg/docs/customization#extending-presets
+ * @module
+ */
 import { z } from "zod";
-import { createEnv } from ".";
+import { createEnv } from "./index.ts";
 import type {
   FlyEnv,
   NeonVercelEnv,
@@ -10,7 +15,7 @@ import type {
   UploadThingV6Env,
   UpstashRedisEnv,
   VercelEnv,
-} from "./presets";
+} from "./presets.ts";
 
 /**
  * Vercel System Environment Variables
