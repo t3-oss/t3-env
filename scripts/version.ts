@@ -5,9 +5,14 @@ export const MODULE = true;
 
 const packages = ["core", "nextjs", "nuxt"];
 
+/**
+ * 1. Bump versions
+ */
+await Bun.$`bunx changeset version`;
+
 for (const pkg of packages) {
   /**
-   * 1. Sync versions
+   * 2. Sync versions
    */
   const pkgJson = await Bun.file(`packages/${pkg}/package.json`).json();
   const jsrJson = await Bun.file(`packages/${pkg}/jsr.json`).json();
@@ -16,25 +21,9 @@ for (const pkg of packages) {
   await Bun.write(`packages/${pkg}/jsr.json`, JSON.stringify(jsrJson, null, 2));
 
   /**
-   * 2. Run prepack (if exists)
+   * 3. Run prepack (if exists)
    */
   if (pkgJson.scripts?.prepack) {
     await Bun.$`bun run prepack`.cwd(`packages/${pkg}`);
   }
-
-  /**
-   * 3. Publish to JSR
-   */
-  await Bun.$`bunx jsr publish --allow-dirty`.cwd(`packages/${pkg}`);
-}
-
-/**
- * 4. Commit and push (if on main)
- */
-if (process.env.GITHUB_REF === "refs/heads/main") {
-  await Bun.$`git config user.name "t3-release-bot"`;
-  await Bun.$`git config user.email "t3-release-bot@users.noreply.github.com"`;
-  await Bun.$`git add .`;
-  await Bun.$`git commit -m "chore(release): 📦 publish to JSR"`;
-  await Bun.$`git push origin main`;
 }
