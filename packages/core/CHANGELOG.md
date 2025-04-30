@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.13.4
+
+### Patch Changes
+
+- [`9872066`](https://github.com/t3-oss/t3-env/commit/9872066d49b87e3eae350c36563392324c80fd84) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - note: this release does not contain any changes
+
 ## 0.13.3
 
 ### Patch Changes
