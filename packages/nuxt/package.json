@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nuxt",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "type": "module",
   "keywords": [
     "create-t3-app",
