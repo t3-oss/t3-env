@@ -16,9 +16,11 @@ for (const pkg of packages) {
   await Bun.write(`packages/${pkg}/jsr.json`, JSON.stringify(jsrJson, null, 2));
 
   /**
-   * 2. Run prepack
+   * 2. Run prepack (if exists)
    */
-  await Bun.$`bun run prepack`.cwd(`packages/${pkg}`);
+  if (pkgJson.scripts?.prepack) {
+    await Bun.$`bun run prepack`.cwd(`packages/${pkg}`);
+  }
 
   /**
    * 3. Publish to JSR
