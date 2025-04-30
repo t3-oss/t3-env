@@ -37,10 +37,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish to JSR
-        if: steps.changeset.outputs.published == 'true'
-        run: bun run scripts/jsr-publish.ts
-
       - name: Fix formatting
         if: steps.changeset.outputs.hasChangesets == 'true'
         run: |

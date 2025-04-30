@@ -1,38 +1,46 @@
-import { exec } from "node:child_process";
-import fs from "node:fs";
+/**
+ * Script for bumping the version of the packages to a canary version
+ * and then publishing them to NPM and JSR
+ */
+export const MODULE = true;
 
-const pkgJsonPaths = [
-  "packages/core/package.json",
-  "packages/nextjs/package.json",
-  "packages/nuxt/package.json",
-];
+const packages = ["core", "nextjs", "nuxt"];
 
-try {
-  exec("git rev-parse --short HEAD", (err, stdout) => {
-    if (err) {
-      console.log(err);
-      process.exit(1);
-    }
-    const commitHash = stdout.trim();
+const commitHash = (await Bun.$`git rev-parse --short HEAD`.text()).trim();
 
-    for (const pkgJsonPath of pkgJsonPaths) {
-      const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
-      const oldVersion = pkg.version;
-      const [major, minor, patch] = oldVersion.split(".").map(Number);
-      const newVersion = `${major}.${minor}.${patch + 1}-canary.${commitHash}`;
+for (const pkg of packages) {
+  const pkgJson = await Bun.file(`packages/${pkg}/package.json`).json();
+  const jsrJson = await Bun.file(`packages/${pkg}/jsr.json`).json();
 
-      pkg.version = newVersion;
+  const oldVersion = pkgJson.version;
+  const [major, minor, patch] = oldVersion.split(".").map(Number);
+  const newVersion = `${major}.${minor}.${patch + 1}-canary.${commitHash}`;
 
-      const content = `${JSON.stringify(pkg, null, "\t")}\n`;
-      const newContent = content.replace(
-        new RegExp(`"@t3-oss/\\*": "${oldVersion}"`, "g"),
-        `"@t3-oss/*": "${newVersion}"`,
-      );
+  pkgJson.version = newVersion;
+  jsrJson.version = newVersion;
+  const content = `${JSON.stringify(pkgJson, null, "\t")}\n`;
+  const newContent = content.replace(
+    new RegExp(`"@t3-oss/\\*": "${oldVersion}"`, "g"),
+    `"@t3-oss/*": "${newVersion}"`,
+  );
 
-      fs.writeFileSync(pkgJsonPath, newContent);
-    }
-  });
-} catch (error) {
-  console.error(error);
-  process.exit(1);
+  await Bun.write(`packages/${pkg}/package.json`, newContent);
+  await Bun.write(`packages/${pkg}/jsr.json`, JSON.stringify(jsrJson, null, 2));
+
+  /**
+   * 2. Run prepack (if exists)
+   */
+  if (pkgJson.scripts?.prepack) {
+    await Bun.$`bun run prepack`.cwd(`packages/${pkg}`);
+  }
+
+  /**
+   * 3. Publish to NPM
+   */
+  await Bun.$`npm publish --access public --tag canary`.cwd(`packages/${pkg}`);
+
+  /**
+   * 4. Publish to JSR
+   */
+  await Bun.$`bunx jsr publish --allow-dirty`.cwd(`packages/${pkg}`);
 }
