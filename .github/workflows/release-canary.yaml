@@ -15,6 +15,9 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'release canary')
     name: Build & Publish a canary release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
 
     steps:
       - name: Checkout repo
@@ -33,6 +36,9 @@ jobs:
           for dir in packages/*/; do
               npm publish "$dir" --access public --tag canary
           done
+
+      - name: Publish to JSR
+        run: bun run scripts/jsr-publish.ts
 
       - name: Create a new comment notifying of the new canary version
         uses: actions/github-script@v6
