@@ -3,8 +3,8 @@
  * It contains the `createEnv` function that you can use to create your schema.
  * @module
  */
-import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard";
-import { ensureSynchronous, parseWithDictionary } from "./standard";
+import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard.ts";
+import { ensureSynchronous, parseWithDictionary } from "./standard.ts";
 
 export type { StandardSchemaV1, StandardSchemaDictionary };
 

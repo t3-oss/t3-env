@@ -1,9 +1,10 @@
 {
   "name": "@t3-oss/env-nuxt",
-  "version": "0.10.1",
+  "version": "0.13.0-beta.0",
   "exports": {
     ".": "./src/index.ts",
-    "./presets": "./src/presets.ts"
+    "./presets-zod": "./src/presets-zod.ts",
+    "./presets-valibot": "./src/presets-valibot.ts"
   },
   "include": ["src/**/*.ts", "README.md", "LICENSE", "package.json"],
   "exclude": ["node_modules", "dist", "test"]
