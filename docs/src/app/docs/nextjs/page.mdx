@@ -19,6 +19,12 @@ pnpm add @t3-oss/env-nextjs zod
 
 <Callout>
 
+Although we'll use Zod as examples throughout these docs, you can use any validator that supports [Standard Schema](https://github.com/standard-schema/standard-schema).
+
+</Callout>
+
+<Callout>
+
 `@t3-oss/env-nextjs` requires a minimum of `typescript@5.0.0`.
 
 </Callout>
@@ -79,7 +85,13 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     OPEN_AI_API_KEY: z.string().min(1),
   },
-  runtimeEnv: process.env,
+  // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
+  // runtimeEnv: {
+  //   DATABASE_URL: process.env.DATABASE_URL,
+  //   OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
+  // },
+  // For Next.js >= 13.4.4, you can just reference process.env:
+  experimental__runtimeEnv: process.env
 });
 ```
 
@@ -89,10 +101,30 @@ import { z } from "zod";
 
 export const env = createEnv({
   client: {
-    PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
-  runtimeEnv: process.env,
+  runtimeEnv: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  },
 });
+```
+
+</Callout>
+
+<Callout type="info">
+
+If you're using the `standalone` output in your `next.config.ts`, make sure to include the following:  
+
+```ts title="next.config.ts"
+import type { NextConfig } from "next"
+
+const nextConfig: NextConfig = {
+  output: "standalone",
+  // Add the packages in transpilePackages
+  transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
+}
+
+export default nextConfig
 ```
 
 </Callout>
@@ -106,7 +138,7 @@ import { fileURLToPath } from "node:url";
 import createJiti from "jiti";
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
-// Import env here to validate during build. Using jiti we can import .ts files :)
+// Import env here to validate during build. Using jiti@^1 we can import .ts files :)
 jiti("./app/env");
 
 /** @type {import('next').NextConfig} */
@@ -114,6 +146,8 @@ export default {
   /** ... */
 };
 ```
+
+We do not recommend using `next.config.ts` as it does not support loading ESM. 
 
 ### Use your schema
 

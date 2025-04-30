@@ -1,8 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/cn";
 import { CheckCheck, Copy } from "lucide-react";
 import { useRef, useState } from "react";
+import { cn } from "@/lib/cn";
 import { Icons } from "../icons";
 
 export type CodeblockProps = React.DetailedHTMLProps<

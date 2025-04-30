@@ -1,5 +1,71 @@
 # @t3-oss/env-nuxt
 
+## 0.13.0
+
+### Minor Changes
+
+- [#313](https://github.com/t3-oss/t3-env/pull/313) [`35577fc`](https://github.com/t3-oss/t3-env/commit/35577fca8fa0752f2542759ed11d8386d868c2a5) Thanks [@EskiMojo14](https://github.com/EskiMojo14)! - feat!: added ability to customise schema combination
+
+  Combination of schemas can now be customised using the `createFinalSchema` option. This allows further refinement or transformation of the environment variables.
+
+  For 99% of users, this is a non-breaking change. If you were relying on internal types, there's a type-only breaking change:
+
+  - `CreateEnv` now has the signature `CreateEnv<TFinalSchema, TExtends>`, instead of the previous `CreateEnv<TServer, TClient, TShared, TExtends>`.
+    - Previous behaviour can be achieved by using `DefaultCombinedSchema<TServer, TClient, TShared>` as the type for `TFinalSchema`.
+
+### Patch Changes
+
+- Updated dependencies [[`35577fc`](https://github.com/t3-oss/t3-env/commit/35577fca8fa0752f2542759ed11d8386d868c2a5), [`00c35f2`](https://github.com/t3-oss/t3-env/commit/00c35f2f26cb4f07ba16680e6c965128bdb5b9a7)]:
+  - @t3-oss/env-core@0.13.0
+
+## 0.12.0
+
+### Minor Changes
+
+- [#299](https://github.com/t3-oss/t3-env/pull/299) [`b13d46b`](https://github.com/t3-oss/t3-env/commit/b13d46b84cdeed816b0b7b28a1c50b953064f7d6) Thanks [@EskiMojo14](https://github.com/EskiMojo14)! - feat!: support standard schema
+
+  Validators can now be any validator that supports [Standard Schema](https://github.com/standard-schema/standard-schema),
+  for example Zod & Valibot.
+
+  This feature comes with some breaking changes:
+
+  - If using Zod, the minimum required version is now 3.24.
+  - `onValidationError` now gets `StandardSchemaV1.Issue[]` instead of `ZodError`
+
+- [#310](https://github.com/t3-oss/t3-env/pull/310) [`eb37304`](https://github.com/t3-oss/t3-env/commit/eb373046ed9f11f71df8acf3ddc2b8671faee95a) Thanks [@EskiMojo14](https://github.com/EskiMojo14)! - feat!: add valibot presets
+
+  Presets using Valibot are now available using the `/presets-valibot` entrypoint.
+
+  This feature comes with some breaking changes:
+
+  - Zod presets have now been moved to `/presets-zod`.
+
+### Patch Changes
+
+- Updated dependencies [[`b13d46b`](https://github.com/t3-oss/t3-env/commit/b13d46b84cdeed816b0b7b28a1c50b953064f7d6), [`7c09bc3`](https://github.com/t3-oss/t3-env/commit/7c09bc36592c79cf2776fb57d04884b61de8ab89), [`eb37304`](https://github.com/t3-oss/t3-env/commit/eb373046ed9f11f71df8acf3ddc2b8671faee95a), [`bb80923`](https://github.com/t3-oss/t3-env/commit/bb809231d07a089391ed2949e5f1161caf1b3a30), [`bb80923`](https://github.com/t3-oss/t3-env/commit/bb809231d07a089391ed2949e5f1161caf1b3a30)]:
+  - @t3-oss/env-core@0.12.0
+
+## 0.11.1
+
+### Patch Changes
+
+- Updated dependencies [[`2a74b72`](https://github.com/t3-oss/t3-env/commit/2a74b72de710c179edddddae86bd272f05ec57d7)]:
+  - @t3-oss/env-core@0.11.1
+
+## 0.11.0
+
+### Patch Changes
+
+- Updated dependencies [[`8737daf`](https://github.com/t3-oss/t3-env/commit/8737daf90eaabe201fdaccdfe418a0f4f8835623), [`870608d`](https://github.com/t3-oss/t3-env/commit/870608d1890581edd82a7fc71419b520dab3464b)]:
+  - @t3-oss/env-core@0.11.0
+
+## 0.10.2
+
+### Patch Changes
+
+- Updated dependencies [[`204836b`](https://github.com/t3-oss/t3-env/commit/204836be6a47bce1fdbaca7e16c0d249684f9d0c)]:
+  - @t3-oss/env-core@0.10.2
+
 ## 0.10.1
 
 ### Patch Changes

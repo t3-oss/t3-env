@@ -34,10 +34,10 @@ import { createEnv } from "@t3-oss/env-core";
 export const env = createEnv({
   // ...
   // Called when the schema validation fails.
-  onValidationError: (error: ZodError) => {
+  onValidationError: (issues: StandardSchemaV1.Issue[]) => {
     console.error(
       "❌ Invalid environment variables:",
-      error.flatten().fieldErrors
+      issues
     );
     throw new Error("Invalid environment variables");
   },
@@ -83,7 +83,7 @@ Your env object may extend other presets by using the `extends` property. This c
 
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
-import { vercel } from "@t3-oss/env-core/presets";
+import { vercel } from "@t3-oss/env-core/presets-zod";
 
 export const env = createEnv({
   // ...
@@ -97,12 +97,16 @@ env.VERCEL_URL; // string
 T3 Env ships the following presets out of the box, all importable from the `/presets` entrypoint.
 
 - `vercel` - Vercel environment variables. See full list [here](https://vercel.com/docs/projects/environment-variables/system-environment-variables#system-environment-variables).
+- `neonVercel` - Neon provided system environment variables when using the Vercel integration. See full list [here](https://neon.tech/docs/guides/vercel-native-integration#environment-variables-set-by-the-integration).
 - `uploadthing` - All environment variables required to use [UploadThing](https://uploadthing.com/). More info [here](https://docs.uploadthing.com/getting-started/appdir#add-env-variables).
+- `render` - Render environment variables. See full list [here](https://docs.render.com/environment-variables#all-runtimes).
+- `railway` - Railway provided system environment variables. See full list [here](https://docs.railway.app/reference/variables#railway-provided-variables).
+- `fly.io` - Fly.io provided machine runtime environment variables. See full list [here](https://fly.io/docs/machines/runtime-environment/#environment-variables).
+- `netlify` - Netlify provided system environment variables. See full list [here](https://docs.netlify.com/configure-builds/environment-variables).
+- `upstashRedis` -  Upstash Redis environment variables. More info [here](https://upstash.com/docs/redis/howto/connectwithupstashredis).
 
 <Callout type="info">
-
-Feel free to open a PR with more presets!
-
+  Feel free to open a PR with more presets!
 </Callout>
 
 A preset is just like any other env object, so you can easily create your own:
@@ -121,5 +125,38 @@ import { env as authEnv } from "@repo/auth/env";
 export const env = createEnv({
   // ...
   extends: [authEnv],
+});
+```
+
+## Further refinement or transformation
+
+You can use the `createFinalSchema` option to further refine or transform the environment variables.
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    SKIP_AUTH: z.boolean().optional(),
+    EMAIL: z.string().email().optional(),
+    PASSWORD: z.string().min(1).optional(),
+  },
+  // ...
+  createFinalSchema: (shape, isServer) =>
+    z.object(shape).transform((env, ctx) => {
+      if (env.SKIP_AUTH || !isServer) return { SKIP_AUTH: true } as const;
+      if (!env.EMAIL || !env.PASSWORD) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "EMAIL and PASSWORD are required if SKIP_AUTH is false",
+        });
+        return z.NEVER;
+      }
+      return {
+        EMAIL: env.EMAIL,
+        PASSWORD: env.PASSWORD,
+      };
+    }),
 });
 ```
