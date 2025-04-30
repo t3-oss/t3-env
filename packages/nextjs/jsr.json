@@ -1,11 +1,20 @@
 {
   "name": "@t3-oss/env-nextjs",
-  "version": "0.13.0",
+  "version": "0.13.3",
   "exports": {
     ".": "./src/index.ts",
     "./presets-zod": "./src/presets-zod.ts",
     "./presets-valibot": "./src/presets-valibot.ts"
   },
-  "include": ["src/**/*.ts", "README.md", "LICENSE", "package.json"],
-  "exclude": ["node_modules", "dist", "test"]
+  "include": [
+    "src/**/*.ts",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test"
+  ]
 }
