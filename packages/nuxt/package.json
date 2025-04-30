@@ -38,8 +38,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "bunchee",
-    "dev": "bunchee --no-clean",
+    "build": "tsdown src/index.ts src/presets-zod.ts src/presets-valibot.ts --dts",
     "typecheck": "tsc --noEmit",
     "prepack": "bun ../../.github/replace-workspace-protocol.ts"
   },
@@ -63,7 +62,7 @@
     }
   },
   "devDependencies": {
-    "bunchee": "6.5.1",
+    "tsdown": "0.10.2",
     "typescript": "5.8.3",
     "zod": "3.24.3"
   }

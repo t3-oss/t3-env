@@ -1,5 +1,4 @@
 import { optional, picklist, pipe, string, url } from "valibot";
-import type { StandardSchemaDictionary } from ".";
 import { createEnv } from ".";
 import type {
   FlyEnv,
@@ -17,7 +16,7 @@ import type {
  * Vercel System Environment Variables
  * @see https://vercel.com/docs/projects/environment-variables/system-environment-variables#system-environment-variables
  */
-export const vercel = () =>
+export const vercel = (): Readonly<VercelEnv> =>
   createEnv({
     server: {
       VERCEL: optional(string()),
@@ -41,7 +40,7 @@ export const vercel = () =>
       VERCEL_GIT_COMMIT_AUTHOR_NAME: optional(string()),
       VERCEL_GIT_PREVIOUS_SHA: optional(string()),
       VERCEL_GIT_PULL_REQUEST_ID: optional(string()),
-    } satisfies StandardSchemaDictionary<VercelEnv>,
+    },
     runtimeEnv: process.env,
   });
 
@@ -49,7 +48,7 @@ export const vercel = () =>
  * Neon for Vercel Environment Variables
  * @see https://neon.tech/docs/guides/vercel-native-integration#environment-variables-set-by-the-integration
  */
-export const neonVercel = () =>
+export const neonVercel = (): Readonly<NeonVercelEnv> =>
   createEnv({
     server: {
       DATABASE_URL: string(),
@@ -67,29 +66,29 @@ export const neonVercel = () =>
       POSTGRES_DATABASE: optional(string()),
       POSTGRES_URL_NO_SSL: optional(pipe(string(), url())),
       POSTGRES_PRISMA_URL: optional(pipe(string(), url())),
-    } satisfies StandardSchemaDictionary<NeonVercelEnv>,
+    },
     runtimeEnv: process.env,
   });
 
 /**
  * @see https://v6.docs.uploadthing.com/getting-started/nuxt#add-env-variables
  */
-export const uploadthingV6 = () =>
+export const uploadthingV6 = (): Readonly<UploadThingV6Env> =>
   createEnv({
     server: {
       UPLOADTHING_TOKEN: string(),
-    } satisfies StandardSchemaDictionary<UploadThingV6Env>,
+    },
     runtimeEnv: process.env,
   });
 
 /**
  * @see https://docs.uploadthing.com/getting-started/appdir#add-env-variables
  */
-export const uploadthing = () =>
+export const uploadthing = (): Readonly<UploadThingEnv> =>
   createEnv({
     server: {
       UPLOADTHING_TOKEN: string(),
-    } satisfies StandardSchemaDictionary<UploadThingEnv>,
+    },
     runtimeEnv: process.env,
   });
 
@@ -97,7 +96,7 @@ export const uploadthing = () =>
  * Render System Environment Variables
  * @see https://docs.render.com/environment-variables#all-runtimes
  */
-export const render = () =>
+export const render = (): Readonly<RenderEnv> =>
   createEnv({
     server: {
       IS_PULL_REQUEST: optional(string()),
@@ -114,7 +113,7 @@ export const render = () =>
         picklist(["web", "pserv", "cron", "worker", "static"]),
       ),
       RENDER: optional(string()),
-    } satisfies StandardSchemaDictionary<RenderEnv>,
+    },
     runtimeEnv: process.env,
   });
 
@@ -122,7 +121,7 @@ export const render = () =>
  * Railway Environment Variables
  * @see https://docs.railway.app/reference/variables#railway-provided-variables
  */
-export const railway = () =>
+export const railway = (): Readonly<RailwayEnv> =>
   createEnv({
     server: {
       RAILWAY_PUBLIC_DOMAIN: optional(string()),
@@ -148,7 +147,7 @@ export const railway = () =>
       RAILWAY_GIT_REPO_NAME: optional(string()),
       RAILWAY_GIT_REPO_OWNER: optional(string()),
       RAILWAY_GIT_COMMIT_MESSAGE: optional(string()),
-    } satisfies StandardSchemaDictionary<RailwayEnv>,
+    },
     runtimeEnv: process.env,
   });
 
@@ -156,7 +155,7 @@ export const railway = () =>
  * Fly.io Environment Variables
  * @see https://fly.io/docs/machines/runtime-environment/#environment-variables
  */
-export const fly = () =>
+export const fly = (): Readonly<FlyEnv> =>
   createEnv({
     server: {
       FLY_APP_NAME: optional(string()),
@@ -170,7 +169,7 @@ export const fly = () =>
       FLY_PROCESS_GROUP: optional(string()),
       FLY_VM_MEMORY_MB: optional(string()),
       PRIMARY_REGION: optional(string()),
-    } satisfies StandardSchemaDictionary<FlyEnv>,
+    },
     runtimeEnv: process.env,
   });
 
@@ -178,7 +177,7 @@ export const fly = () =>
  * Netlify Environment Variables
  * @see https://docs.netlify.com/configure-builds/environment-variables
  */
-export const netlify = () =>
+export const netlify = (): Readonly<NetlifyEnv> =>
   createEnv({
     server: {
       NETLIFY: optional(string()),
@@ -194,7 +193,7 @@ export const netlify = () =>
       DEPLOY_ID: optional(string()),
       SITE_NAME: optional(string()),
       SITE_ID: optional(string()),
-    } satisfies StandardSchemaDictionary<NetlifyEnv>,
+    },
     runtimeEnv: process.env,
   });
 
@@ -202,11 +201,11 @@ export const netlify = () =>
  * Upstash redis Environment Variables
  * @see https://upstash.com/docs/redis/howto/connectwithupstashredis
  */
-export const upstashRedis = () =>
+export const upstashRedis = (): Readonly<UpstashRedisEnv> =>
   createEnv({
     server: {
       UPSTASH_REDIS_REST_URL: pipe(string(), url()),
       UPSTASH_REDIS_REST_TOKEN: string(),
-    } satisfies StandardSchemaDictionary<UpstashRedisEnv>,
+    },
     runtimeEnv: process.env,
   });
