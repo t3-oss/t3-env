@@ -19,11 +19,4 @@ for (const pkg of packages) {
 
   jsrJson.version = pkgJson.version;
   await Bun.write(`packages/${pkg}/jsr.json`, JSON.stringify(jsrJson, null, 2));
-
-  /**
-   * 3. Run prepack (if exists)
-   */
-  if (pkgJson.scripts?.prepack) {
-    await Bun.$`bun run prepack`.cwd(`packages/${pkg}`);
-  }
 }
