@@ -1,5 +1,14 @@
 # @t3-oss/env-nextjs
 
+## 0.13.3
+
+### Patch Changes
+
+- [#337](https://github.com/t3-oss/t3-env/pull/337) [`2231713`](https://github.com/t3-oss/t3-env/commit/2231713170bcbf7f4998d9055bce8f0c0be0e71c) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - note: this release does not contain any changes
+
+- Updated dependencies [[`2231713`](https://github.com/t3-oss/t3-env/commit/2231713170bcbf7f4998d9055bce8f0c0be0e71c)]:
+  - @t3-oss/env-core@0.13.3
+
 ## 0.13.2
 
 ### Patch Changes
