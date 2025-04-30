@@ -1,3 +1,8 @@
+/**
+ * Presets for Valibot
+ * @see https://env.t3.gg/docs/customization#extending-presets
+ * @module
+ */
 import { optional, picklist, pipe, string, url } from "valibot";
 import { createEnv } from "./index.ts";
 import type {
