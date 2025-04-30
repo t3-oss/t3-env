@@ -25,7 +25,7 @@ jobs:
         run: bun run build
 
       - name: Bump version to canary
-        run: node .github/canary-version.js
+        run: bun run scripts/canary-version.ts
 
       - name: Authenticate to npm and publish
         run: |

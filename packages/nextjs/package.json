@@ -39,7 +39,7 @@
   "scripts": {
     "build": "tsdown src/index.ts src/presets-zod.ts src/presets-valibot.ts --dts",
     "typecheck": "tsc --noEmit",
-    "prepack": "bun ../../.github/replace-workspace-protocol.ts"
+    "prepack": "bun ../../scripts/replace-workspace-protocol.ts"
   },
   "dependencies": {
     "@t3-oss/env-core": "workspace:*"

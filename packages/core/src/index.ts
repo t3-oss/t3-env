@@ -6,29 +6,69 @@
 import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard.ts";
 import { ensureSynchronous, parseWithDictionary } from "./standard.ts";
 
-export type { StandardSchemaV1, StandardSchemaDictionary };
+export type {
+  /**
+   * The Standard Schema Interface
+   * @see https://github.com/standard-schema/standard-schema
+   * @internal
+   */
+  StandardSchemaV1,
+  /**
+   * A record with values being Standard Schema validators
+   * @see https://github.com/standard-schema/standard-schema
+   * @internal
+   */
+  StandardSchemaDictionary,
+};
 
-/** @internal */
-export type ErrorMessage<T extends string> = T;
-/** @internal */
-export type Simplify<T> = {
+/**
+ * Symbol for indicating type errors
+ * @internal
+ */
+type ErrorMessage<T extends string> = T;
+
+/**
+ * Simplify a type
+ * @internal
+ */
+type Simplify<T> = {
   [P in keyof T]: T[P];
 } & {};
 
+/**
+ * Get the keys of the possibly undefined values
+ * @internal
+ */
 type PossiblyUndefinedKeys<T> = {
   [K in keyof T]: undefined extends T[K] ? K : never;
 }[keyof T];
 
+/**
+ * Make the keys of the type possibly undefined
+ * @internal
+ */
 type UndefinedOptional<T> = Partial<Pick<T, PossiblyUndefinedKeys<T>>> &
   Omit<T, PossiblyUndefinedKeys<T>>;
 
+/**
+ * Make the keys of the type impossible
+ * @internal
+ */
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
 
-type UnReadonlyObject<T> = T extends Readonly<infer U> ? U : T;
+/**
+ * Reverse a Readonly object to be mutable
+ * @internal
+ */
+type Mutable<T> = T extends Readonly<infer U> ? U : T;
 
+/**
+ * Reduce an array of records to a single object where later keys override earlier ones
+ * @internal
+ */
 type Reduce<
   TArr extends Record<string, unknown>[],
   TAcc = object,
@@ -36,7 +76,7 @@ type Reduce<
   ? TAcc
   : TArr extends [infer Head, ...infer Tail]
     ? Tail extends Record<string, unknown>[]
-      ? UnReadonlyObject<Head> & Omit<Reduce<Tail, TAcc>, keyof Head>
+      ? Mutable<Head> & Omit<Reduce<Tail, TAcc>, keyof Head>
       : never
     : never;
 
