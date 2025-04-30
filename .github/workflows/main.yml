@@ -35,6 +35,15 @@ jobs:
 
       - run: bun lint
 
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - uses: ./.github/setup
+
+      - run: bun typecheck
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -42,4 +51,5 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./.github/setup
 
-      - run: bun turbo test typecheck --filter "@t3-oss/env*"
+      - run: bun turbo run build --filter=@t3-oss/env*
+      - run: bun test
