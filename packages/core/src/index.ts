@@ -315,9 +315,17 @@ export type CreateEnv<
   Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>
 >;
 
-/**
- * Create a new environment variable schema.
- */
+const makeInternalProp = <T>(name: string) => {
+  const symbol = Symbol(name);
+  return {
+    matches: (prop: string | symbol) => prop === symbol,
+    getValue: (obj: Record<string, unknown>) =>
+      (obj as { [symbol]?: T })[symbol],
+  };
+};
+
+const serverKeysProp = makeInternalProp<string[]>("serverKeys");
+
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,
@@ -363,6 +371,7 @@ export function createEnv<
         ..._client,
         ..._shared,
       };
+  const ownKeys = new Set(Object.keys(finalSchemaShape));
 
   const parsed =
     opts
@@ -402,14 +411,40 @@ export function createEnv<
     return prop === "__esModule" || prop === "$$typeof";
   };
 
+  const serverKeys = isServer ? undefined : Object.keys(_server);
+
+  // a map of keys to the preset we got them from
+  const presetsByKey: Record<string, TExtendsFormat[number] | undefined> = {};
+
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
-    return Object.assign(acc, curr);
+    for (const key in curr) {
+      if (!ownKeys.has(key)) {
+        presetsByKey[key] = curr;
+      }
+      acc[key] = curr[key];
+    }
+    const presetServerKeys = serverKeysProp.getValue(curr);
+    if (presetServerKeys) {
+      // these are keys that the proxy should handle but won't be exposed on the client
+      for (const key of presetServerKeys) {
+        if (!ownKeys.has(key)) {
+          presetsByKey[key] = curr;
+        }
+      }
+    }
+    return acc;
   }, {});
+
   const fullObj = Object.assign(extendedObj, parsed.value);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
+      // we need to expose these on the client side so we know to pass them off to the right proxy
+      if (serverKeysProp.matches(prop)) return serverKeys;
       if (typeof prop !== "string") return undefined;
+      // pass off handling to the original proxy from the preset
+      const preset = presetsByKey[prop];
+      if (preset && !ownKeys.has(prop)) return preset[prop];
       if (ignoreProp(prop)) return undefined;
       if (!isValidServerAccess(prop)) return onInvalidAccess(prop);
       return Reflect.get(target, prop);
