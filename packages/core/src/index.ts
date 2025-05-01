@@ -371,6 +371,7 @@ export function createEnv<
         ..._client,
         ..._shared,
       };
+  const ownKeys = new Set(Object.keys(finalSchemaShape));
 
   const parsed =
     opts
@@ -417,20 +418,24 @@ export function createEnv<
 
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
     for (const key in curr) {
-      presetsByKey[key] = curr;
+      if (!ownKeys.has(key)) {
+        presetsByKey[key] = curr;
+      }
       acc[key] = curr[key];
     }
     const presetServerKeys = serverKeysProp.getValue(curr);
     if (presetServerKeys) {
       // these are keys that the proxy should handle but won't be exposed on the client
       for (const key of presetServerKeys) {
-        presetsByKey[key] = curr;
+        if (!ownKeys.has(key)) {
+          presetsByKey[key] = curr;
+        }
       }
     }
     return acc;
   }, {});
 
-  const fullObj = Object.assign(parsed.value, extendedObj);
+  const fullObj = Object.assign(extendedObj, parsed.value);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
@@ -439,7 +444,7 @@ export function createEnv<
       if (typeof prop !== "string") return undefined;
       // pass off handling to the original proxy from the preset
       const preset = presetsByKey[prop];
-      if (preset) return preset[prop];
+      if (preset && !ownKeys.has(prop)) return preset[prop];
       if (ignoreProp(prop)) return undefined;
       if (!isValidServerAccess(prop)) return onInvalidAccess(prop);
       return Reflect.get(target, prop);
