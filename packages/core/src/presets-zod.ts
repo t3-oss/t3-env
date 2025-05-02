@@ -6,6 +6,7 @@
 import { z } from "zod";
 import { createEnv } from "./index.ts";
 import type {
+  CoolifyEnv,
   FlyEnv,
   NeonVercelEnv,
   NetlifyEnv,
@@ -211,6 +212,25 @@ export const upstashRedis = (): Readonly<UpstashRedisEnv> =>
     server: {
       UPSTASH_REDIS_REST_URL: z.string().url(),
       UPSTASH_REDIS_REST_TOKEN: z.string(),
+    },
+    runtimeEnv: process.env,
+  });
+
+/**
+ * Coolify Environment Variables
+ * @see https://coolify.io/docs/knowledge-base/environment-variables#predefined-variables
+ */
+export const coolify = (): Readonly<CoolifyEnv> =>
+  createEnv({
+    server: {
+      COOLIFY_FQDN: z.string().optional(),
+      COOLIFY_URL: z.string().optional(),
+      COOLIFY_BRANCH: z.string().optional(),
+      COOLIFY_RESOURCE_UUID: z.string().optional(),
+      COOLIFY_CONTAINER_NAME: z.string().optional(),
+      SOURCE_COMMIT: z.string().optional(),
+      PORT: z.string().optional(),
+      HOST: z.string().optional(),
     },
     runtimeEnv: process.env,
   });

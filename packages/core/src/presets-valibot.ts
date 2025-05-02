@@ -6,6 +6,7 @@
 import { optional, picklist, pipe, string, url } from "valibot";
 import { createEnv } from "./index.ts";
 import type {
+  CoolifyEnv,
   FlyEnv,
   NeonVercelEnv,
   NetlifyEnv,
@@ -211,6 +212,25 @@ export const upstashRedis = (): Readonly<UpstashRedisEnv> =>
     server: {
       UPSTASH_REDIS_REST_URL: pipe(string(), url()),
       UPSTASH_REDIS_REST_TOKEN: string(),
+    },
+    runtimeEnv: process.env,
+  });
+
+/**
+ * Coolify Environment Variables
+ * @see https://coolify.io/docs/knowledge-base/environment-variables#predefined-variables
+ */
+export const coolify = (): Readonly<CoolifyEnv> =>
+  createEnv({
+    server: {
+      COOLIFY_FQDN: optional(string()),
+      COOLIFY_URL: optional(string()),
+      COOLIFY_BRANCH: optional(string()),
+      COOLIFY_RESOURCE_UUID: optional(string()),
+      COOLIFY_CONTAINER_NAME: optional(string()),
+      SOURCE_COMMIT: optional(string()),
+      PORT: optional(string()),
+      HOST: optional(string()),
     },
     runtimeEnv: process.env,
   });
