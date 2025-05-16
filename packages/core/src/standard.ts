@@ -112,6 +112,7 @@ export function parseWithDictionary<TDict extends StandardSchemaDictionary>(
       issues.push(
         ...propResult.issues.map((issue) => ({
           ...issue,
+          message: issue.message,
           path: [key, ...(issue.path ?? [])],
         })),
       );
