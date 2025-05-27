@@ -112,7 +112,7 @@ export function parseWithDictionary<TDict extends StandardSchemaDictionary>(
       issues.push(
         ...propResult.issues.map((issue) => ({
           ...issue,
-          message: issue.message,
+          message: issue.message, // https://github.com/t3-oss/t3-env/pull/346
           path: [key, ...(issue.path ?? [])],
         })),
       );
