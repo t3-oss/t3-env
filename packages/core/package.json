@@ -49,6 +49,9 @@
     "typescript": {
       "optional": true
     },
+    "arktype": {
+      "optional": true
+    },
     "zod": {
       "optional": true
     },

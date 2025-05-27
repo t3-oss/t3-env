@@ -115,6 +115,7 @@
         "zod": "^3.24.0 || ^4.0.0-beta.0",
       },
       "optionalPeers": [
+        "arktype",
         "typescript",
         "valibot",
         "zod",
@@ -134,11 +135,13 @@
         "zod": "3.24.3",
       },
       "peerDependencies": {
+        "arktype": "^2.1.0",
         "typescript": ">=5.0.0",
         "valibot": "^1.0.0-beta.7 || ^1.0.0",
         "zod": "^3.24.0 || ^4.0.0-beta.0",
       },
       "optionalPeers": [
+        "arktype",
         "typescript",
         "valibot",
         "zod",
@@ -158,11 +161,13 @@
         "zod": "3.24.3",
       },
       "peerDependencies": {
+        "arktype": "^2.1.0",
         "typescript": ">=5.0.0",
         "valibot": "^1.0.0-beta.7 || ^1.0.0",
         "zod": "^3.24.0 || ^4.0.0-beta.0",
       },
       "optionalPeers": [
+        "arktype",
         "typescript",
         "valibot",
         "zod",
