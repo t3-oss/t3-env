@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-core",
-  "version": "0.13.4",
+  "version": "0.13.6",
   "type": "module",
   "keywords": [
     "create-t3-app",
@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "build": "tsdown src/index.ts src/presets-zod.ts src/presets-valibot.ts --dts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsgo --noEmit"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
@@ -49,6 +49,9 @@
     "typescript": {
       "optional": true
     },
+    "arktype": {
+      "optional": true
+    },
     "zod": {
       "optional": true
     },
@@ -57,9 +60,9 @@
     }
   },
   "devDependencies": {
+    "@typescript/native-preview": "^7.0.0-dev.20250523.1",
     "arktype": "2.1.0",
-    "tsdown": "0.10.2",
-    "typescript": "5.8.3",
+    "tsdown": "0.12.3",
     "zod": "3.24.3",
     "valibot": "1.0.0"
   }
