@@ -1,4 +1,4 @@
-import { optional, picklist, pipe, string, url } from "valibot";
+import { url, optional, picklist, pipe, string } from "valibot";
 import type { StandardSchemaDictionary } from ".";
 import { createEnv } from ".";
 import type {
@@ -79,18 +79,18 @@ export const supabaseVercel = () =>
   createEnv({
     server: {
       POSTGRES_URL: pipe(string(), url()),
-      POSTGRES_PRISMA_URL: pipe(string(), url()),
-      POSTGRES_URL_NON_POOLING: pipe(string(), url()),
-      POSTGRES_USER: string(),
-      POSTGRES_HOST: string(),
-      POSTGRES_PASSWORD: string(),
-      POSTGRES_DATABASE: string(),
-      SUPABASE_SERVICE_ROLE_KEY: string(),
-      SUPABASE_ANON_KEY: string(),
-      SUPABASE_URL: pipe(string(), url()),
-      SUPABASE_JWT_SECRET: string(),
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: string(),
-      NEXT_PUBLIC_SUPABASE_URL: pipe(string(), url()),
+      POSTGRES_PRISMA_URL: optional(pipe(string(), url())),
+      POSTGRES_URL_NON_POOLING: optional(pipe(string(), url())),
+      POSTGRES_USER: optional(string()),
+      POSTGRES_HOST: optional(string()),
+      POSTGRES_PASSWORD: optional(string()),
+      POSTGRES_DATABASE: optional(string()),
+      SUPABASE_SERVICE_ROLE_KEY: optional(string()),
+      SUPABASE_ANON_KEY: optional(string()),
+      SUPABASE_URL: optional(pipe(string(), url())),
+      SUPABASE_JWT_SECRET: optional(string()),
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: optional(string()),
+      NEXT_PUBLIC_SUPABASE_URL: optional(pipe(string(), url())),
     } satisfies StandardSchemaDictionary.Matching<SupabaseVercelEnv>,
     runtimeEnv: process.env,
   });
