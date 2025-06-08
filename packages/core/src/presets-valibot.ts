@@ -16,6 +16,7 @@ import type {
   UploadThingV6Env,
   UpstashRedisEnv,
   VercelEnv,
+  WxtEnv,
 } from "./presets";
 
 /**
@@ -233,4 +234,24 @@ export const coolify = (): Readonly<CoolifyEnv> =>
       HOST: optional(string()),
     },
     runtimeEnv: process.env,
+  });
+
+/**
+ * WXT Environment Variables
+ * @see https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables
+ */
+export const wxt = (): Readonly<WxtEnv> =>
+  createEnv({
+    server: {
+      MANIFEST_VERSION: optional(picklist([2, 3])),
+      BROWSER: optional(
+        picklist(["chrome", "firefox", "safari", "edge", "opera"]),
+      ),
+      CHROME: optional(z.boolean()),
+      FIREFOX: optional(z.boolean()),
+      SAFARI: optional(z.boolean()),
+      EDGE: optional(z.boolean()),
+      OPERA: optional(z.boolean()),
+    },
+    runtimeEnv: import.meta.env,
   });
