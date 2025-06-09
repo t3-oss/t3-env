@@ -3,6 +3,7 @@
 ![NPM Version](https://img.shields.io/npm/v/%40t3-oss%2Fenv-core)
 [![JSR](https://jsr.io/badges/@t3-oss/env-core)](https://jsr.io/@t3-oss/env-core)
 [![JSR Score](https://jsr.io/badges/@t3-oss/env-core/score)](https://jsr.io/@t3-oss/env-core)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/@t3-oss/env-core)](https://socket.dev/npm/package/@t3-oss/env-core/overview)
 
 The Next.js package comes preconfigured for Next.js and also enforces some extra rules by default to make sure you have out-of-the-box compatibility in all different Next.js runtimes.
 
