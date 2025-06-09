@@ -1,9 +1,7 @@
-/// <reference types="bun" />
-import { describe, expect, spyOn, test } from "bun:test";
-import { expectTypeOf } from "expect-type";
-
 import * as v from "valibot";
+import { describe, expect, expectTypeOf, test, vi } from "vitest";
 import { createEnv } from "../src";
+import { uploadthing } from "../src/presets-valibot";
 
 function ignoreErrors(cb: () => void) {
   try {
@@ -452,7 +450,7 @@ describe("extending presets", () => {
       }>
     >();
 
-    const consoleError = spyOn(console, "error");
+    const consoleError = vi.spyOn(console, "error");
     expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
@@ -791,4 +789,25 @@ test("overriding preset env var", () => {
     }>
   >();
   expect(env.PRESET_ENV).toBe(123);
+});
+
+test("with built-in preset", () => {
+  process.env.UPLOADTHING_TOKEN = "token";
+  const env = createEnv({
+    server: {
+      FOO: v.string(),
+    },
+    extends: [uploadthing()],
+    runtimeEnv: { FOO: "bar" },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      FOO: string;
+      UPLOADTHING_TOKEN: string;
+    }>
+  >();
+
+  expect(env.FOO).toBe("bar");
+  expect(env.UPLOADTHING_TOKEN).toBe("token");
 });

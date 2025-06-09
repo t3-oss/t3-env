@@ -1,7 +1,4 @@
-/// <reference types="bun" />
-import { describe, expect, spyOn, test } from "bun:test";
-import { expectTypeOf } from "expect-type";
-
+import { describe, expect, expectTypeOf, test, vi } from "vitest";
 import z from "zod/v4";
 import { createEnv } from "../src";
 
@@ -452,7 +449,7 @@ describe("extending presets", () => {
       }>
     >();
 
-    const consoleError = spyOn(console, "error");
+    const consoleError = vi.spyOn(console, "error");
     expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
