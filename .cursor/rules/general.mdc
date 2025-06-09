@@ -26,6 +26,7 @@ You're working in a monorepo using:
 - Restate what the objective is of what you are being asked to change clearly in a short summary.
 - Do not use any third party library. The library must confirm to [Standard Schema](mdc:https:/standardschema.dev) and not be tied to any one schema validation library.
 - Reason about the API design before implementing changes. Is it possible to achieve strong and generic typing for your chosen API? If not, reconsider.
+- Create clearly documented changesets for your introduced changes using `bun changeset`.
 
 ## Coding Standards
 
