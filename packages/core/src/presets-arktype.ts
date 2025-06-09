@@ -259,3 +259,23 @@ export const coolify = (): Readonly<CoolifyEnv> =>
     },
     runtimeEnv: process.env,
   });
+
+/**
+ * WXT Environment Variables
+ * @see https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables
+ */
+export const wxt = (): Readonly<WxtEnv> =>
+  createEnv({
+    server: {
+      MANIFEST_VERSION: type("2 | 3 | undefined"),
+      BROWSER: type(
+        "'chrome' | 'firefox' | 'safari' | 'edge' | 'opera' | undefined",
+      ),
+      CHROME: type("boolean | undefined"),
+      FIREFOX: type("boolean | undefined"),
+      SAFARI: type("boolean | undefined"),
+      EDGE: type("boolean | undefined"),
+      OPERA: type("boolean | undefined"),
+    },
+    runtimeEnv: import.meta.env,
+  });
