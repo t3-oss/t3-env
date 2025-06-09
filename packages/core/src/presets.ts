@@ -150,9 +150,9 @@ export interface CoolifyEnv {
 }
 
 export interface ViteEnv {
-  BASE_URL?: string;
-  MODE?: string;
-  DEV?: boolean;
-  PROD?: boolean;
-  SSR?: boolean;
+  BASE_URL: string;
+  MODE: string;
+  DEV: boolean;
+  PROD: boolean;
+  SSR: boolean;
 }

@@ -268,11 +268,11 @@ export const coolify = (): Readonly<CoolifyEnv> =>
 export const vite = (): Readonly<ViteEnv> =>
   createEnv({
     server: {
-      BASE_URL: type("string | undefined"),
-      MODE: type("string | undefined"),
-      DEV: type("boolean | undefined"),
-      PROD: type("boolean | undefined"),
-      SSR: type("boolean | undefined"),
+      BASE_URL: type("string"),
+      MODE: type("string"),
+      DEV: type("boolean"),
+      PROD: type("boolean"),
+      SSR: type("boolean"),
     },
     runtimeEnv: import.meta.env,
   });
