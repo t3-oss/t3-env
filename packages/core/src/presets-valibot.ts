@@ -3,7 +3,7 @@
  * @see https://env.t3.gg/docs/customization#extending-presets
  * @module
  */
-import { optional, picklist, pipe, string, url } from "valibot";
+import { boolean, optional, picklist, pipe, string, url } from "valibot";
 import { createEnv } from "./index.ts";
 import type {
   CoolifyEnv,
@@ -17,6 +17,7 @@ import type {
   UploadThingV6Env,
   UpstashRedisEnv,
   VercelEnv,
+  ViteEnv,
 } from "./presets";
 
 /**
@@ -258,4 +259,20 @@ export const coolify = (): Readonly<CoolifyEnv> =>
       HOST: optional(string()),
     },
     runtimeEnv: process.env,
+  });
+
+/**
+ * Vite Environment Variables
+ * @see https://vite.dev/guide/env-and-mode
+ */
+export const vite = (): Readonly<ViteEnv> =>
+  createEnv({
+    server: {
+      BASE_URL: string(),
+      MODE: string(),
+      DEV: boolean(),
+      PROD: boolean(),
+      SSR: boolean(),
+    },
+    runtimeEnv: import.meta.env,
   });
