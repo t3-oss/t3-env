@@ -285,7 +285,7 @@ export const vite = (): Readonly<ViteEnv> =>
 export const wxt = (): Readonly<WxtEnv> =>
   createEnv({
     server: {
-      MANIFEST_VERSION: optional(picklist(["2", "3"])),
+      MANIFEST_VERSION: optional(picklist([2, 3])),
       BROWSER: optional(
         picklist(["chrome", "firefox", "safari", "edge", "opera"]),
       ),

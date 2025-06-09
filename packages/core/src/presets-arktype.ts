@@ -285,7 +285,7 @@ export const vite = (): Readonly<ViteEnv> =>
 export const wxt = (): Readonly<WxtEnv> =>
   createEnv({
     server: {
-      MANIFEST_VERSION: type("'2' | '3' | undefined"),
+      MANIFEST_VERSION: type("2 | 3 | undefined"),
       BROWSER: type(
         "'chrome' | 'firefox' | 'safari' | 'edge' | 'opera' | undefined",
       ),
