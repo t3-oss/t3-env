@@ -58,6 +58,19 @@
         "vite": "^6.0.1",
       },
     },
+    "examples/astro-arktype": {
+      "name": "@examples/astro-arktype",
+      "dependencies": {
+        "@astrojs/solid-js": "^5.0.4",
+        "@t3-oss/env-core": "workspace:*",
+        "arktype": "^2.1.0",
+        "astro": "^5.1.9",
+        "solid-js": "^1.9.4",
+      },
+      "devDependencies": {
+        "vite": "^6.0.1",
+      },
+    },
     "examples/astro-valibot": {
       "name": "@examples/astro-valibot",
       "dependencies": {
@@ -387,6 +400,8 @@
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.24.2", "", { "os": "win32", "cpu": "x64" }, "sha512-7VTgWzgMGvup6aSqDPLiW5zHaxYJGTO4OokMjIlrCtf+VpEL+cXKtCvg723iguPYI5oaUNdS+/V7OU2gvXVWEg=="],
 
     "@examples/astro": ["@examples/astro@workspace:examples/astro"],
+
+    "@examples/astro-arktype": ["@examples/astro-arktype@workspace:examples/astro-arktype"],
 
     "@examples/astro-valibot": ["@examples/astro-valibot@workspace:examples/astro-valibot"],
 
