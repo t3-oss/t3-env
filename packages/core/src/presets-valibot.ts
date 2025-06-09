@@ -289,11 +289,11 @@ export const wxt = (): Readonly<WxtEnv> =>
       BROWSER: optional(
         picklist(["chrome", "firefox", "safari", "edge", "opera"]),
       ),
-      CHROME: optional(z.boolean()),
-      FIREFOX: optional(z.boolean()),
-      SAFARI: optional(z.boolean()),
-      EDGE: optional(z.boolean()),
-      OPERA: optional(z.boolean()),
+      CHROME: optional(boolean()),
+      FIREFOX: optional(boolean()),
+      SAFARI: optional(boolean()),
+      EDGE: optional(boolean()),
+      OPERA: optional(boolean()),
     },
     runtimeEnv: import.meta.env,
   });
