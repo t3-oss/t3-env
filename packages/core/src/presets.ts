@@ -158,7 +158,7 @@ export interface ViteEnv {
 }
 
 export interface WxtEnv {
-  MANIFEST_VERSION?: 2 | 3;
+  MANIFEST_VERSION?: "2" | "3";
   BROWSER?: "chrome" | "firefox" | "safari" | "edge" | "opera";
   CHROME?: boolean;
   FIREFOX?: boolean;
