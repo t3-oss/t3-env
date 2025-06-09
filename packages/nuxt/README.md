@@ -1,5 +1,9 @@
 # Typesafe Envs made Simple
 
+![NPM Version](https://img.shields.io/npm/v/%40t3-oss%2Fenv-core)
+[![JSR](https://jsr.io/badges/@t3-oss/env-core)](https://jsr.io/@t3-oss/env-core)
+[![JSR Score](https://jsr.io/badges/@t3-oss/env-core/score)](https://jsr.io/@t3-oss/env-core)
+
 The Nuxt package comes preconfigured for Nuxt, and fills the runtimeEnv option automatically. All you need to do is define your schemas!
 
 > For full documentation, see https://env.t3.gg
