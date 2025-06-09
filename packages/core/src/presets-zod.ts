@@ -18,6 +18,7 @@ import type {
   UpstashRedisEnv,
   VercelEnv,
   ViteEnv,
+  WxtEnv,
 } from "./presets.ts";
 
 /**
@@ -273,6 +274,26 @@ export const vite = (): Readonly<ViteEnv> =>
       DEV: z.boolean(),
       PROD: z.boolean(),
       SSR: z.boolean(),
+    },
+    runtimeEnv: import.meta.env,
+  });
+
+/**
+ * WXT Environment Variables
+ * @see https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables
+ */
+export const wxt = (): Readonly<WxtEnv> =>
+  createEnv({
+    server: {
+      MANIFEST_VERSION: z.enum([2, 3]).optional(),
+      BROWSER: z
+        .enum(["chrome", "firefox", "safari", "edge", "opera"])
+        .optional(),
+      CHROME: z.boolean().optional(),
+      FIREFOX: z.boolean().optional(),
+      SAFARI: z.boolean().optional(),
+      EDGE: z.boolean().optional(),
+      OPERA: z.boolean().optional(),
     },
     runtimeEnv: import.meta.env,
   });

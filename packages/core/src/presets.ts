@@ -156,3 +156,13 @@ export interface ViteEnv {
   PROD: boolean;
   SSR: boolean;
 }
+
+export interface WxtEnv {
+  MANIFEST_VERSION?: 2 | 3;
+  BROWSER?: "chrome" | "firefox" | "safari" | "edge" | "opera";
+  CHROME?: boolean;
+  FIREFOX?: boolean;
+  SAFARI?: boolean;
+  EDGE?: boolean;
+  OPERA?: boolean;
+}
