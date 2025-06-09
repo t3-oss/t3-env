@@ -2,7 +2,7 @@
 import { describe, expect, spyOn, test } from "bun:test";
 import { expectTypeOf } from "expect-type";
 
-import z from "zod";
+import z from "zod/v4";
 import { createEnv } from "../src";
 
 function ignoreErrors(cb: () => void) {
@@ -237,7 +237,9 @@ describe("errors when validation fails", () => {
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),
-    ).toThrow("Invalid variable BAR: Expected number, received nan");
+    ).toThrow(
+      "Invalid variable BAR: Invalid input: expected number, received NaN",
+    );
   });
 });
 

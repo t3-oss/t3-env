@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "turbo run build --filter @t3-oss/env*",
+    "clean": "turbo run clean && rm -rf node_modules",
     "dev": "turbo watch build --filter @t3-oss/env*",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",

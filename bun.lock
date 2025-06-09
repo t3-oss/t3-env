@@ -51,7 +51,7 @@
         "@t3-oss/env-core": "workspace:*",
         "astro": "^5.1.9",
         "solid-js": "^1.9.4",
-        "zod": "3.24.3",
+        "zod": "3.25.56",
       },
       "devDependencies": {
         "vite": "^6.0.1",
@@ -77,7 +77,7 @@
         "next": "15.3.1",
         "react": "19.1.0",
         "react-dom": "19.1.0",
-        "zod": "3.24.3",
+        "zod": "3.25.56",
       },
       "devDependencies": {
         "@types/node": "^22.14.1",
@@ -91,7 +91,7 @@
       "name": "@examples/nuxt",
       "dependencies": {
         "@t3-oss/env-nuxt": "workspace:*",
-        "zod": "3.24.3",
+        "zod": "3.25.56",
       },
       "devDependencies": {
         "@types/node": "^22.14.1",
@@ -100,13 +100,13 @@
     },
     "packages/core": {
       "name": "@t3-oss/env-core",
-      "version": "0.13.4",
+      "version": "0.13.6",
       "devDependencies": {
         "@typescript/native-preview": "^7.0.0-dev.20250523.1",
         "arktype": "2.1.0",
         "tsdown": "0.12.3",
         "valibot": "1.0.0",
-        "zod": "3.24.3",
+        "zod": "3.25.56",
       },
       "peerDependencies": {
         "arktype": "^2.1.0",
@@ -123,7 +123,7 @@
     },
     "packages/nextjs": {
       "name": "@t3-oss/env-nextjs",
-      "version": "0.13.4",
+      "version": "0.13.6",
       "dependencies": {
         "@t3-oss/env-core": "workspace:*",
       },
@@ -132,7 +132,7 @@
         "arktype": "2.1.0",
         "tsdown": "0.12.3",
         "valibot": "1.0.0",
-        "zod": "3.24.3",
+        "zod": "3.25.56",
       },
       "peerDependencies": {
         "arktype": "^2.1.0",
@@ -149,7 +149,7 @@
     },
     "packages/nuxt": {
       "name": "@t3-oss/env-nuxt",
-      "version": "0.13.4",
+      "version": "0.13.6",
       "dependencies": {
         "@t3-oss/env-core": "workspace:*",
       },
@@ -158,7 +158,7 @@
         "arktype": "2.1.0",
         "tsdown": "0.12.3",
         "valibot": "1.0.0",
-        "zod": "3.24.3",
+        "zod": "3.25.56",
       },
       "peerDependencies": {
         "arktype": "^2.1.0",
@@ -2493,7 +2493,7 @@
 
     "zip-stream": ["zip-stream@6.0.1", "", { "dependencies": { "archiver-utils": "^5.0.0", "compress-commons": "^6.0.2", "readable-stream": "^4.0.0" } }, "sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA=="],
 
-    "zod": ["zod@3.24.3", "", {}, "sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg=="],
+    "zod": ["zod@3.25.56", "", {}, "sha512-rd6eEF3BTNvQnR2e2wwolfTmUTnp70aUTqr0oaGbHifzC3BKJsoV+Gat8vxUMR1hwOKBs6El+qWehrHbCpW6SQ=="],
 
     "zod-to-json-schema": ["zod-to-json-schema@3.24.1", "", { "peerDependencies": { "zod": "^3.24.1" } }, "sha512-3h08nf3Vw3Wl3PK+q3ow/lIil81IT2Oa7YpQyUUDsEWbXveMesdfK1xBd2RhCkynwZndAxixji/7SYJJowr62w=="],
 
