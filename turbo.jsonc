@@ -17,6 +17,9 @@
       "dependsOn": ["transit", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
     },
+    "//#test": {
+      "persistent": true
+    },
     // Transit node in the turbo graph
     // no package.json scrips actually implement transit but it creates a dependency link for other tasks:
     // https://turbo.build/docs/crafting-your-repository/configuring-tasks#dependent-tasks-that-can-be-run-in-parallel
