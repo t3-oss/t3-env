@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nextjs",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "type": "module",
   "keywords": [
     "create-t3-app",
@@ -70,7 +70,7 @@
     }
   },
   "devDependencies": {
-    "@typescript/native-preview": "^7.0.0-dev.20250523.1",
+    "@typescript/native-preview": "^7.0.0-dev.20250609.1",
     "arktype": "2.1.0",
     "tsdown": "0.12.3",
     "zod": "3.25.56",

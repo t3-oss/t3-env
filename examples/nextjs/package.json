@@ -19,7 +19,7 @@
     "@types/node": "^22.14.1",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
-    "@typescript/native-preview": "^7.0.0-dev.20250523.1",
+    "@typescript/native-preview": "^7.0.0-dev.20250609.1",
     "jiti": "^1.21.0"
   }
 }
