@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-core",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "exports": {
     ".": "./src/index.ts",
     "./presets-arktype": "./src/presets-arktype.ts",

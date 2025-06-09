@@ -1,5 +1,13 @@
 # @t3-oss/env-core
 
+## 0.13.7
+
+### Patch Changes
+
+- [#357](https://github.com/t3-oss/t3-env/pull/357) [`216bc2d`](https://github.com/t3-oss/t3-env/commit/216bc2df4d391f44311273873f74e2f8dfd2011e) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - feat: add arktype presets
+
+- [#354](https://github.com/t3-oss/t3-env/pull/354) [`221bdb5`](https://github.com/t3-oss/t3-env/commit/221bdb56e51ec6aa80a3bf751abb8f66822298bd) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add supabase vercel preset (https://vercel.com/marketplace/supabase)
+
 ## 0.13.6
 
 ### Patch Changes
