@@ -5,10 +5,26 @@ This is the framework agnostic core package of t3-env.
 ## Installation
 
 ```bash
-npm i @t3-oss/env-core zod
+# npm
+npm i @t3-oss/env-core
+
+# pnpm
+pnpm add @t3-oss/env-core
+
+# bun
+bun add @t3-oss/env-core
+
+# deno
+deno add jsr:@t3-oss/env-core
 ```
 
 ## Usage
+
+> For full documentation, see https://env.t3.gg
+
+> [!NOTE]
+>
+> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod
 
 ```ts
 // src/env.ts
