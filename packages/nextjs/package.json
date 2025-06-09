@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nextjs",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "type": "module",
   "keywords": [
     "create-t3-app",
@@ -21,6 +21,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./presets-arktype": {
+      "types": "./dist/presets-arktype.d.ts",
+      "default": "./dist/presets-arktype.js"
+    },
     "./presets-zod": {
       "types": "./dist/presets-zod.d.ts",
       "default": "./dist/presets-zod.js"
@@ -37,7 +41,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-zod.ts src/presets-valibot.ts --dts",
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts",
+    "clean": "rm -rf dist node_modules .turbo .cache",
     "typecheck": "tsgo --noEmit",
     "prepack": "bun ../../scripts/replace-workspace-protocol.ts"
   },
@@ -68,7 +73,7 @@
     "@typescript/native-preview": "^7.0.0-dev.20250523.1",
     "arktype": "2.1.0",
     "tsdown": "0.12.3",
-    "zod": "3.24.3",
+    "zod": "3.25.56",
     "valibot": "1.0.0"
   }
 }

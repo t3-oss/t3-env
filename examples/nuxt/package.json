@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
+    "clean": "rm -rf node_modules",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview"
@@ -14,6 +15,6 @@
   },
   "dependencies": {
     "@t3-oss/env-nuxt": "workspace:*",
-    "zod": "3.24.3"
+    "zod": "3.25.56"
   }
 }
