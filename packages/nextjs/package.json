@@ -41,7 +41,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts",
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral",
     "clean": "rm -rf dist node_modules .turbo .cache",
     "typecheck": "tsgo --noEmit",
     "prepack": "bun ../../scripts/replace-workspace-protocol.ts"
