@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "clean": "rm -rf .next node_modules .turbo .cache",
     "build": "next build",
     "start": "next start"
   },
@@ -31,8 +32,8 @@
     "@types/node": "^22.14.1",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
+    "@typescript/native-preview": "^7.0.0-dev.20250609.1",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
-    "typescript": "5.8.3"
+    "tailwindcss": "^3.4.3"
   }
 }

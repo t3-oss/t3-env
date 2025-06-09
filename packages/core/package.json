@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-core",
-  "version": "0.13.4",
+  "version": "0.13.8",
   "type": "module",
   "keywords": [
     "create-t3-app",
@@ -20,6 +20,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./presets-arktype": {
+      "types": "./dist/presets-arktype.d.ts",
+      "default": "./dist/presets-arktype.js"
+    },
     "./presets-zod": {
       "types": "./dist/presets-zod.d.ts",
       "default": "./dist/presets-zod.js"
@@ -36,8 +40,9 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-zod.ts src/presets-valibot.ts --dts",
-    "typecheck": "tsc --noEmit"
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral",
+    "clean": "rm -rf dist node_modules .turbo .cache",
+    "typecheck": "tsgo --noEmit"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
@@ -49,6 +54,9 @@
     "typescript": {
       "optional": true
     },
+    "arktype": {
+      "optional": true
+    },
     "zod": {
       "optional": true
     },
@@ -57,10 +65,10 @@
     }
   },
   "devDependencies": {
+    "@typescript/native-preview": "^7.0.0-dev.20250609.1",
     "arktype": "2.1.0",
-    "tsdown": "0.10.2",
-    "typescript": "5.8.3",
-    "zod": "3.24.3",
+    "tsdown": "0.12.3",
+    "zod": "3.25.56",
     "valibot": "1.0.0"
   }
 }

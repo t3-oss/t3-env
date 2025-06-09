@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "clean": "rm -rf node_modules",
     "dev": "next dev",
     "start": "next start"
   },
@@ -12,13 +13,13 @@
     "next": "15.3.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "zod": "3.24.3"
+    "zod": "3.25.56"
   },
   "devDependencies": {
     "@types/node": "^22.14.1",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
-    "jiti": "^1.21.0",
-    "typescript": "5.8.3"
+    "@typescript/native-preview": "^7.0.0-dev.20250609.1",
+    "jiti": "^1.21.0"
   }
 }

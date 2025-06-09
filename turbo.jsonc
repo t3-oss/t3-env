@@ -6,6 +6,9 @@
       "dependsOn": ["^dev"],
       "cache": false
     },
+    "clean": {
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", ".nuxt"]
@@ -13,6 +16,9 @@
     "typecheck": {
       "dependsOn": ["transit", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
+    },
+    "//#test": {
+      "persistent": true
     },
     // Transit node in the turbo graph
     // no package.json scrips actually implement transit but it creates a dependency link for other tasks:

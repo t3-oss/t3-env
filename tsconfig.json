@@ -3,8 +3,8 @@
     /* Base Options: */
     "skipLibCheck": true,
     "target": "es2022",
-    "erasableSyntaxOnly": true,
-    "libReplacement": false,
+    // "erasableSyntaxOnly": true,
+    // "libReplacement": false,
     "isolatedDeclarations": true,
     "declaration": true,
     "isolatedModules": true,

@@ -1,9 +1,7 @@
-/// <reference types="bun" />
-import { describe, expect, spyOn, test } from "bun:test";
-import { expectTypeOf } from "expect-type";
-
-import z from "zod";
+import { describe, expect, expectTypeOf, test, vi } from "vitest";
+import z from "zod/v4";
 import { createEnv } from "../src";
+import { uploadthing } from "../src/presets-zod";
 
 function ignoreErrors(cb: () => void) {
   try {
@@ -237,7 +235,9 @@ describe("errors when validation fails", () => {
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),
-    ).toThrow("Invalid variable BAR: Expected number, received nan");
+    ).toThrow(
+      "Invalid variable BAR: Invalid input: expected number, received NaN",
+    );
   });
 });
 
@@ -450,7 +450,7 @@ describe("extending presets", () => {
       }>
     >();
 
-    const consoleError = spyOn(console, "error");
+    const consoleError = vi.spyOn(console, "error");
     expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
@@ -464,9 +464,7 @@ describe("extending presets", () => {
   });
   describe("single preset", () => {
     const processEnv = {
-      PRESET_SERVER_ENV: "server_preset",
-      PRESET_SHARED_ENV: "shared_preset",
-      PRESET_CLIENT_ENV: "client_preset",
+      PRESET_ENV: "preset",
       SHARED_ENV: "shared",
       SERVER_ENV: "server",
       CLIENT_ENV: "client",
@@ -475,19 +473,7 @@ describe("extending presets", () => {
     function lazyCreateEnv() {
       const preset = createEnv({
         server: {
-          PRESET_SERVER_ENV: z.literal("server_preset"),
-        },
-        shared: {
-          PRESET_SHARED_ENV: z.string(),
-        },
-        clientPrefix: "PRESET_CLIENT_",
-        client: {
-          PRESET_CLIENT_ENV: z.string(),
-        },
-        onInvalidAccess(variable) {
-          throw new Error(
-            `Attempted to access preset variable ${variable} on the client`,
-          );
+          PRESET_ENV: z.enum(["preset"]),
         },
         runtimeEnv: processEnv,
       });
@@ -503,11 +489,6 @@ describe("extending presets", () => {
         client: {
           CLIENT_ENV: z.string(),
         },
-        onInvalidAccess(variable) {
-          throw new Error(
-            `Attempted to access variable ${variable} on the client`,
-          );
-        },
         extends: [preset],
         runtimeEnv: processEnv,
       });
@@ -518,9 +499,7 @@ describe("extending presets", () => {
         SERVER_ENV: string;
         SHARED_ENV: string;
         CLIENT_ENV: string;
-        PRESET_SERVER_ENV: "server_preset";
-        PRESET_SHARED_ENV: string;
-        PRESET_CLIENT_ENV: string;
+        PRESET_ENV: "preset";
       }>
     >();
 
@@ -534,9 +513,7 @@ describe("extending presets", () => {
         SERVER_ENV: "server",
         SHARED_ENV: "shared",
         CLIENT_ENV: "client",
-        PRESET_SERVER_ENV: "server_preset",
-        PRESET_SHARED_ENV: "shared_preset",
-        PRESET_CLIENT_ENV: "client_preset",
+        PRESET_ENV: "preset",
       });
 
       globalThis.window = window;
@@ -549,15 +526,13 @@ describe("extending presets", () => {
       const env = lazyCreateEnv();
 
       expect(() => env.SERVER_ENV).toThrow(
-        "Attempted to access variable SERVER_ENV on the client",
+        "❌ Attempted to access a server-side environment variable on the client",
       );
-      expect(() => env.PRESET_SERVER_ENV).toThrow(
-        "Attempted to access preset variable PRESET_SERVER_ENV on the client",
+      expect(() => env.PRESET_ENV).toThrow(
+        "❌ Attempted to access a server-side environment variable on the client",
       );
       expect(env.SHARED_ENV).toBe("shared");
       expect(env.CLIENT_ENV).toBe("client");
-      expect(env.PRESET_SHARED_ENV).toBe("shared_preset");
-      expect(env.PRESET_CLIENT_ENV).toBe("client_preset");
 
       globalThis.window = window;
     });
@@ -814,4 +789,25 @@ test("overriding preset env var", () => {
     }>
   >();
   expect(env.PRESET_ENV).toBe(123);
+});
+
+test("with built-in preset", () => {
+  process.env.UPLOADTHING_TOKEN = "token";
+  const env = createEnv({
+    server: {
+      FOO: z.string(),
+    },
+    extends: [uploadthing()],
+    runtimeEnv: { FOO: "bar" },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      FOO: string;
+      UPLOADTHING_TOKEN: string;
+    }>
+  >();
+
+  expect(env.FOO).toBe("bar");
+  expect(env.UPLOADTHING_TOKEN).toBe("token");
 });

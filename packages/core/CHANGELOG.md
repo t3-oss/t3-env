@@ -1,5 +1,33 @@
 # @t3-oss/env-core
 
+## 0.13.8
+
+### Patch Changes
+
+- [#353](https://github.com/t3-oss/t3-env/pull/353) [`31202b8`](https://github.com/t3-oss/t3-env/commit/31202b8d0131ae4da366e26aa3782766c7c23cac) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add Vite preset (https://vite.dev/guide/env-and-mode)
+
+- [#362](https://github.com/t3-oss/t3-env/pull/362) [`21d6d95`](https://github.com/t3-oss/t3-env/commit/21d6d950eac16bf30b72e037683ee94d50fc4663) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add WXT preset (https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables)
+
+## 0.13.7
+
+### Patch Changes
+
+- [#357](https://github.com/t3-oss/t3-env/pull/357) [`216bc2d`](https://github.com/t3-oss/t3-env/commit/216bc2df4d391f44311273873f74e2f8dfd2011e) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - feat: add arktype presets
+
+- [#354](https://github.com/t3-oss/t3-env/pull/354) [`221bdb5`](https://github.com/t3-oss/t3-env/commit/221bdb56e51ec6aa80a3bf751abb8f66822298bd) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add supabase vercel preset (https://vercel.com/marketplace/supabase)
+
+## 0.13.6
+
+### Patch Changes
+
+- [#341](https://github.com/t3-oss/t3-env/pull/341) [`aa245ed`](https://github.com/t3-oss/t3-env/commit/aa245edf2b80f0449c5537ade19630c88c08db35) Thanks [@Asamsig](https://github.com/Asamsig)! - Add preset for Coolify predefined environment variables
+
+## 0.13.5
+
+### Patch Changes
+
+- [#346](https://github.com/t3-oss/t3-env/pull/346) [`73e90f5`](https://github.com/t3-oss/t3-env/commit/73e90f563f8e6cc6621f4c59fe0229d0d336767a) Thanks [@haltcase](https://github.com/haltcase)! - fix: issue where `issue.message` is missing with the default configuration
+
 ## 0.13.4
 
 ### Patch Changes

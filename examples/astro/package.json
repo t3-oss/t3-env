@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "astro build",
+    "clean": "rm -rf node_modules",
     "dev": "astro dev",
     "preview": "astro preview",
     "start": "astro dev"
@@ -13,7 +14,7 @@
     "@t3-oss/env-core": "workspace:*",
     "astro": "^5.1.9",
     "solid-js": "^1.9.4",
-    "zod": "3.24.3"
+    "zod": "3.25.56"
   },
   "devDependencies": {
     "vite": "^6.0.1"

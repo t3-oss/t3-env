@@ -3,18 +3,22 @@
  * @see https://env.t3.gg/docs/customization#extending-presets
  * @module
  */
-import { optional, picklist, pipe, string, url } from "valibot";
+import { boolean, optional, picklist, pipe, string, url } from "valibot";
 import { createEnv } from "./index.ts";
 import type {
+  CoolifyEnv,
   FlyEnv,
   NeonVercelEnv,
   NetlifyEnv,
   RailwayEnv,
   RenderEnv,
+  SupabaseVercelEnv,
   UploadThingEnv,
   UploadThingV6Env,
   UpstashRedisEnv,
   VercelEnv,
+  ViteEnv,
+  WxtEnv,
 } from "./presets";
 
 /**
@@ -71,6 +75,30 @@ export const neonVercel = (): Readonly<NeonVercelEnv> =>
       POSTGRES_DATABASE: optional(string()),
       POSTGRES_URL_NO_SSL: optional(pipe(string(), url())),
       POSTGRES_PRISMA_URL: optional(pipe(string(), url())),
+    },
+    runtimeEnv: process.env,
+  });
+
+/**
+ * Supabase for Vercel Environment Variables
+ * @see https://vercel.com/marketplace/supabase
+ */
+export const supabaseVercel = (): Readonly<SupabaseVercelEnv> =>
+  createEnv({
+    server: {
+      POSTGRES_URL: pipe(string(), url()),
+      POSTGRES_PRISMA_URL: optional(pipe(string(), url())),
+      POSTGRES_URL_NON_POOLING: optional(pipe(string(), url())),
+      POSTGRES_USER: optional(string()),
+      POSTGRES_HOST: optional(string()),
+      POSTGRES_PASSWORD: optional(string()),
+      POSTGRES_DATABASE: optional(string()),
+      SUPABASE_SERVICE_ROLE_KEY: optional(string()),
+      SUPABASE_ANON_KEY: optional(string()),
+      SUPABASE_URL: optional(pipe(string(), url())),
+      SUPABASE_JWT_SECRET: optional(string()),
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: optional(string()),
+      NEXT_PUBLIC_SUPABASE_URL: optional(pipe(string(), url())),
     },
     runtimeEnv: process.env,
   });
@@ -213,4 +241,59 @@ export const upstashRedis = (): Readonly<UpstashRedisEnv> =>
       UPSTASH_REDIS_REST_TOKEN: string(),
     },
     runtimeEnv: process.env,
+  });
+
+/**
+ * Coolify Environment Variables
+ * @see https://coolify.io/docs/knowledge-base/environment-variables#predefined-variables
+ */
+export const coolify = (): Readonly<CoolifyEnv> =>
+  createEnv({
+    server: {
+      COOLIFY_FQDN: optional(string()),
+      COOLIFY_URL: optional(string()),
+      COOLIFY_BRANCH: optional(string()),
+      COOLIFY_RESOURCE_UUID: optional(string()),
+      COOLIFY_CONTAINER_NAME: optional(string()),
+      SOURCE_COMMIT: optional(string()),
+      PORT: optional(string()),
+      HOST: optional(string()),
+    },
+    runtimeEnv: process.env,
+  });
+
+/**
+ * Vite Environment Variables
+ * @see https://vite.dev/guide/env-and-mode
+ */
+export const vite = (): Readonly<ViteEnv> =>
+  createEnv({
+    server: {
+      BASE_URL: string(),
+      MODE: string(),
+      DEV: boolean(),
+      PROD: boolean(),
+      SSR: boolean(),
+    },
+    runtimeEnv: import.meta.env,
+  });
+
+/**
+ * WXT Environment Variables
+ * @see https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables
+ */
+export const wxt = (): Readonly<WxtEnv> =>
+  createEnv({
+    server: {
+      MANIFEST_VERSION: optional(picklist([2, 3])),
+      BROWSER: optional(
+        picklist(["chrome", "firefox", "safari", "edge", "opera"]),
+      ),
+      CHROME: optional(boolean()),
+      FIREFOX: optional(boolean()),
+      SAFARI: optional(boolean()),
+      EDGE: optional(boolean()),
+      OPERA: optional(boolean()),
+    },
+    runtimeEnv: import.meta.env,
   });
