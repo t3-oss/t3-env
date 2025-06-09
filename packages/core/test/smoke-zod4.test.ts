@@ -1,9 +1,7 @@
-/// <reference types="bun" />
-import { describe, expect, spyOn, test } from "bun:test";
-import { expectTypeOf } from "expect-type";
-
-import z from "zod";
+import { describe, expect, expectTypeOf, test, vi } from "vitest";
+import z from "zod/v4";
 import { createEnv } from "../src";
+import { uploadthing } from "../src/presets-zod";
 
 function ignoreErrors(cb: () => void) {
   try {
@@ -237,7 +235,9 @@ describe("errors when validation fails", () => {
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),
-    ).toThrow("Invalid variable BAR: Expected number, received nan");
+    ).toThrow(
+      "Invalid variable BAR: Invalid input: expected number, received NaN",
+    );
   });
 });
 
@@ -450,7 +450,7 @@ describe("extending presets", () => {
       }>
     >();
 
-    const consoleError = spyOn(console, "error");
+    const consoleError = vi.spyOn(console, "error");
     expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
@@ -789,4 +789,25 @@ test("overriding preset env var", () => {
     }>
   >();
   expect(env.PRESET_ENV).toBe(123);
+});
+
+test("with built-in preset", () => {
+  process.env.UPLOADTHING_TOKEN = "token";
+  const env = createEnv({
+    server: {
+      FOO: z.string(),
+    },
+    extends: [uploadthing()],
+    runtimeEnv: { FOO: "bar" },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      FOO: string;
+      UPLOADTHING_TOKEN: string;
+    }>
+  >();
+
+  expect(env.FOO).toBe("bar");
+  expect(env.UPLOADTHING_TOKEN).toBe("token");
 });

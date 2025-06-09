@@ -52,4 +52,4 @@ jobs:
       - uses: ./.github/setup
 
       - run: bun turbo run build --filter=@t3-oss/env*
-      - run: bun test
+      - run: bun run test

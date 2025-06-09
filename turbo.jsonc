@@ -6,6 +6,9 @@
       "dependsOn": ["^dev"],
       "cache": false
     },
+    "clean": {
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", ".nuxt"]

@@ -10,10 +10,11 @@
   ],
   "scripts": {
     "build": "turbo run build --filter @t3-oss/env*",
+    "clean": "turbo run clean && rm -rf node_modules",
     "dev": "turbo watch build --filter @t3-oss/env*",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
-    "test": "bun test",
+    "test": "vitest --silent=passed-only",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "@types/bun": "^1.2.10",
     "@typescript/native-preview": "^7.0.0-dev.20250523.1",
     "expect-type": "^1.2.1",
-    "turbo": "2.5.1"
+    "turbo": "2.5.1",
+    "vitest": "3.2.3"
   }
 }
