@@ -2,6 +2,9 @@
 
 This is the framework agnostic core package of t3-env.
 
+> For full documentation, see https://env.t3.gg
+
+
 ## Installation
 
 ```bash
@@ -19,8 +22,6 @@ deno add jsr:@t3-oss/env-core
 ```
 
 ## Usage
-
-> For full documentation, see https://env.t3.gg
 
 > [!NOTE]
 >

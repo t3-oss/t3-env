@@ -2,6 +2,8 @@
 
 The Nuxt package comes preconfigured for Nuxt, and fills the runtimeEnv option automatically. All you need to do is define your schemas!
 
+> For full documentation, see https://env.t3.gg
+
 ## Installation
 
 ```bash
@@ -19,8 +21,6 @@ deno add jsr:@t3-oss/env-nuxt
 ```
 
 ## Usage
-
-> For full documentation, see https://env.t3.gg
 
 > [!NOTE]
 >

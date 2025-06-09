@@ -2,11 +2,13 @@
 
 Deploying your app with invalid environment variables is a hassle. This package helps you to avoid that.
 
+> For full documentation, see https://env.t3.gg
+
 ## Installation
 
 > [!NOTE]
 >
->This is an ESM only package that requires a tsconfig with a module resolution that can read package.json#exports (`NodeNext` if transpiling with `tsc`, `Bundler` if using a bundler).
+> This is an ESM only package that requires a tsconfig with a module resolution that can read package.json#exports (`NodeNext` if transpiling with `tsc`, `Bundler` if using a bundler).
 
 ```bash
  # npm
@@ -22,14 +24,12 @@ Deploying your app with invalid environment variables is a hassle. This package 
  deno add jsr:@t3-oss/env-nuxt
  ```
 
+## Usage
+
 > [!NOTE]
 >
 > You may use any Standard Schema compliant validator of your choice. This example uses Zod
 
-
-## Usage
-
-> For full documentation, see https://env.t3.gg
 
 This package supports the full power of Zod/Valibot etc, meaning you can use `transforms` and `default` values.
 
