@@ -20,6 +20,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./presets-arktype": {
+      "types": "./dist/presets-arktype.d.ts",
+      "default": "./dist/presets-arktype.js"
+    },
     "./presets-zod": {
       "types": "./dist/presets-zod.d.ts",
       "default": "./dist/presets-zod.js"
@@ -36,7 +40,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-zod.ts src/presets-valibot.ts --dts",
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts",
     "clean": "rm -rf dist node_modules .turbo .cache",
     "typecheck": "tsgo --noEmit"
   },
