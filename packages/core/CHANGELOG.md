@@ -1,5 +1,58 @@
 # @t3-oss/env-core
 
+## 0.13.6
+
+### Patch Changes
+
+- [#341](https://github.com/t3-oss/t3-env/pull/341) [`aa245ed`](https://github.com/t3-oss/t3-env/commit/aa245edf2b80f0449c5537ade19630c88c08db35) Thanks [@Asamsig](https://github.com/Asamsig)! - Add preset for Coolify predefined environment variables
+
+## 0.13.5
+
+### Patch Changes
+
+- [#346](https://github.com/t3-oss/t3-env/pull/346) [`73e90f5`](https://github.com/t3-oss/t3-env/commit/73e90f563f8e6cc6621f4c59fe0229d0d336767a) Thanks [@haltcase](https://github.com/haltcase)! - fix: issue where `issue.message` is missing with the default configuration
+
+## 0.13.4
+
+### Patch Changes
+
+- [`9872066`](https://github.com/t3-oss/t3-env/commit/9872066d49b87e3eae350c36563392324c80fd84) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - note: this release does not contain any changes
+
+## 0.13.3
+
+### Patch Changes
+
+- [#337](https://github.com/t3-oss/t3-env/pull/337) [`2231713`](https://github.com/t3-oss/t3-env/commit/2231713170bcbf7f4998d9055bce8f0c0be0e71c) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - note: this release does not contain any changes
+
+## 0.13.2
+
+### Patch Changes
+
+- [#335](https://github.com/t3-oss/t3-env/pull/335) [`91db4ac`](https://github.com/t3-oss/t3-env/commit/91db4ac0c1acea79b486be62bee25948d5d1ea74) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - note: this release does not contain any new changes
+
+## 0.13.1
+
+### Patch Changes
+
+- [#227](https://github.com/t3-oss/t3-env/pull/227) [`567491b`](https://github.com/t3-oss/t3-env/commit/567491b5918b0a1cd57425d4bb03157ce1c8dceb) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - add `VERCEL_PROJECT_PRODUCTION_URL` to vercel preset
+
+## 0.13.0
+
+### Minor Changes
+
+- [#313](https://github.com/t3-oss/t3-env/pull/313) [`35577fc`](https://github.com/t3-oss/t3-env/commit/35577fca8fa0752f2542759ed11d8386d868c2a5) Thanks [@EskiMojo14](https://github.com/EskiMojo14)! - feat!: added ability to customise schema combination
+
+  Combination of schemas can now be customised using the `createFinalSchema` option. This allows further refinement or transformation of the environment variables.
+
+  For 99% of users, this is a non-breaking change. If you were relying on internal types, there's a type-only breaking change:
+
+  - `CreateEnv` now has the signature `CreateEnv<TFinalSchema, TExtends>`, instead of the previous `CreateEnv<TServer, TClient, TShared, TExtends>`.
+    - Previous behaviour can be achieved by using `DefaultCombinedSchema<TServer, TClient, TShared>` as the type for `TFinalSchema`.
+
+### Patch Changes
+
+- [#312](https://github.com/t3-oss/t3-env/pull/312) [`00c35f2`](https://github.com/t3-oss/t3-env/commit/00c35f2f26cb4f07ba16680e6c965128bdb5b9a7) Thanks [@Abdalrhman-Almarakeby](https://github.com/Abdalrhman-Almarakeby)! - add preset for upstash redis environment variables
+
 ## 0.12.0
 
 ### Minor Changes

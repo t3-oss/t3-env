@@ -15,6 +15,11 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'release canary')
     name: Build & Publish a canary release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout repo
@@ -24,15 +29,11 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Bump version to canary
-        run: node .github/canary-version.js
+      - name: Authenticate to npm
+        run:  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
-      - name: Authenticate to npm and publish
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-          for dir in packages/*/; do
-              npm publish "$dir" --access public --tag canary
-          done
+      - name: Publish
+        run: bun run scripts/canary.ts
 
       - name: Create a new comment notifying of the new canary version
         uses: actions/github-script@v6

@@ -1,8 +1,13 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { Link } from "next-view-transitions";
 import * as React from "react";
-
+import { cn } from "@/lib/cn";
+import { Icons } from "./icons";
+import type { NavItem } from "./main-nav";
+import type { NestedNavItem } from "./sidebar";
+import { ThemeToggle } from "./theme-toggle";
 import { Button } from "./ui/button";
 import {
   Popover,
@@ -11,14 +16,6 @@ import {
   PopoverTrigger,
 } from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
-
-import { cn } from "@/lib/cn";
-
-import { usePathname } from "next/navigation";
-import { Icons } from "./icons";
-import type { NavItem } from "./main-nav";
-import type { NestedNavItem } from "./sidebar";
-import { ThemeToggle } from "./theme-toggle";
 
 export function MobileDropdown(props: {
   items: { main: NavItem[]; docs: NestedNavItem[] };

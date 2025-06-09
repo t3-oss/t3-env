@@ -104,6 +104,8 @@ T3 Env ships the following presets out of the box, all importable from the `/pre
 - `railway` - Railway provided system environment variables. See full list [here](https://docs.railway.app/reference/variables#railway-provided-variables).
 - `fly.io` - Fly.io provided machine runtime environment variables. See full list [here](https://fly.io/docs/machines/runtime-environment/#environment-variables).
 - `netlify` - Netlify provided system environment variables. See full list [here](https://docs.netlify.com/configure-builds/environment-variables).
+- `upstashRedis` -  Upstash Redis environment variables. More info [here](https://upstash.com/docs/redis/howto/connectwithupstashredis).
+- `coolify` -  Coolify environment variables. More info [here](https://coolify.io/docs/knowledge-base/environment-variables#predefined-variables).
 
 <Callout type="info">
   Feel free to open a PR with more presets!
@@ -125,5 +127,38 @@ import { env as authEnv } from "@repo/auth/env";
 export const env = createEnv({
   // ...
   extends: [authEnv],
+});
+```
+
+## Further refinement or transformation
+
+You can use the `createFinalSchema` option to further refine or transform the environment variables.
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    SKIP_AUTH: z.boolean().optional(),
+    EMAIL: z.string().email().optional(),
+    PASSWORD: z.string().min(1).optional(),
+  },
+  // ...
+  createFinalSchema: (shape, isServer) =>
+    z.object(shape).transform((env, ctx) => {
+      if (env.SKIP_AUTH || !isServer) return { SKIP_AUTH: true } as const;
+      if (!env.EMAIL || !env.PASSWORD) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "EMAIL and PASSWORD are required if SKIP_AUTH is false",
+        });
+        return z.NEVER;
+      }
+      return {
+        EMAIL: env.EMAIL,
+        PASSWORD: env.PASSWORD,
+      };
+    }),
 });
 ```

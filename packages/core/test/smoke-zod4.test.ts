@@ -1,9 +1,7 @@
-/// <reference types="bun" />
-import { describe, expect, spyOn, test } from "bun:test";
-import { expectTypeOf } from "expect-type";
-
-import z from "zod";
+import { describe, expect, expectTypeOf, test, vi } from "vitest";
+import z from "zod/v4";
 import { createEnv } from "../src";
+import { uploadthing } from "../src/presets-zod";
 
 function ignoreErrors(cb: () => void) {
   try {
@@ -237,7 +235,9 @@ describe("errors when validation fails", () => {
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),
-    ).toThrow("Invalid variable BAR: Expected number, received nan");
+    ).toThrow(
+      "Invalid variable BAR: Invalid input: expected number, received NaN",
+    );
   });
 });
 
@@ -450,7 +450,7 @@ describe("extending presets", () => {
       }>
     >();
 
-    const consoleError = spyOn(console, "error");
+    const consoleError = vi.spyOn(console, "error");
     expect(() => lazyCreateEnv()).toThrow("Invalid environment variables");
     expect(consoleError.mock.calls[0]).toEqual([
       "❌ Invalid environment variables:",
@@ -626,4 +626,188 @@ describe("extending presets", () => {
       globalThis.window = window;
     });
   });
+});
+
+describe("createFinalSchema", () => {
+  test("custom schema combiner", () => {
+    let receivedIsServer = false;
+    const env = createEnv({
+      server: {
+        SERVER_ENV: z.string(),
+      },
+      shared: {
+        SHARED_ENV: z.string(),
+      },
+      clientPrefix: "CLIENT_",
+      client: {
+        CLIENT_ENV: z.string(),
+      },
+      runtimeEnv: {
+        SERVER_ENV: "server",
+        SHARED_ENV: "shared",
+        CLIENT_ENV: "client",
+      },
+      createFinalSchema: (shape, isServer) => {
+        expectTypeOf(isServer).toEqualTypeOf<boolean>();
+        if (typeof isServer === "boolean") receivedIsServer = true;
+        return z.object(shape);
+      },
+    });
+
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        SERVER_ENV: string;
+        SHARED_ENV: string;
+        CLIENT_ENV: string;
+      }>
+    >();
+
+    expect(env).toMatchObject({
+      SERVER_ENV: "server",
+      SHARED_ENV: "shared",
+      CLIENT_ENV: "client",
+    });
+
+    expect(receivedIsServer).toBe(true);
+  });
+  test("schema combiner with further refinement", () => {
+    const env = createEnv({
+      server: {
+        SKIP_AUTH: z.boolean().optional(),
+        EMAIL: z.string().email().optional(),
+        PASSWORD: z.string().min(1).optional(),
+      },
+      runtimeEnv: {
+        SKIP_AUTH: true,
+      },
+      createFinalSchema: (shape) =>
+        z.object(shape).refine((env) => {
+          expectTypeOf(env).toEqualTypeOf<{
+            SKIP_AUTH?: boolean;
+            EMAIL?: string;
+            PASSWORD?: string;
+          }>();
+          return env.SKIP_AUTH || (env.EMAIL && env.PASSWORD);
+        }),
+    });
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<{
+        SKIP_AUTH?: boolean;
+        EMAIL?: string;
+        PASSWORD?: string;
+      }>
+    >();
+    expect(env).toMatchObject({ SKIP_AUTH: true });
+  });
+  test("schema combiner that changes the type", () => {
+    const env = createEnv({
+      server: {
+        SKIP_AUTH: z.boolean().optional(),
+        EMAIL: z.string().email().optional(),
+        PASSWORD: z.string().min(1).optional(),
+      },
+      createFinalSchema: (shape) =>
+        z.object(shape).transform((env, ctx) => {
+          if (env.SKIP_AUTH) return { SKIP_AUTH: true } as const;
+          if (!env.EMAIL || !env.PASSWORD) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "EMAIL and PASSWORD are required if SKIP_AUTH is false",
+            });
+            return z.NEVER;
+          }
+          return {
+            EMAIL: env.EMAIL,
+            PASSWORD: env.PASSWORD,
+          };
+        }),
+      runtimeEnv: {
+        SKIP_AUTH: true,
+      },
+    });
+    expectTypeOf(env).toEqualTypeOf<
+      Readonly<
+        | {
+            readonly SKIP_AUTH: true;
+            EMAIL?: undefined;
+            PASSWORD?: undefined;
+          }
+        | {
+            readonly SKIP_AUTH?: undefined;
+            EMAIL: string;
+            PASSWORD: string;
+          }
+      >
+    >();
+    expect(env).toMatchObject({ SKIP_AUTH: true });
+  });
+});
+test("empty 'extends' array should not cause type errors", () => {
+  const env = createEnv({
+    clientPrefix: "FOO_",
+    server: { BAR: z.string() },
+    client: { FOO_BAR: z.string() },
+    runtimeEnvStrict: {
+      BAR: "bar",
+      FOO_BAR: "foo",
+    },
+    extends: [],
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      BAR: string;
+      FOO_BAR: string;
+    }>
+  >();
+
+  expect(env).toMatchObject({
+    BAR: "bar",
+    FOO_BAR: "foo",
+  });
+});
+
+test("overriding preset env var", () => {
+  const preset = createEnv({
+    server: {
+      PRESET_ENV: z.string(),
+    },
+    runtimeEnv: { PRESET_ENV: "preset" },
+  });
+
+  const env = createEnv({
+    server: {
+      PRESET_ENV: z.coerce.number(),
+    },
+    extends: [preset],
+    runtimeEnv: { PRESET_ENV: 123 },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      PRESET_ENV: number;
+    }>
+  >();
+  expect(env.PRESET_ENV).toBe(123);
+});
+
+test("with built-in preset", () => {
+  process.env.UPLOADTHING_TOKEN = "token";
+  const env = createEnv({
+    server: {
+      FOO: z.string(),
+    },
+    extends: [uploadthing()],
+    runtimeEnv: { FOO: "bar" },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      FOO: string;
+      UPLOADTHING_TOKEN: string;
+    }>
+  >();
+
+  expect(env.FOO).toBe("bar");
+  expect(env.UPLOADTHING_TOKEN).toBe("token");
 });

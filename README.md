@@ -13,6 +13,9 @@ Deploying your app with invalid environment variables is a hassle. This package 
 pnpm add @t3-oss/env-core zod
 # or, with options preconfigured for Next.js
 pnpm add @t3-oss/env-nextjs zod
+
+# Package is also available on JSR
+deno add jsr:@t3-oss/env-core
 ```
 
 > [!NOTE]

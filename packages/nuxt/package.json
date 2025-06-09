@@ -1,8 +1,14 @@
 {
   "name": "@t3-oss/env-nuxt",
-  "version": "0.12.0",
+  "version": "0.13.6",
   "type": "module",
-  "keywords": ["create-t3-app", "environment variables", "zod", "nuxt", "vue"],
+  "keywords": [
+    "create-t3-app",
+    "environment variables",
+    "zod",
+    "nuxt",
+    "vue"
+  ],
   "author": "Julius Marminge",
   "license": "MIT",
   "repository": {
@@ -16,6 +22,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./presets-arktype": {
+      "types": "./dist/presets-arktype.d.ts",
+      "default": "./dist/presets-arktype.js"
+    },
     "./presets-zod": {
       "types": "./dist/presets-zod.d.ts",
       "default": "./dist/presets-zod.js"
@@ -25,23 +35,32 @@
       "default": "./dist/presets-valibot.js"
     }
   },
-  "files": ["dist", "package.json", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
-    "build": "bunchee",
-    "dev": "bunchee -w --no-clean",
-    "typecheck": "tsc --noEmit",
-    "prepack": "bun ../../replace-workspace-protocol.ts"
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts",
+    "clean": "rm -rf dist node_modules .turbo .cache",
+    "typecheck": "tsgo --noEmit",
+    "prepack": "bun ../../scripts/replace-workspace-protocol.ts"
   },
   "dependencies": {
     "@t3-oss/env-core": "workspace:*"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0",
-    "zod": "^3.24.0",
+    "arktype": "^2.1.0",
+    "zod": "^3.24.0 || ^4.0.0-beta.0",
     "valibot": "^1.0.0-beta.7 || ^1.0.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
+      "optional": true
+    },
+    "arktype": {
       "optional": true
     },
     "zod": {
@@ -52,8 +71,10 @@
     }
   },
   "devDependencies": {
-    "bunchee": "^6.3.2",
-    "typescript": "^5.7.3",
-    "zod": "^3.24.1"
+    "@typescript/native-preview": "^7.0.0-dev.20250523.1",
+    "arktype": "2.1.0",
+    "tsdown": "0.12.3",
+    "zod": "3.25.56",
+    "valibot": "1.0.0"
   }
 }

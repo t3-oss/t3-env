@@ -12,6 +12,10 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -27,7 +31,8 @@ jobs:
         with:
           commit: "chore(release): 📦 version packages"
           title: "chore(release): 📦  version packages"
-          publish: bunx changeset publish
+          publish: bun run scripts/publish.ts
+          version: bun run scripts/version.ts
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -35,8 +40,15 @@ jobs:
       - name: Fix formatting
         if: steps.changeset.outputs.hasChangesets == 'true'
         run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
           git checkout changeset-release/main
           bun lint:fix
           git add .
-          git commit -m "chore(release): 📦 fix formatting"
-          git push origin changeset-release/main
+          # Check if there are staged changes before committing and pushing
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(release): 📦 fix formatting"
+            git push origin changeset-release/main
+          else
+            echo "No formatting changes to commit."
+          fi

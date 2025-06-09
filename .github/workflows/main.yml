@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./.github/setup
 
-      - run: bun turbo build
+      - run: bun turbo build --filter=@t3-oss/env*
 
   lint:
     runs-on: ubuntu-latest
@@ -52,4 +52,4 @@ jobs:
       - uses: ./.github/setup
 
       - run: bun turbo run build --filter=@t3-oss/env*
-      - run: bun test
+      - run: bun run test

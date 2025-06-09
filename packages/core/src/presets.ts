@@ -132,3 +132,19 @@ export interface NetlifyEnv {
   SITE_NAME?: string;
   SITE_ID?: string;
 }
+
+export interface UpstashRedisEnv {
+  UPSTASH_REDIS_REST_URL: string;
+  UPSTASH_REDIS_REST_TOKEN: string;
+}
+
+export interface CoolifyEnv {
+  COOLIFY_FQDN?: string;
+  COOLIFY_URL?: string;
+  COOLIFY_BRANCH?: string;
+  COOLIFY_RESOURCE_UUID?: string;
+  COOLIFY_CONTAINER_NAME?: string;
+  SOURCE_COMMIT?: string;
+  PORT?: string;
+  HOST?: string;
+}
