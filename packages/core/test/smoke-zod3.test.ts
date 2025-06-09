@@ -2,6 +2,7 @@ import { describe, expect, expectTypeOf, test, vi } from "vitest";
 
 import z from "zod/v3";
 import { createEnv } from "../src";
+import { uploadthing } from "../src/presets-zod";
 
 function ignoreErrors(cb: () => void) {
   try {
@@ -787,4 +788,25 @@ test("overriding preset env var", () => {
     }>
   >();
   expect(env.PRESET_ENV).toBe(123);
+});
+
+test("with built-in preset", () => {
+  process.env.UPLOADTHING_TOKEN = "token";
+  const env = createEnv({
+    server: {
+      FOO: z.string(),
+    },
+    extends: [uploadthing()],
+    runtimeEnv: { FOO: "bar" },
+  });
+
+  expectTypeOf(env).toEqualTypeOf<
+    Readonly<{
+      FOO: string;
+      UPLOADTHING_TOKEN: string;
+    }>
+  >();
+
+  expect(env.FOO).toBe("bar");
+  expect(env.UPLOADTHING_TOKEN).toBe("token");
 });
