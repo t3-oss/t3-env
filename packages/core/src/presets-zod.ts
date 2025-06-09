@@ -81,7 +81,7 @@ export const neonVercel = (): Readonly<NeonVercelEnv> =>
  * Supabase for Vercel Environment Variables
  * @see https://vercel.com/marketplace/supabase
  */
-export const supabaseVercel = () =>
+export const supabaseVercel = (): Readonly<SupabaseVercelEnv> =>
   createEnv({
     server: {
       POSTGRES_URL: z.string().url(),
@@ -97,7 +97,7 @@ export const supabaseVercel = () =>
       SUPABASE_JWT_SECRET: z.string().optional(),
       NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().optional(),
       NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
-    } satisfies StandardSchemaDictionary.Matching<SupabaseVercelEnv>,
+    },
     runtimeEnv: process.env,
   });
 
