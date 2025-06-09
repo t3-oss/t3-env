@@ -1,5 +1,13 @@
 # @t3-oss/env-core
 
+## 0.13.8
+
+### Patch Changes
+
+- [#353](https://github.com/t3-oss/t3-env/pull/353) [`31202b8`](https://github.com/t3-oss/t3-env/commit/31202b8d0131ae4da366e26aa3782766c7c23cac) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add Vite preset (https://vite.dev/guide/env-and-mode)
+
+- [#362](https://github.com/t3-oss/t3-env/pull/362) [`21d6d95`](https://github.com/t3-oss/t3-env/commit/21d6d950eac16bf30b72e037683ee94d50fc4663) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add WXT preset (https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables)
+
 ## 0.13.7
 
 ### Patch Changes
