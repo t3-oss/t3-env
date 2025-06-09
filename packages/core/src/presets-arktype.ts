@@ -17,6 +17,7 @@ import type {
   UploadThingV6Env,
   UpstashRedisEnv,
   VercelEnv,
+  ViteEnv,
 } from "./presets.ts";
 
 /**
@@ -258,4 +259,20 @@ export const coolify = (): Readonly<CoolifyEnv> =>
       HOST: type("string | undefined"),
     },
     runtimeEnv: process.env,
+  });
+
+/**
+ * Vite Environment Variables
+ * @see https://vite.dev/guide/env-and-mode
+ */
+export const vite = (): Readonly<ViteEnv> =>
+  createEnv({
+    server: {
+      BASE_URL: type("string | undefined"),
+      MODE: type("string | undefined"),
+      DEV: type("boolean | undefined"),
+      PROD: type("boolean | undefined"),
+      SSR: type("boolean | undefined"),
+    },
+    runtimeEnv: import.meta.env,
   });
