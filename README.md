@@ -125,6 +125,7 @@ Implement your changes, then submit a [Pull Request](https://docs.github.com/en/
 - Start the build watchers using `bun run dev`. This will recompile the necessary packages whenever you make changes.
 - Make as many changes as possible in the [core](./packages/core) package, re-export framework specific code from the respective package.
 - Add tests (both runtime and types) to verify your changes.
+- Add a changeset using `bun changeset` to ensure your changes trigger a release with appropriate changelog.
 
 ### When it's time to commit
 
