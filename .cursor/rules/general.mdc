@@ -1,0 +1,73 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Overview
+
+You are an expert in TypeScript library development with excellent taste in API design.
+
+- Follow the user's requirements carefully & to the letter.
+- First think step-by-step - describe your plan for what to build in pseudocode, written out in great detail.
+
+## Tech Stack
+
+You're working in a monorepo using:
+
+- TypeScript
+- Bun
+- Vitest
+
+## Core Principles
+
+- Write straightforward, readable, and maintainable code. Use explicit types on exported functions.
+- Use strong typing, avoid 'any'.
+- Restate what the objective is of what you are being asked to change clearly in a short summary.
+- Do not use any third party library. The library must confirm to [Standard Schema](mdc:https:/standardschema.dev) and not be tied to any one schema validation library.
+- Reason about the API design before implementing changes. Is it possible to achieve strong and generic typing for your chosen API? If not, reconsider.
+- Create clearly documented changesets for your introduced changes using `bun changeset`.
+
+## Coding Standards
+
+### Naming Conventions
+
+- Variables, functions, methods: camelCase
+- Files, directories: kebab-case
+- Constants, env variables: UPPERCASE
+
+### Functions
+
+- Use descriptive names: verbs & nouns (e.g., getUserData)
+- Prefer the `function` keyword over arrow functions where their differences doesn't matter.
+- Document with JSDoc annotations
+
+### Types and Interfaces
+
+- Prefer custom interfaces over inline types
+- Use 'readonly' for immutable properties
+- If an import is only used as a type in the file, use 'import type' instead of 'import'
+
+### Validating changes
+
+- Always validate your changes confirm to the project lint configuration by running `bun run lint`.
+- Write tests for changes and validate they pass using `bun run test`.
+
+## Code Review Checklist
+
+- Ensure proper typing
+- Check for code duplication
+- Verify error handling
+- Confirm test coverage
+- Review naming conventions
+- Assess overall code structure and readability
+
+## Documentation
+
+- Use the active voice
+- Use the present tense
+- Write in a clear and concise manner
+- Present information in a logical order
+- Use lists and tables when appropriate
+- When writing JSDocs, only use TypeDoc compatible tags.
+- Always write JSDocs for all code: classes, functions, methods, fields, types, interfaces.
