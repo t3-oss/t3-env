@@ -2,13 +2,29 @@
 
 The Nuxt package comes preconfigured for Nuxt, and fills the runtimeEnv option automatically. All you need to do is define your schemas!
 
+> For full documentation, see https://env.t3.gg
+
 ## Installation
 
 ```bash
-npm i @t3-oss/env-nuxt zod
+# npm
+npm i @t3-oss/env-nuxt
+
+# pnpm
+pnpm add @t3-oss/env-nuxt
+
+# bun
+bun add @t3-oss/env-nuxt
+
+# deno
+deno add jsr:@t3-oss/env-nuxt
 ```
 
 ## Usage
+
+> [!NOTE]
+>
+> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod
 
 ```ts
 // src/env.ts

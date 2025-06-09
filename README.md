@@ -2,30 +2,34 @@
 
 Deploying your app with invalid environment variables is a hassle. This package helps you to avoid that.
 
+> For full documentation, see https://env.t3.gg
+
 ## Installation
 
 > [!NOTE]
 >
->This is an ESM only package that requires a tsconfig with a module resolution that can read package.json#exports (`NodeNext` if transpiling with `tsc`, `Bundler` if using a bundler).
+> This is an ESM only package that requires a tsconfig with a module resolution that can read package.json#exports (`NodeNext` if transpiling with `tsc`, `Bundler` if using a bundler).
 
 ```bash
-# Core package, no framework specific features
-pnpm add @t3-oss/env-core zod
-# or, with options preconfigured for Next.js
-pnpm add @t3-oss/env-nextjs zod
+ # npm
+ npm i @t3-oss/env-nuxt
 
-# Package is also available on JSR
-deno add jsr:@t3-oss/env-core
-```
+ # pnpm
+ pnpm add @t3-oss/env-nuxt
+
+ # bun
+ bun add @t3-oss/env-nuxt
+
+ # deno
+ deno add jsr:@t3-oss/env-nuxt
+ ```
+
+## Usage
 
 > [!NOTE]
 >
 > You may use any Standard Schema compliant validator of your choice. This example uses Zod
 
-
-## Usage
-
-> For full documentation, see https://env.t3.gg
 
 This package supports the full power of Zod/Valibot etc, meaning you can use `transforms` and `default` values.
 
@@ -33,7 +37,7 @@ This package supports the full power of Zod/Valibot etc, meaning you can use `tr
 
 ```ts
 // src/env.mjs
-import { createEnv } from "@t3-oss/env-nextjs";
+import { createEnv } from "@t3-oss/env-nextjs"; // or core package
 import { z } from "zod";
 
 export const env = createEnv({

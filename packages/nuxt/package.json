@@ -42,7 +42,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts",
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral",
     "clean": "rm -rf dist node_modules .turbo .cache",
     "typecheck": "tsgo --noEmit",
     "prepack": "bun ../../scripts/replace-workspace-protocol.ts"
@@ -71,7 +71,7 @@
     }
   },
   "devDependencies": {
-    "@typescript/native-preview": "^7.0.0-dev.20250523.1",
+    "@typescript/native-preview": "^7.0.0-dev.20250609.1",
     "arktype": "2.1.0",
     "tsdown": "0.12.3",
     "zod": "3.25.56",

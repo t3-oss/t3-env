@@ -2,13 +2,29 @@
 
 The Next.js package comes preconfigured for Next.js and also enforces some extra rules by default to make sure you have out-of-the-box compatibility in all different Next.js runtimes.
 
+> For full documentation, see https://env.t3.gg
+> 
 ## Installation
 
 ```bash
-npm i @t3-oss/env-nextjs zod
+# npm
+npm i @t3-oss/env-nextjs
+
+# pnpm
+pnpm add @t3-oss/env-nextjs
+
+# bun
+bun add @t3-oss/env-nextjs
+
+# deno
+deno add jsr:@t3-oss/env-nextjs
 ```
 
 ## Usage
+
+> [!NOTE]
+>
+> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod
 
 ```ts
 // src/env.ts

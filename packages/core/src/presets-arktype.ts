@@ -17,6 +17,7 @@ import type {
   UploadThingV6Env,
   UpstashRedisEnv,
   VercelEnv,
+  ViteEnv,
 } from "./presets.ts";
 
 /**
