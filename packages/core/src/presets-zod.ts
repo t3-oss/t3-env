@@ -268,7 +268,7 @@ export const coolify = (): Readonly<CoolifyEnv> =>
  */
 export const vite = (): Readonly<ViteEnv> =>
   createEnv({
-    server: {
+    shared: {
       BASE_URL: z.string(),
       MODE: z.string(),
       DEV: z.boolean(),
