@@ -836,3 +836,28 @@ test("with built-in preset", () => {
   expect(env.FOO).toBe("bar");
   expect(env.UPLOADTHING_TOKEN).toBe("token");
 });
+
+test("client access on shared preset", () => {
+  const preset = createEnv({
+    server: {},
+    shared: {
+      SHARED_ENV: z.string(),
+    },
+    runtimeEnv: { SHARED_ENV: "shared" },
+    isServer: false,
+  });
+
+  const env = createEnv({
+    server: {},
+    shared: {
+      MY_ENV: z.string(),
+    },
+    client: {},
+    clientPrefix: "VITE_",
+    extends: [preset],
+    runtimeEnv: { MY_ENV: "my" },
+  });
+
+  expect(env.SHARED_ENV).toBe("shared");
+  expect(env.MY_ENV).toBe("my");
+});
