@@ -18,7 +18,11 @@
       "outputs": [".cache/tsbuildinfo.json"]
     },
     "//#test": {
-      "persistent": true
+      "persistent": true,
+      "outputs": []
+    },
+    "//#test:run": {
+      "outputs": []
     },
     // Transit node in the turbo graph
     // no package.json scrips actually implement transit but it creates a dependency link for other tasks:
