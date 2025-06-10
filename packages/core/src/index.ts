@@ -3,6 +3,8 @@
  * It contains the `createEnv` function that you can use to create your schema.
  * @module
  */
+
+import { globalValue } from "./GlobalValue.ts";
 import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard.ts";
 import { ensureSynchronous, parseWithDictionary } from "./standard.ts";
 
@@ -315,16 +317,10 @@ export type CreateEnv<
   Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>
 >;
 
-const makeInternalProp = <T>(name: string) => {
-  const symbol = Symbol(name);
-  return {
-    matches: (prop: string | symbol) => prop === symbol,
-    getValue: (obj: Record<string, unknown>) =>
-      (obj as { [symbol]?: T })[symbol],
-  };
-};
-
-const serverKeysProp = makeInternalProp<string[]>("serverKeys");
+const serverKeysProp = globalValue(Symbol.for("t3-env/serverKeys"), (id) => ({
+  matches: (prop: string | symbol) => prop === id,
+  getValue: (obj: Record<PropertyKey, unknown>) => obj[id] as string[],
+}));
 
 export function createEnv<
   TPrefix extends TPrefixFormat,
