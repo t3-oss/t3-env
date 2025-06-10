@@ -11,10 +11,11 @@
   "scripts": {
     "build": "turbo run build --filter @t3-oss/env*",
     "clean": "turbo run clean && rm -rf node_modules",
-    "dev": "turbo watch build --filter @t3-oss/env*",
+    "dev": "turbo watch build test --filter @t3-oss/env* --filter //",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
     "test": "vitest --silent=passed-only",
+    "test:run": "vitest run --silent=passed-only",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
