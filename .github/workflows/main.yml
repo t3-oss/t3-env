@@ -18,7 +18,7 @@ env:
 
 jobs:
   build:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
       - run: bun turbo build --filter=@t3-oss/env*
 
   lint:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
       - run: bun lint
 
   typecheck:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
       - run: bun typecheck
 
   test:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
