@@ -9,6 +9,7 @@
     "declaration": true,
     "isolatedModules": true,
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
 
     /* Strictness */
     "strict": true,
