@@ -13,6 +13,11 @@ runs:
 
     - name: Cache dependencies
       uses: useblacksmith/cache@v5
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
 
     - run: bun install
       shell: bash
