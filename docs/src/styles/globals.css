@@ -124,6 +124,15 @@
   --font-cal: var(--font-cal);
 }
 
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
 @keyframes fade-up {
   0% {
     opacity: 0;
@@ -167,15 +176,6 @@
   }
   to {
     height: 0;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }
 
