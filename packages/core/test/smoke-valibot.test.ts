@@ -6,7 +6,7 @@ import { uploadthing } from "../src/presets-valibot";
 function ignoreErrors(cb: () => void) {
   try {
     cb();
-  } catch (err) {
+  } catch (_err) {
     // ignore
   }
 }

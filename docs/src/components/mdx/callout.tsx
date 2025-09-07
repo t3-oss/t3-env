@@ -3,11 +3,7 @@
  */
 
 import clsx from "clsx";
-import React, {
-  type ComponentProps,
-  type ReactElement,
-  type ReactNode,
-} from "react";
+import type { ComponentProps, ReactElement, ReactNode } from "react";
 
 export function InformationCircleIcon(
   props: ComponentProps<"svg">,

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.0-beta.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.3/schema.json",
   "assist": {
     "actions": {
       "source": {
@@ -19,10 +19,8 @@
         "useImportType": "error",
         "useExportType": "error",
         "useLiteralEnumMembers": "error",
-        "noCommaOperator": "error",
         "useNodejsImportProtocol": "error",
         "useAsConstAssertion": "error",
-        "useNumericLiterals": "error",
         "useEnumInitializers": "error",
         "useSelfClosingElements": "error",
         "useConst": "error",
@@ -35,7 +33,6 @@
         "noParameterAssign": "error",
         "noNonNullAssertion": "error",
         "useDefaultParameterLast": "error",
-        "noArguments": "error",
         "noUselessElse": "error",
         "useShorthandFunctionType": "error"
       },
@@ -49,6 +46,14 @@
       }
     }
   },
+  "css": {
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": false
+    }
+  },
   "overrides": [
     {
       "includes": ["**/*.test.ts"],
@@ -56,6 +61,21 @@
         "rules": {
           "suspicious": {
             "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.svelte", "**/*.astro", "**/*.vue"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "off",
+            "useImportType": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
           }
         }
       }

@@ -2,7 +2,6 @@
 
 import { useSelectedLayoutSegment } from "next/navigation";
 import { Link } from "next-view-transitions";
-import * as React from "react";
 import type { Icons } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
@@ -32,7 +31,7 @@ export function MainNav(props: { items: NavItem[] }) {
               key={item.href}
               href={item.href}
               className={cn(
-                "text-foreground/60 text-sm font-medium transition-colors hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background rounded-md",
+                "text-foreground/60 text-sm font-medium transition-colors hover:text-foreground/80 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background rounded-md",
                 item.disabled && "cursor-not-allowed opacity-80",
                 isActive(item.href) && "text-foreground",
               )}
