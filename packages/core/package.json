@@ -40,7 +40,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral",
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral --unbundle",
     "clean": "rm -rf dist node_modules .turbo .cache",
     "typecheck": "tsgo --noEmit"
   },
@@ -67,7 +67,7 @@
   "devDependencies": {
     "@typescript/native-preview": "^7.0.0-dev.20250907.1",
     "arktype": "2.1.0",
-    "tsdown": "0.12.3",
+    "tsdown": "0.14.2",
     "zod": "4.1.5",
     "valibot": "1.0.0"
   }
