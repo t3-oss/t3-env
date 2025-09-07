@@ -34,6 +34,7 @@ jobs:
       - uses: ./.github/setup
 
       - run: bun lint
+      - run: bun sherif@1.6.1
 
   typecheck:
     runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
