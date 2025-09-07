@@ -14,7 +14,7 @@
     "@t3-oss/env-core": "workspace:*",
     "astro": "^5.1.9",
     "solid-js": "^1.9.4",
-    "zod": "3.25.56"
+    "zod": "4.1.5"
   },
   "devDependencies": {
     "vite": "^6.0.1"
