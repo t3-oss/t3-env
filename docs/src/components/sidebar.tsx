@@ -41,7 +41,7 @@ export function DocsSidebarNavItems(props: {
             key={item.title}
             href={item.href}
             className={cn(
-              "group flex w-full items-center rounded-md border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ringfocus-visible:outline-none focus-visible:ring-ring ring-offset-background h-9 px-3",
+              "group flex w-full items-center rounded-md border border-transparent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ringfocus-visible:outline-none focus-visible:ring-ring ring-offset-background h-9 px-3",
               item.disabled && "cursor-not-allowed opacity-60",
               {
                 "font-medium bg-accent border-border text-accent-foreground":

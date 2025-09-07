@@ -1,6 +1,95 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@config '../../tailwind.config.ts';
+@import "tw-animate-css";
+
+@utility step {
+  counter-increment: step;
+
+  &:before {
+    @apply absolute w-8 h-8 bg-accent font-cal rounded-full font-medium text-center text-base inline-flex items-center justify-center -indent-px;
+    @apply ml-[-41px];
+    content: counter(step);
+  }
+}
+
+@utility hamburger {
+  /* Hamburger menu icon animation */
+
+  & svg g {
+    @apply origin-center;
+    transition: transform 0.1s ease-in-out;
+  }
+  & svg path {
+    @apply opacity-100;
+    transition:
+      transform 0.1s ease-in-out 0.1s,
+      opacity 0.1s ease-in-out;
+  }
+  & svg.open path {
+    transition:
+      transform 0.1s ease-in-out,
+      opacity 0s ease-in-out;
+  }
+  & svg.open g {
+    transition: transform 0.1s ease-in-out 0.1s;
+  }
+  & svg.open > path {
+    @apply opacity-0;
+  }
+  & svg.open > g:nth-of-type(1) {
+    @apply rotate-45;
+  }
+  & svg.open > g:nth-of-type(1) path {
+    transform: translate3d(0, 6px, 0);
+  }
+  & svg.open > g:nth-of-type(2) {
+    @apply -rotate-45;
+  }
+  & svg.open > g:nth-of-type(2) path {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@utility open {
+  .hamburger &svg path {
+    transition:
+      transform 0.1s ease-in-out,
+      opacity 0s ease-in-out;
+  }
+  .hamburger &svg g {
+    transition: transform 0.1s ease-in-out 0.1s;
+  }
+  .hamburger &svg > path {
+    @apply opacity-0;
+  }
+  .hamburger &svg > g:nth-of-type(1) {
+    @apply rotate-45;
+  }
+  .hamburger &svg > g:nth-of-type(1) path {
+    transform: translate3d(0, 6px, 0);
+  }
+  .hamburger &svg > g:nth-of-type(2) {
+    @apply -rotate-45;
+  }
+  .hamburger &svg > g:nth-of-type(2) path {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@utility line {
+  pre > code > &::before {
+    counter-increment: line;
+    content: counter(line);
+
+    /* Other styling */
+    display: inline-block;
+    width: 1rem;
+    margin-right: 1rem;
+    text-align: right;
+    color: var(--muted-foreground);
+  }
+}
 
 @layer base {
   :root {
@@ -72,70 +161,16 @@
 @layer base {
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-}
-
-@layer utilities {
-  .step {
-    counter-increment: step;
-  }
-
-  .step:before {
-    @apply absolute w-8 h-8 bg-accent font-cal rounded-full font-medium text-center text-base inline-flex items-center justify-center -indent-px;
-    @apply ml-[-41px];
-    content: counter(step);
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
 
 @layer components {
-  /* Hamburger menu icon animation */
-
-  .hamburger svg g {
-    @apply origin-center;
-    transition: transform 0.1s ease-in-out;
-  }
-  .hamburger svg path {
-    @apply opacity-100;
-    transition: transform 0.1s ease-in-out 0.1s, opacity 0.1s ease-in-out;
-  }
-  .hamburger svg.open path {
-    transition: transform 0.1s ease-in-out, opacity 0s ease-in-out;
-  }
-  .hamburger svg.open g {
-    transition: transform 0.1s ease-in-out 0.1s;
-  }
-  .hamburger svg.open > path {
-    @apply opacity-0;
-  }
-  .hamburger svg.open > g:nth-of-type(1) {
-    @apply rotate-45;
-  }
-  .hamburger svg.open > g:nth-of-type(1) path {
-    transform: translate3d(0, 6px, 0);
-  }
-  .hamburger svg.open > g:nth-of-type(2) {
-    @apply -rotate-45;
-  }
-  .hamburger svg.open > g:nth-of-type(2) path {
-    transform: translate3d(0, -6px, 0);
-  }
-
   pre > code {
     counter-reset: line;
     padding: unset !important;
-  }
-
-  pre > code > .line::before {
-    counter-increment: line;
-    content: counter(line);
-
-    /* Other styling */
-    display: inline-block;
-    width: 1rem;
-    margin-right: 1rem;
-    text-align: right;
-    color: var(--muted-foreground);
   }
 
   [data-rehype-pretty-code-fragment] {

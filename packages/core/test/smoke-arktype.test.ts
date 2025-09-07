@@ -6,7 +6,7 @@ import { uploadthing } from "../src/presets-arktype.ts";
 function ignoreErrors(cb: () => void) {
   try {
     cb();
-  } catch (err) {
+  } catch (_err) {
     // ignore
   }
 }

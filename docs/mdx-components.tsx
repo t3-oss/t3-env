@@ -1,6 +1,5 @@
 import type { MDXComponents } from "mdx/types";
 import { Link } from "next-view-transitions";
-import * as React from "react";
 
 import { Icons } from "@/components/icons";
 import { Callout } from "@/components/mdx/callout";
@@ -51,9 +50,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </a>
       </h4>
     ),
-    p: (props) => (
-      <p className="leading-7 [&:not(:first-child)]:mt-6" {...props} />
-    ),
+    p: (props) => <p className="leading-7 not-first:mt-6" {...props} />,
     a: ({ children, href }) => {
       const isExternal = href?.startsWith("http");
       const Component = isExternal ? "a" : Link;
@@ -75,7 +72,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     pre: Codeblock,
 
-    // biome-ignore lint/nursery/noImgElement: <explanation>
+    // biome-ignore lint/performance/noImgElement: don't care
     img: (props) => <img {...props} className="rounded-lg" />,
 
     // Add custom components.

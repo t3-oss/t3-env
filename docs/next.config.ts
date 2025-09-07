@@ -1,10 +1,10 @@
 // @ts-nocheck - whatever
 import withMdx from "@next/mdx";
-import rehypePrettyCode from "rehype-pretty-code";
+import type { NextConfig } from "next";
+import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 import { getHighlighter } from "shiki";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
   redirects: async () => [
     { source: "/docs", destination: "/docs/introduction", permanent: true },
@@ -19,8 +19,7 @@ export default withMdx({
     rehypePlugins: [
       [
         rehypePrettyCode,
-        /** @type {import("rehype-pretty-code").Options} */
-        ({
+        {
           theme: { dark: "one-dark-pro", light: "min-light" },
           getHighlighter,
           onVisitLine(node) {
@@ -37,7 +36,7 @@ export default withMdx({
             node.properties.className = ["word"];
             node.properties["data-word-id"] = id;
           },
-        }),
+        } satisfies Options,
       ],
     ],
   },

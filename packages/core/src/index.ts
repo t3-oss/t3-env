@@ -54,7 +54,7 @@ type UndefinedOptional<T> = Partial<Pick<T, PossiblyUndefinedKeys<T>>> &
  * Make the keys of the type impossible
  * @internal
  */
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: any is fine here
 type Impossible<T extends Record<string, any>> = Partial<
   Record<keyof T, never>
 >;
@@ -344,7 +344,7 @@ export function createEnv<
   }
 
   const skip = !!opts.skipValidation;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: any is fine here
   if (skip) return runtimeEnv as any;
 
   const _client = typeof opts.client === "object" ? opts.client : {};
@@ -403,6 +403,7 @@ export function createEnv<
   };
 
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
+    // biome-ignore lint/performance/noAccumulatingSpread: meh...
     return Object.assign(acc, curr);
   }, {});
   const fullObj = Object.assign(extendedObj, parsed.value);
@@ -426,6 +427,6 @@ export function createEnv<
     // },
   });
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: any is fine here
   return env as any;
 }
