@@ -1,5 +1,14 @@
 # @t3-oss/env-nextjs
 
+## 0.13.9
+
+### Patch Changes
+
+- [`36e3288`](https://github.com/t3-oss/t3-env/commit/36e32881618658fc7ed08a60f4dd509c88813ea0) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - chore: this is an empty release using using oidc for automatic provenance
+
+- Updated dependencies [[`36e3288`](https://github.com/t3-oss/t3-env/commit/36e32881618658fc7ed08a60f4dd509c88813ea0)]:
+  - @t3-oss/env-core@0.13.9
+
 ## 0.13.8
 
 ### Patch Changes
