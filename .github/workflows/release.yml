@@ -35,7 +35,6 @@ jobs:
           version: bun run scripts/version.ts
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Fix formatting
         if: steps.changeset.outputs.hasChangesets == 'true'
