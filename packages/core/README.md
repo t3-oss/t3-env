@@ -43,7 +43,7 @@ export const env = createEnv({
    * Will throw if you access these variables on the client.
    */
   server: {
-    DATABASE_URL: z.string().url(),
+    DATABASE_URL: z.url(),
     OPEN_AI_API_KEY: z.string().min(1),
   },
   /*
