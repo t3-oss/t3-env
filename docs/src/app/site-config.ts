@@ -45,13 +45,13 @@ export const siteConfig = {
       title: "Further Reading",
       items: [
         {
-          title: "Standard Schema",
-          href: "/docs/standard-schema",
-        },
-        {
           title: "Recipes",
           href: "/docs/recipes",
           items: [],
+        },
+        {
+          title: "Standard Schema",
+          href: "/docs/standard-schema",
         },
         {
           title: "Customization",
