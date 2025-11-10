@@ -3,7 +3,7 @@ export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: "Env",
   description:
-    "Never build your apps with invalid environment variables again. Validate and transform your environment with the full power of Zod.",
+    "Never build your apps with invalid environment variables again. Validate and transform your environment with ease.",
   mainNav: [
     {
       title: "Documentation",
@@ -44,6 +44,10 @@ export const siteConfig = {
     {
       title: "Further Reading",
       items: [
+        {
+          title: "Standard Schema",
+          href: "/docs/standard-schema",
+        },
         {
           title: "Recipes",
           href: "/docs/recipes",
