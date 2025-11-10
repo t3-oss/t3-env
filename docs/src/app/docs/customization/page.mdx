@@ -94,7 +94,37 @@ export const env = createEnv({
 env.VERCEL_URL; // string
 ```
 
-T3 Env ships the following presets out of the box, all importable from the `/presets` entrypoint.
+### Available validators
+
+Presets are available for multiple [Standard Schema](/docs/standard-schema) compliant validators. Choose the import that matches your validator:
+
+- `@t3-oss/env-core/presets-zod` - Presets using [Zod](https://zod.dev)
+- `@t3-oss/env-core/presets-valibot` - Presets using [Valibot](https://valibot.dev)
+- `@t3-oss/env-core/presets-arktype` - Presets using [ArkType](https://arktype.io)
+
+```ts title="src/env.ts (using Valibot)"
+import { createEnv } from "@t3-oss/env-core";
+import { vercel } from "@t3-oss/env-core/presets-valibot";
+import * as v from "valibot";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: v.pipe(v.string(), v.url()),
+  },
+  extends: [vercel()],
+  runtimeEnv: process.env,
+});
+```
+
+<Callout type="info">
+
+Using the preset import that matches your validator ensures you only bundle the validator you're actually using, optimizing your bundle size.
+
+</Callout>
+
+### Available presets
+
+T3 Env ships the following presets out of the box:
 
 - `vercel` - Vercel environment variables. See full list [here](https://vercel.com/docs/projects/environment-variables/system-environment-variables#system-environment-variables).
 - `neonVercel` - Neon provided system environment variables when using the Vercel integration. See full list [here](https://neon.tech/docs/guides/vercel-native-integration#environment-variables-set-by-the-integration).
