@@ -16,7 +16,7 @@ export function DocsSidebarNav(props: { items: NestedNavItem[] }) {
   return props.items.length ? (
     <div className="w-full px-2">
       {props.items.map((item) => (
-        <div key={item.href} className={cn("pb-6")}>
+        <div key={item.title} className={cn("pb-6")}>
           <h4 className="mb-1 rounded-md px-3 py-1 text-sm font-semibold">
             {item.title}
           </h4>

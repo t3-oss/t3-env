@@ -10,6 +10,14 @@ Forgetting environment variables during build can be a hassle and difficult to d
 
 This library does all the grunt work for you, simply define your schema and use your environment variables safely.
 
+## Features
+
+- 🔒 **Type-safe environment variables** - Get autocomplete and type checking for your environment variables
+- 🔄 **Standard Schema support** - Use any [Standard Schema](https://standardschema.dev) compliant validator (Zod, Valibot, ArkType, Typia, etc.)
+- 🎯 **Server/Client separation** - Prevent accidental exposure of server variables to the client
+- 🚀 **Framework agnostic** - Works with Next.js, Nuxt, Vite, and any other framework
+- 📦 **Presets included** - Ready-to-use configurations for Vercel, Netlify, Railway, and more
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { Link } from "next-view-transitions";
@@ -55,7 +63,21 @@ By having an object you import and use throughout the application, you can use b
 
 By default, some frameworks (e.g. Next.js) treeshake away unused environment variables unless you explicitly access them on the `process.env` object. This means that the above implementation would fail even if you export and use the `envVariables` object in your application, as no environment will be included in the bundle for some environments / runtimes.
 
-Another pitfall is client side validation. Importing `envVariables` on the client will throw an error as the server side environment variables `DATABASE_URL` & `CUSTOM_STUFF` is not defined on the client. This library solves this issue by using a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) based implementation combined with Zod's `safeParse` method instead of `parse`.
+Another pitfall is client side validation. Importing `envVariables` on the client will throw an error as the server side environment variables `DATABASE_URL` & `CUSTOM_STUFF` is not defined on the client. This library solves this issue by using a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) based implementation combined with your validator's safe parsing method.
+
+### Standard Schema support
+
+T3 Env is built on the [Standard Schema](https://standardschema.dev) specification, which means you can use **any** validator library that implements this standard. Choose from popular options like:
+
+- [Zod](https://zod.dev) - TypeScript-first schema validation
+- [Valibot](https://valibot.dev) - Modular and tree-shakeable
+- [ArkType](https://arktype.io) - TypeScript-like syntax with exceptional performance
+- [Typia](https://typia.io) - Transformer-based validation
+- [And more...](https://github.com/standard-schema/standard-schema?tab=readme-ov-file#what-schema-libraries-implement-the-spec)
+
+This gives you the flexibility to pick the validator that best fits your project's needs, or the one that you're already using.
+
+Learn more in the [Standard Schema documentation](/docs/standard-schema).
 
 <Callout type="info">
 

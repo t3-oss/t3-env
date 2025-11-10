@@ -8,6 +8,25 @@ export const metadata = {
 
 The core package can be used in any framework of your choice. To use it, figure out what prefix your framework uses for exposing environment variables to the client. For example, Astro uses `PUBLIC_`, while Vite uses `VITE_`. You should be able to find this in the frameworks documentation.
 
+<Callout type="info">
+
+Using Next.js or Nuxt? We have dedicated packages with preconfigured settings for these frameworks:
+
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/cn";
+import { Link } from "next-view-transitions";
+
+<div className="flex gap-2 mt-2">
+  <Link href="/docs/nextjs" className={cn(buttonVariants({ variant: "outline" }))}>
+    Next.js →
+  </Link>
+  <Link href="/docs/nuxt" className={cn(buttonVariants({ variant: "outline" }))}>
+    Nuxt →
+  </Link>
+</div>
+
+</Callout>
+
 <Steps>
 
 ### Install dependencies
@@ -23,7 +42,7 @@ deno add jsr:@t3-oss/env-core
 
 <Callout>
 
-Although we'll use Zod as examples throughout these docs, you can use any validator that supports [Standard Schema](https://github.com/standard-schema/standard-schema).
+Although we'll use Zod as examples throughout these docs, you can use any validator that supports [Standard Schema](/docs/core/standard-schema). T3 Env works with [Zod](https://zod.dev), [Valibot](https://valibot.dev), [ArkType](https://arktype.dev), [Typia](https://typia.io), and other compliant validators.
 
 </Callout>
 

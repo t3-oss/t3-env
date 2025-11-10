@@ -5,18 +5,21 @@ export const metadata = {
 
 # Recipes
 
-`t3-env` supports the full power of Zod meaning you can use transforms, default values etc. to create a set of powerful and flexible validation schemas for your environment variables. Below we'll look at a few example recipes for
+`t3-env` supports [Standard Schema](/docs/standard-schema) compliant validators, meaning you can use transforms, default values, and all the powerful features your chosen validator provides. Below we'll look at a few example recipes for common use cases.
 
 <Callout>
-  All environment variables are strings, so make sure that the first `ZodType`
-  is a `z.string()`. This will be enforced on type-level in the future.
+  All environment variables are strings, so your schema should start with a string validator before applying transforms or coercions.
 </Callout>
 
 ## Booleans
 
-Coercing booleans from strings is a common use case. Below are 2 examples of how to do this, but you can choose any coercian logic you want.
+Coercing booleans from strings is a common use case. Below are examples of how to do this with different validators.
+
+<Callout type="warning">
 
 Zod's default primitives coercion should not be used for booleans, since every string gets coerced to true.
+
+</Callout>
 
 ```ts
 export const env = createEnv({
