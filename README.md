@@ -33,8 +33,8 @@ Deploying your app with invalid environment variables is a hassle. This package 
 
 > [!NOTE]
 >
-> You may use any Standard Schema compliant validator of your choice. This example uses Zod
-
+> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod.
+> See the [documentation](https://env.t3.gg/docs/standard-schema) for more details.
 
 This package supports the full power of Zod/Valibot etc, meaning you can use `transforms` and `default` values.
 
