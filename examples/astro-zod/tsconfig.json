@@ -1,10 +1,14 @@
 {
-  "extends": "astro/tsconfigs/strictest",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
+    "module": "Preserve",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
+    "isolatedDeclarations": false,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "noEmit": true,
     "types": ["astro/client"]
   },
   "include": ["src", "astro.config.mjs"]

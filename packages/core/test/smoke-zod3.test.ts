@@ -1,13 +1,13 @@
 import { describe, expect, expectTypeOf, test, vi } from "vitest";
 
-import z from "zod/v3";
-import { createEnv } from "../src";
-import { uploadthing } from "../src/presets-zod";
+import { z } from "zod/v3";
+import { createEnv } from "../src/index.ts";
+import { uploadthing } from "../src/presets-zod.ts";
 
 function ignoreErrors(cb: () => void) {
   try {
     cb();
-  } catch (_err) {
+  } catch {
     // ignore
   }
 }
@@ -230,9 +230,7 @@ describe("errors when validation fails", () => {
           FOO_BAR: "foo",
         },
         onValidationError: (issues) => {
-          const barError = issues.find(
-            (issue) => issue.path?.[0] === "BAR",
-          )?.message;
+          const barError = issues.find((issue) => issue.path?.[0] === "BAR")?.message;
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),

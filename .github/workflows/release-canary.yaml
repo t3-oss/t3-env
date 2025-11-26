@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/setup
 
       - name: Build
@@ -36,7 +36,7 @@ jobs:
         run: bun run scripts/canary.ts
 
       - name: Create a new comment notifying of the new canary version
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
