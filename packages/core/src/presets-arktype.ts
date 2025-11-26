@@ -142,9 +142,7 @@ export const render = (): Readonly<RenderEnv> =>
       RENDER_INSTANCE_ID: type("string | undefined"),
       RENDER_SERVICE_ID: type("string | undefined"),
       RENDER_SERVICE_NAME: type("string | undefined"),
-      RENDER_SERVICE_TYPE: type(
-        "'web' | 'pserv' | 'cron' | 'worker' | 'static' | undefined",
-      ),
+      RENDER_SERVICE_TYPE: type("'web' | 'pserv' | 'cron' | 'worker' | 'static' | undefined"),
       RENDER: type("string | undefined"),
     },
     runtimeEnv: process.env,
@@ -215,9 +213,7 @@ export const netlify = (): Readonly<NetlifyEnv> =>
     server: {
       NETLIFY: type("string | undefined"),
       BUILD_ID: type("string | undefined"),
-      CONTEXT: type(
-        "'production' | 'deploy-preview' | 'branch-deploy' | 'dev' | undefined",
-      ),
+      CONTEXT: type("'production' | 'deploy-preview' | 'branch-deploy' | 'dev' | undefined"),
       REPOSITORY_URL: type("string | undefined"),
       BRANCH: type("string | undefined"),
       URL: type("string | undefined"),
@@ -286,9 +282,7 @@ export const wxt = (): Readonly<WxtEnv> =>
   createEnv({
     server: {
       MANIFEST_VERSION: type("2 | 3 | undefined"),
-      BROWSER: type(
-        "'chrome' | 'firefox' | 'safari' | 'edge' | 'opera' | undefined",
-      ),
+      BROWSER: type("'chrome' | 'firefox' | 'safari' | 'edge' | 'opera' | undefined"),
       CHROME: type("boolean | undefined"),
       FIREFOX: type("boolean | undefined"),
       SAFARI: type("boolean | undefined"),

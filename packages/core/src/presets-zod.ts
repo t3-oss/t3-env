@@ -142,9 +142,7 @@ export const render = (): Readonly<RenderEnv> =>
       RENDER_INSTANCE_ID: z.string().optional(),
       RENDER_SERVICE_ID: z.string().optional(),
       RENDER_SERVICE_NAME: z.string().optional(),
-      RENDER_SERVICE_TYPE: z
-        .enum(["web", "pserv", "cron", "worker", "static"])
-        .optional(),
+      RENDER_SERVICE_TYPE: z.enum(["web", "pserv", "cron", "worker", "static"]).optional(),
       RENDER: z.string().optional(),
     },
     runtimeEnv: process.env,
@@ -215,9 +213,7 @@ export const netlify = (): Readonly<NetlifyEnv> =>
     server: {
       NETLIFY: z.string().optional(),
       BUILD_ID: z.string().optional(),
-      CONTEXT: z
-        .enum(["production", "deploy-preview", "branch-deploy", "dev"])
-        .optional(),
+      CONTEXT: z.enum(["production", "deploy-preview", "branch-deploy", "dev"]).optional(),
       REPOSITORY_URL: z.string().optional(),
       BRANCH: z.string().optional(),
       URL: z.string().optional(),
@@ -286,9 +282,7 @@ export const wxt = (): Readonly<WxtEnv> =>
   createEnv({
     server: {
       MANIFEST_VERSION: z.union([z.literal(2), z.literal(3)]).optional(),
-      BROWSER: z
-        .enum(["chrome", "firefox", "safari", "edge", "opera"])
-        .optional(),
+      BROWSER: z.enum(["chrome", "firefox", "safari", "edge", "opera"]).optional(),
       CHROME: z.boolean().optional(),
       FIREFOX: z.boolean().optional(),
       SAFARI: z.boolean().optional(),

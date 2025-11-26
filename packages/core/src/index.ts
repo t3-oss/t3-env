@@ -55,9 +55,7 @@ type UndefinedOptional<T> = Partial<Pick<T, PossiblyUndefinedKeys<T>>> &
  * @internal
  */
 // biome-ignore lint/suspicious/noExplicitAny: any is fine here
-type Impossible<T extends Record<string, any>> = Partial<
-  Record<keyof T, never>
->;
+type Impossible<T extends Record<string, any>> = Partial<Record<keyof T, never>>;
 
 /**
  * Reverse a Readonly object to be mutable
@@ -69,10 +67,7 @@ type Mutable<T> = T extends Readonly<infer U> ? U : T;
  * Reduce an array of records to a single object where later keys override earlier ones
  * @internal
  */
-type Reduce<
-  TArr extends Record<string, unknown>[],
-  TAcc = object,
-> = TArr extends []
+type Reduce<TArr extends Record<string, unknown>[], TAcc = object> = TArr extends []
   ? TAcc
   : TArr extends [infer Head, ...infer Tail]
     ? Tail extends Record<string, unknown>[]
@@ -220,9 +215,7 @@ export interface ClientOptions<
   client: Partial<{
     [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
       ? TClient[TKey]
-      : ErrorMessage<`${TKey extends string
-          ? TKey
-          : never} is not prefixed with ${TPrefix}.`>;
+      : ErrorMessage<`${TKey extends string ? TKey : never} is not prefixed with ${TPrefix}.`>;
   }>;
 }
 
@@ -244,9 +237,9 @@ export interface ServerOptions<
       : TPrefix extends ""
         ? TServer[TKey]
         : TKey extends `${TPrefix}${string}`
-          ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
-              ? TKey
-              : never} should not prefixed with ${TPrefix}.`>
+          ? ErrorMessage<`${
+              TKey extends `${TPrefix}${string}` ? TKey : never
+            } should not prefixed with ${TPrefix}.`>
           : TServer[TKey];
   }>;
 }
@@ -261,10 +254,7 @@ export interface CreateSchemaOptions<
    * A custom function to combine the schemas.
    * Can be used to add further refinement or transformation.
    */
-  createFinalSchema?: (
-    shape: TServer & TClient & TShared,
-    isServer: boolean,
-  ) => TFinalSchema;
+  createFinalSchema?: (shape: TServer & TClient & TShared, isServer: boolean) => TFinalSchema;
 }
 
 export type ServerClientOptions<
@@ -284,8 +274,7 @@ export type EnvOptions<
   TExtends extends Array<Record<string, unknown>>,
   TFinalSchema extends StandardSchemaV1<{}, {}>,
 > = (
-  | (LooseOptions<TShared, TExtends> &
-      ServerClientOptions<TPrefix, TServer, TClient>)
+  | (LooseOptions<TShared, TExtends> & ServerClientOptions<TPrefix, TServer, TClient>)
   | (StrictOptions<TPrefix, TServer, TClient, TShared, TExtends> &
       ServerClientOptions<TPrefix, TServer, TClient>)
 ) &
@@ -303,17 +292,13 @@ export type DefaultCombinedSchema<
   TShared extends TSharedFormat,
 > = StandardSchemaV1<
   {},
-  UndefinedOptional<
-    StandardSchemaDictionary.InferOutput<TServer & TClient & TShared>
-  >
+  UndefinedOptional<StandardSchemaDictionary.InferOutput<TServer & TClient & TShared>>
 >;
 
 export type CreateEnv<
   TFinalSchema extends StandardSchemaV1<{}, {}>,
   TExtends extends TExtendsFormat,
-> = Readonly<
-  Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>
->;
+> = Readonly<Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>>;
 
 /**
  * Create a new environment variable schema.
@@ -324,11 +309,7 @@ export function createEnv<
   TClient extends TClientFormat = NonNullable<unknown>,
   TShared extends TSharedFormat = NonNullable<unknown>,
   const TExtends extends TExtendsFormat = [],
-  TFinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<
-    TServer,
-    TClient,
-    TShared
-  >,
+  TFinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<TServer, TClient, TShared>,
 >(
   opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends, TFinalSchema>,
 ): CreateEnv<TFinalSchema, TExtends> {
@@ -350,8 +331,7 @@ export function createEnv<
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
   const _shared = typeof opts.shared === "object" ? opts.shared : {};
-  const isServer =
-    opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
+  const isServer = opts.isServer ?? (typeof window === "undefined" || "Deno" in window);
 
   const finalSchemaShape = isServer
     ? {
@@ -364,10 +344,9 @@ export function createEnv<
         ..._shared,
       };
 
+  const finalSchema = opts.createFinalSchema?.(finalSchemaShape as never, isServer);
   const parsed =
-    opts
-      .createFinalSchema?.(finalSchemaShape as never, isServer)
-      ["~standard"].validate(runtimeEnv) ??
+    finalSchema?.["~standard"].validate(runtimeEnv) ??
     parseWithDictionary(finalSchemaShape, runtimeEnv);
 
   ensureSynchronous(parsed, "Validation must be synchronous");
@@ -382,9 +361,7 @@ export function createEnv<
   const onInvalidAccess =
     opts.onInvalidAccess ??
     (() => {
-      throw new Error(
-        "❌ Attempted to access a server-side environment variable on the client",
-      );
+      throw new Error("❌ Attempted to access a server-side environment variable on the client");
     });
 
   if (parsed.issues) {

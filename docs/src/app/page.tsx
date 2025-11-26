@@ -1,5 +1,5 @@
 import { Link } from "next-view-transitions";
-import Balancer from "react-wrap-balancer";
+import { Balancer } from "react-wrap-balancer";
 
 import { siteConfig } from "@/app/site-config";
 import { Icons } from "@/components/icons";
@@ -40,10 +40,7 @@ export default function IndexPage() {
             animationFillMode: "forwards",
           }}
         >
-          <Link
-            href={siteConfig.links.docs}
-            className={buttonVariants({ size: "lg" })}
-          >
+          <Link href={siteConfig.links.docs} className={buttonVariants({ size: "lg" })}>
             Documentation
           </Link>
           <Link

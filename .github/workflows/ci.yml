@@ -17,40 +17,30 @@ env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
 jobs:
-  build:
-    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
+  check:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
       - uses: ./.github/setup
-
       - run: bun turbo build --filter=@t3-oss/env*
-
-  lint:
-    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-      - uses: ./.github/setup
-
       - run: bun lint
-      - run: bunx sherif@1.6.1
+      - run: bun fmt --check
 
-  typecheck:
-    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
+  sherif:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
-      - uses: ./.github/setup
-
-      - run: bun typecheck
+        uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+      - run: bunx sherif@1.9.0
 
   test:
-    runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/setup
-
-      - run: bun turbo run build --filter=@t3-oss/env*
       - run: bun run test

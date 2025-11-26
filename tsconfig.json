@@ -1,26 +1,37 @@
 {
   "compilerOptions": {
-    /* Base Options: */
-    "skipLibCheck": true,
-    "target": "es2022",
-    // "erasableSyntaxOnly": true,
-    // "libReplacement": false,
-    "isolatedDeclarations": true,
-    "declaration": true,
+    // Build Performance
+    "incremental": true,
+    "composite": true,
+    "libReplacement": false,
+    "tsBuildInfoFile": "${configDir}/.cache/tsbuildinfo.json",
+
+    // Module System
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "module": "NodeNext",
+    "moduleDetection": "force",
     "isolatedModules": true,
+    "isolatedDeclarations": true,
+    "erasableSyntaxOnly": true,
+    "noEmit": true,
+
+    // Import Resolution
+    "verbatimModuleSyntax": true,
+    "rewriteRelativeImportExtensions": true,
     "allowImportingTsExtensions": true,
 
-    /* Strictness */
+    // Type Safety
     "strict": true,
+    "noImplicitOverride": true,
     // "noUncheckedIndexedAccess": true,
 
-    /* Bundled projects */
-    "lib": ["dom", "dom.iterable", "ES2022"],
-    "noEmit": true,
-    "module": "Preserve",
-    "incremental": true,
-    "tsBuildInfoFile": "${configDir}/.cache/tsbuildinfo.json"
+    // Development
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "packages"]
+  "include": ["./**/*.ts"],
+  "exclude": ["./node_modules", "./packages"]
 }

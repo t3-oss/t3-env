@@ -1,12 +1,12 @@
 import { type } from "arktype";
 import { describe, expect, expectTypeOf, test, vi } from "vitest";
-import { createEnv } from "../src";
+import { createEnv } from "../src/index.ts";
 import { uploadthing } from "../src/presets-arktype.ts";
 
 function ignoreErrors(cb: () => void) {
   try {
     cb();
-  } catch (_err) {
+  } catch {
     // ignore
   }
 }
@@ -229,9 +229,7 @@ describe("errors when validation fails", () => {
           FOO_BAR: "foo",
         },
         onValidationError: (issues) => {
-          const barError = issues.find(
-            (issue) => issue.path?.[0] === "BAR",
-          )?.message;
+          const barError = issues.find((issue) => issue.path?.[0] === "BAR")?.message;
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),

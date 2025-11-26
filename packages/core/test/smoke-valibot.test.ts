@@ -1,12 +1,12 @@
 import * as v from "valibot";
 import { describe, expect, expectTypeOf, test, vi } from "vitest";
-import { createEnv } from "../src";
-import { uploadthing } from "../src/presets-valibot";
+import { createEnv } from "../src/index.ts";
+import { uploadthing } from "../src/presets-valibot.ts";
 
 function ignoreErrors(cb: () => void) {
   try {
     cb();
-  } catch (_err) {
+  } catch {
     // ignore
   }
 }
@@ -229,15 +229,11 @@ describe("errors when validation fails", () => {
           FOO_BAR: "foo",
         },
         onValidationError: (issues) => {
-          const barError = issues.find(
-            (issue) => issue.path?.[0] === "BAR",
-          )?.message;
+          const barError = issues.find((issue) => issue.path?.[0] === "BAR")?.message;
           throw new Error(`Invalid variable BAR: ${barError}`);
         },
       }),
-    ).toThrow(
-      "Invalid variable BAR: Invalid type: Expected number but received NaN",
-    );
+    ).toThrow("Invalid variable BAR: Invalid type: Expected number but received NaN");
   });
 });
 
@@ -710,8 +706,7 @@ describe("createFinalSchema", () => {
             if (env.SKIP_AUTH) return { SKIP_AUTH: true } as const;
             if (!env.EMAIL || !env.PASSWORD) {
               addIssue({
-                message:
-                  "EMAIL and PASSWORD are required if SKIP_AUTH is false",
+                message: "EMAIL and PASSWORD are required if SKIP_AUTH is false",
               });
               return NEVER;
             }
@@ -774,10 +769,7 @@ test("overriding preset env var", () => {
 
   const env = createEnv({
     server: {
-      PRESET_ENV: v.union([
-        v.pipe(v.string(), v.transform(Number)),
-        v.number(),
-      ]),
+      PRESET_ENV: v.union([v.pipe(v.string(), v.transform(Number)), v.number()]),
     },
     extends: [preset],
     runtimeEnv: { PRESET_ENV: 123 },

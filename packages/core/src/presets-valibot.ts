@@ -19,7 +19,7 @@ import type {
   VercelEnv,
   ViteEnv,
   WxtEnv,
-} from "./presets";
+} from "./presets.ts";
 
 /**
  * Vercel System Environment Variables
@@ -142,9 +142,7 @@ export const render = (): Readonly<RenderEnv> =>
       RENDER_INSTANCE_ID: optional(string()),
       RENDER_SERVICE_ID: optional(string()),
       RENDER_SERVICE_NAME: optional(string()),
-      RENDER_SERVICE_TYPE: optional(
-        picklist(["web", "pserv", "cron", "worker", "static"]),
-      ),
+      RENDER_SERVICE_TYPE: optional(picklist(["web", "pserv", "cron", "worker", "static"])),
       RENDER: optional(string()),
     },
     runtimeEnv: process.env,
@@ -215,9 +213,7 @@ export const netlify = (): Readonly<NetlifyEnv> =>
     server: {
       NETLIFY: optional(string()),
       BUILD_ID: optional(string()),
-      CONTEXT: optional(
-        picklist(["production", "deploy-preview", "branch-deploy", "dev"]),
-      ),
+      CONTEXT: optional(picklist(["production", "deploy-preview", "branch-deploy", "dev"])),
       REPOSITORY_URL: optional(string()),
       BRANCH: optional(string()),
       URL: optional(string()),
@@ -286,9 +282,7 @@ export const wxt = (): Readonly<WxtEnv> =>
   createEnv({
     server: {
       MANIFEST_VERSION: optional(picklist([2, 3])),
-      BROWSER: optional(
-        picklist(["chrome", "firefox", "safari", "edge", "opera"]),
-      ),
+      BROWSER: optional(picklist(["chrome", "firefox", "safari", "edge", "opera"])),
       CHROME: optional(boolean()),
       FIREFOX: optional(boolean()),
       SAFARI: optional(boolean()),

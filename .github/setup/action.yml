@@ -3,23 +3,13 @@ description: Composite action that sets up bun and installs dependencies
 runs:
   using: 'composite'
   steps:
-    - uses: actions/setup-node@v4
-    # - uses: useblacksmith/setup-node@v5
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22.x
+        node-version-file: package.json
 
-    - uses: oven-sh/setup-bun@v1
+    - uses: oven-sh/setup-bun@v2
       with:
-        bun-version: latest
-
-    # Consider enabling in the future. For now the cache restoration is slower than the installation.
-    # - name: Cache dependencies
-    #   uses: useblacksmith/cache@v5
-    #   with:
-    #     path: ~/.bun/install/cache
-    #     key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-bun-
+        bun-version-file: package.json
 
     - run: bun install
       shell: bash
