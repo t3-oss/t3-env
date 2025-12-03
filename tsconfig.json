@@ -20,6 +20,7 @@
     "verbatimModuleSyntax": true,
     "rewriteRelativeImportExtensions": true,
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
 
     // Type Safety
     "strict": true,
