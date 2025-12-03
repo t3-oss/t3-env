@@ -13,5 +13,11 @@
       "~/*": ["./app/*"]
     }
   },
-  "include": ["next-env.d.ts", "app", ".next/types/**/*.ts", "*.js"]
+  "include": [
+    "next-env.d.ts",
+    "app",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "*.js"
+  ]
 }
