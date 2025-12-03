@@ -10,9 +10,6 @@ const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
   // oxlint-disable-next-line require-await
   redirects: async () => [{ source: "/docs", destination: "/docs/introduction", permanent: true }],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 };
 
 export default withMdx({
