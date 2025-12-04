@@ -236,9 +236,9 @@ export interface ServerOptions<
       : TPrefix extends ""
         ? TServer[TKey]
         : TKey extends `${TPrefix}${string}`
-          ? ErrorMessage<`${
-              TKey extends `${TPrefix}${string}` ? TKey : never
-            } should not prefixed with ${TPrefix}.`>
+          ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
+              ? TKey
+              : never} should not prefixed with ${TPrefix}.`>
           : TServer[TKey];
   }>;
 }
@@ -324,7 +324,16 @@ export function createEnv<
   }
 
   const skip = !!opts.skipValidation;
-  if (skip) return runtimeEnv as any;
+  if (skip) {
+    if (opts.extends) {
+      for (const preset of opts.extends) {
+        preset.skipValidation = true;
+      }
+    }
+
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    return runtimeEnv as any;
+  }
 
   const _client = typeof opts.client === "object" ? opts.client : {};
   const _server = typeof opts.server === "object" ? opts.server : {};
