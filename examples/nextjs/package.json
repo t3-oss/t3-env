@@ -10,15 +10,15 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "workspace:*",
-    "next": "16.0.7",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "next": "16.0.9",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "zod": "4.1.5"
   },
   "devDependencies": {
     "@types/node": "^22.14.1",
-    "@types/react": "19.2.1",
-    "@types/react-dom": "19.2.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "@typescript/native-preview": "7.0.0-dev.20251125.1",
     "jiti": "^1.21.0"
   }
