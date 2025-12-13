@@ -3,6 +3,8 @@
  * It contains the `createEnv` function that you can use to create your schema.
  * @module
  */
+
+import { globalValue } from "./GlobalValue.ts";
 import type { StandardSchemaDictionary, StandardSchemaV1 } from "./standard.ts";
 import { ensureSynchronous, parseWithDictionary } from "./standard.ts";
 
@@ -299,9 +301,11 @@ export type CreateEnv<
   TExtends extends TExtendsFormat,
 > = Readonly<Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>>;
 
-/**
- * Create a new environment variable schema.
- */
+const serverKeysProp = globalValue(Symbol.for("t3-env/serverKeys"), (id) => ({
+  matches: (prop: string | symbol) => prop === id,
+  getValue: (obj: Record<PropertyKey, unknown>) => obj[id] as string[],
+}));
+
 export function createEnv<
   TPrefix extends TPrefixFormat,
   TServer extends TServerFormat = NonNullable<unknown>,
@@ -341,6 +345,7 @@ export function createEnv<
         ..._client,
         ..._shared,
       };
+  const ownKeys = new Set(Object.keys(finalSchemaShape));
 
   const finalSchema = opts.createFinalSchema?.(finalSchemaShape as never, isServer);
   const parsed =
@@ -377,14 +382,40 @@ export function createEnv<
     return prop === "__esModule" || prop === "$$typeof";
   };
 
+  const serverKeys = isServer ? undefined : Object.keys(_server);
+
+  // a map of keys to the preset we got them from
+  const presetsByKey: Record<string, TExtendsFormat[number] | undefined> = {};
+
   const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
-    return Object.assign(acc, curr);
+    for (const key in curr) {
+      if (!ownKeys.has(key)) {
+        presetsByKey[key] = curr;
+      }
+      acc[key] = curr[key];
+    }
+    const presetServerKeys = serverKeysProp.getValue(curr);
+    if (presetServerKeys) {
+      // these are keys that the proxy should handle but won't be exposed on the client
+      for (const key of presetServerKeys) {
+        if (!ownKeys.has(key)) {
+          presetsByKey[key] = curr;
+        }
+      }
+    }
+    return acc;
   }, {});
+
   const fullObj = Object.assign(extendedObj, parsed.value);
 
   const env = new Proxy(fullObj, {
     get(target, prop) {
+      // we need to expose these on the client side so we know to pass them off to the right proxy
+      if (serverKeysProp.matches(prop)) return serverKeys;
       if (typeof prop !== "string") return undefined;
+      // pass off handling to the original proxy from the preset
+      const preset = presetsByKey[prop];
+      if (preset && !ownKeys.has(prop)) return preset[prop];
       if (ignoreProp(prop)) return undefined;
       if (!isValidServerAccess(prop)) return onInvalidAccess(prop);
       return Reflect.get(target, prop);

@@ -24,6 +24,6 @@
   "oxc.configPath": ".config/.oxlintrc.json",
   "oxc.fmt.configPath": ".config/.oxfmtrc.json",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.experimental.useTsgo": true,
+  // "typescript.experimental.useTsgo": true,
   "typescript.enablePromptUseWorkspaceTsdk": true
 }

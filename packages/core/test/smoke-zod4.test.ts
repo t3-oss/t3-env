@@ -460,7 +460,9 @@ describe("extending presets", () => {
   });
   describe("single preset", () => {
     const processEnv = {
-      PRESET_ENV: "preset",
+      PRESET_SERVER_ENV: "server_preset",
+      PRESET_SHARED_ENV: "shared_preset",
+      PRESET_CLIENT_ENV: "client_preset",
       SHARED_ENV: "shared",
       SERVER_ENV: "server",
       CLIENT_ENV: "client",
@@ -469,7 +471,19 @@ describe("extending presets", () => {
     function lazyCreateEnv() {
       const preset = createEnv({
         server: {
-          PRESET_ENV: z.enum(["preset"]),
+          PRESET_SERVER_ENV: z.literal("server_preset"),
+        },
+        shared: {
+          PRESET_SHARED_ENV: z.string(),
+        },
+        clientPrefix: "PRESET_CLIENT_",
+        client: {
+          PRESET_CLIENT_ENV: z.string(),
+        },
+        onInvalidAccess(variable) {
+          throw new Error(
+            `Attempted to access preset variable ${variable} on the client`,
+          );
         },
         runtimeEnv: processEnv,
       });
@@ -485,6 +499,11 @@ describe("extending presets", () => {
         client: {
           CLIENT_ENV: z.string(),
         },
+        onInvalidAccess(variable) {
+          throw new Error(
+            `Attempted to access variable ${variable} on the client`,
+          );
+        },
         extends: [preset],
         runtimeEnv: processEnv,
       });
@@ -495,7 +514,9 @@ describe("extending presets", () => {
         SERVER_ENV: string;
         SHARED_ENV: string;
         CLIENT_ENV: string;
-        PRESET_ENV: "preset";
+        PRESET_SERVER_ENV: "server_preset";
+        PRESET_SHARED_ENV: string;
+        PRESET_CLIENT_ENV: string;
       }>
     >();
 
@@ -509,7 +530,9 @@ describe("extending presets", () => {
         SERVER_ENV: "server",
         SHARED_ENV: "shared",
         CLIENT_ENV: "client",
-        PRESET_ENV: "preset",
+        PRESET_SERVER_ENV: "server_preset",
+        PRESET_SHARED_ENV: "shared_preset",
+        PRESET_CLIENT_ENV: "client_preset",
       });
 
       globalThis.window = window;
@@ -522,13 +545,15 @@ describe("extending presets", () => {
       const env = lazyCreateEnv();
 
       expect(() => env.SERVER_ENV).toThrow(
-        "❌ Attempted to access a server-side environment variable on the client",
+        "Attempted to access variable SERVER_ENV on the client",
       );
-      expect(() => env.PRESET_ENV).toThrow(
-        "❌ Attempted to access a server-side environment variable on the client",
+      expect(() => env.PRESET_SERVER_ENV).toThrow(
+        "Attempted to access preset variable PRESET_SERVER_ENV on the client",
       );
       expect(env.SHARED_ENV).toBe("shared");
       expect(env.CLIENT_ENV).toBe("client");
+      expect(env.PRESET_SHARED_ENV).toBe("shared_preset");
+      expect(env.PRESET_CLIENT_ENV).toBe("client_preset");
 
       globalThis.window = window;
     });
@@ -806,4 +831,29 @@ test("with built-in preset", () => {
 
   expect(env.FOO).toBe("bar");
   expect(env.UPLOADTHING_TOKEN).toBe("token");
+});
+
+test("client access on shared preset", () => {
+  const preset = createEnv({
+    server: {},
+    shared: {
+      SHARED_ENV: z.string(),
+    },
+    runtimeEnv: { SHARED_ENV: "shared" },
+    isServer: false,
+  });
+
+  const env = createEnv({
+    server: {},
+    shared: {
+      MY_ENV: z.string(),
+    },
+    client: {},
+    clientPrefix: "VITE_",
+    extends: [preset],
+    runtimeEnv: { MY_ENV: "my" },
+  });
+
+  expect(env.SHARED_ENV).toBe("shared");
+  expect(env.MY_ENV).toBe("my");
 });
