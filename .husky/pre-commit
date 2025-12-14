@@ -1,0 +1,1 @@
+cd "$(dirname "$0")/.." && bun run lint-staged
