@@ -25,12 +25,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
       - uses: ./.github/setup
+      - run: bun lint
+      - run: bun fmt --check
 
       - name: Build
         run: bun run build
 
       - name: Authenticate to npm
-        run:  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
       - name: Publish
         run: bun run scripts/canary.ts
