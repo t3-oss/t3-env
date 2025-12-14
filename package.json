@@ -19,6 +19,7 @@
     "dev": "bun run turbo watch build test --filter @t3-oss/env* --filter //",
     "fmt": "oxfmt -c .config/.oxfmtrc.json",
     "lint": "oxlint -c .config/.oxlintrc.json --type-aware --type-check --deny-warnings --report-unused-disable-directives",
+    "lint:fix": "oxlint -c .config/.oxlintrc.json --fix && oxfmt -c .config/.oxfmtrc.json",
     "test": "vitest --silent=passed-only",
     "test:run": "vitest run --silent=passed-only",
     "prepare": "husky"
@@ -38,7 +39,7 @@
   },
   "lint-staged": {
     "**/*.{json,js,ts,d.ts,mjs,cjs}": [
-      "oxfmt -c .config/.oxfmtrc.json"
+      "oxfmt -c .config/.oxfmtrc.json --write"
     ],
     "**/*.{js,ts,d.ts,mjs,cjs}": [
       "oxlint -c .config/.oxlintrc.json --type-aware --type-check --deny-warnings --report-unused-disable-directives --fix"
