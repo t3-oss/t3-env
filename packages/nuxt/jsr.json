@@ -1,6 +1,6 @@
 {
   "name": "@t3-oss/env-nuxt",
-  "version": "0.13.9",
+  "version": "0.13.10",
   "exports": {
     ".": "./src/index.ts",
     "./presets-arktype": "./src/presets-arktype.ts",
