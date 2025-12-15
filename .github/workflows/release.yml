@@ -36,7 +36,6 @@ jobs:
           publish: bun run scripts/publish.ts
           version: bun run scripts/version.ts
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Fix formatting
