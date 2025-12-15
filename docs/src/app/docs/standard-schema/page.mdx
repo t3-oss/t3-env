@@ -1,0 +1,128 @@
+export const metadata = {
+  title: "Standard Schema",
+  description:
+    "Learn about Standard Schema support in T3 Env and how to use any compliant validator of your choice.",
+};
+
+# Standard Schema support
+
+T3 Env is built on the [Standard Schema](https://standardschema.dev) specification, which means you can use **any** validator library that implements this standard. This gives you the flexibility to choose the validation library that best fits your project's needs, or the one that you're already using.
+
+## What is Standard Schema?
+
+Standard Schema is a unified specification for TypeScript schema validation libraries. It provides a common interface that allows different validation libraries to be interoperable. This means that libraries like T3 Env can work with any validator that implements the Standard Schema interface.
+
+The specification defines:
+
+- A standardized way to validate input data
+- Type inference for input and output types
+- A consistent error format
+
+For more details, visit the [Standard Schema specification](https://standardschema.dev).
+
+## Supported validators
+
+T3 Env supports any validator that implements the Standard Schema v1 interface. Here are some popular options:
+
+### Zod
+
+[Zod](https://zod.dev) is a TypeScript-first schema validation library with a simple, composable API.
+
+```bash
+npm install zod
+```
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+    PORT: z.coerce.number().default(3000),
+  },
+  clientPrefix: "PUBLIC_",
+  client: {
+    PUBLIC_API_URL: z.string().url(),
+  },
+  runtimeEnv: process.env,
+});
+```
+
+### Valibot
+
+[Valibot](https://valibot.dev) is a modular, tree-shakeable validation library focused on bundle size and performance.
+
+```bash
+npm install valibot
+```
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import * as v from "valibot";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: v.pipe(v.string(), v.url()),
+    PORT: v.optional(v.pipe(v.string(), v.transform(Number)), "3000"),
+  },
+  clientPrefix: "PUBLIC_",
+  client: {
+    PUBLIC_API_URL: v.pipe(v.string(), v.url()),
+  },
+  runtimeEnv: process.env,
+});
+```
+
+### ArkType
+
+[ArkType](https://arktype.io) is a runtime validation library with TypeScript-like syntax and exceptional performance.
+
+```bash
+npm install arktype
+```
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { type } from "arktype";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: type("string.url"),
+    PORT: type("string.numeric.parse"),
+  },
+  clientPrefix: "PUBLIC_",
+  client: {
+    PUBLIC_API_URL: type("string.url"),
+  },
+  runtimeEnv: process.env,
+});
+```
+
+### Other validators
+
+Any validator that implements the Standard Schema v1 interface will work with T3 Env. Check the [Standard Schema ecosystem](https://standardschema.dev) for more options.
+
+## Presets
+
+T3 Env ships with [presets](/docs/customization#extending-presets) for common deployment platforms (Vercel, Netlify, Railway, etc.). These presets are available for multiple validators:
+
+- `@t3-oss/env-core/presets-zod` - Presets using Zod
+- `@t3-oss/env-core/presets-valibot` - Presets using Valibot
+- `@t3-oss/env-core/presets-arktype` - Presets using ArkType
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import { vercel } from "@t3-oss/env-core/presets-valibot";
+import * as v from "valibot";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: v.pipe(v.string(), v.url()),
+  },
+  extends: [vercel()],
+  runtimeEnv: process.env,
+});
+```
+
+Choose the preset import that matches your validator to keep your bundle size optimized.
