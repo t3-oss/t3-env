@@ -80,9 +80,10 @@ export const env = createEnv({
 
   /**
    * The prefix that client-side variables must have. This is enforced both at
-   * a type-level and at runtime.
+   * a type-level and at runtime. Can be a single string or an array of strings
+   * if you want to use multiple client prefixes.
    */
-  clientPrefix: "PUBLIC_",
+  clientPrefix: "PUBLIC_", // or ["PUBLIC_", "NEXT_PUBLIC_"],
 
   client: {
     PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
