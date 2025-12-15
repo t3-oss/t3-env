@@ -27,7 +27,7 @@ Deploying your app with invalid environment variables is a hassle. This package 
 
  # deno
  deno add jsr:@t3-oss/env-nuxt
- ```
+```
 
 ## Usage
 
@@ -137,7 +137,7 @@ Implement your changes, then submit a [Pull Request](https://docs.github.com/en/
 - Run the linters using `bun lint` (`bun lint:fix` to fix auto-fixable issues)
 - Run the tests using `bun run test`. Alternatively, you can use the test explorer in VSCode to target individual tests.
 - Commit with whatever commit message you want. We squash PRs so the individual commit messages does not matter.
-  - For bug fixes, it's a good practise to first add a failing regression test in one commit, and then implement the fix in another. This helps the review process as it's easy to see what was failing before, and how it succeeded after your change. 
+  - For bug fixes, it's a good practise to first add a failing regression test in one commit, and then implement the fix in another. This helps the review process as it's easy to see what was failing before, and how it succeeded after your change.
 - Add a pull request description explaining your changes. Link any relevant issues (e.g. by including `Closes #123` in the description).
 - If some change might require extra consideration, a quick self-review can help maintainers more easily review your code and get it merged faster.
 

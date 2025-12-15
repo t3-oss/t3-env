@@ -17,22 +17,15 @@ export function DocsSidebarNav(props: { items: NestedNavItem[] }) {
     <div className="w-full px-2">
       {props.items.map((item) => (
         <div key={item.title} className={cn("pb-6")}>
-          <h4 className="mb-1 rounded-md px-3 py-1 text-sm font-semibold">
-            {item.title}
-          </h4>
-          {item?.items?.length && (
-            <DocsSidebarNavItems items={item.items} pathname={pathname} />
-          )}
+          <h4 className="mb-1 rounded-md px-3 py-1 text-sm font-semibold">{item.title}</h4>
+          {item?.items?.length && <DocsSidebarNavItems items={item.items} pathname={pathname} />}
         </div>
       ))}
     </div>
   ) : null;
 }
 
-export function DocsSidebarNavItems(props: {
-  items: NestedNavItem[];
-  pathname: string | null;
-}) {
+export function DocsSidebarNavItems(props: { items: NestedNavItem[]; pathname: string | null }) {
   return props.items?.length ? (
     <div className="grid grid-flow-row auto-rows-max text-sm">
       {props.items.map((item) =>

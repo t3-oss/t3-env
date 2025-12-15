@@ -13,29 +13,32 @@ jobs:
     name: Release
     runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
     permissions:
-      contents: write
-      id-token: write
+      contents: write # For fixing formatting
+      pull-requests: write # For creating release PRs
+      id-token: write # For OIDC publishing
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - uses: ./.github/setup
 
       - name: Build
         run: bun run build
 
+      - run: bun add -g npm@latest
+
       # Using custom token `MY_GITHUB_TOKEN` with more access to avoid rate limiting
       - name: Create Release
         id: changeset
-        uses: changesets/action@v1.4.1
+        uses: changesets/action@v1
         with:
           commit: "chore(release): 📦 version packages"
           title: "chore(release): 📦  version packages"
           publish: bun run scripts/publish.ts
           version: bun run scripts/version.ts
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Fix formatting
         if: steps.changeset.outputs.hasChangesets == 'true'
@@ -43,7 +46,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git checkout changeset-release/main
-          bun lint:fix
+          bun fmt
           git add .
           # Check if there are staged changes before committing and pushing
           if ! git diff --staged --quiet; then

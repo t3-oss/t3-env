@@ -50,17 +50,9 @@ export function Codeblock(props: CodeblockProps) {
         className="absolute right-2 top-[10px] z-20 h-8 w-8 cursor-pointer rounded text-muted-foreground hover:bg-muted"
       >
         <div className="relative p-1 w-full h-full">
-          <Copy
-            className={cn(
-              "absolute h-6 w-6 p-0 transition-all",
-              copied && "scale-0",
-            )}
-          />
+          <Copy className={cn("absolute h-6 w-6 p-0 transition-all", copied && "scale-0")} />
           <CheckCheck
-            className={cn(
-              "absolute h-6 w-6 scale-0 p-0 transition-all",
-              copied && "scale-100",
-            )}
+            className={cn("absolute h-6 w-6 scale-0 p-0 transition-all", copied && "scale-100")}
           />
         </div>
       </button>

@@ -16,6 +16,8 @@ Skipping validation is not encouraged and will lead to your types and runtime va
 
 </Callout>
 
+When enabled, validation will be skipped for both your environment variables and any [extended presets](#extending-presets).
+
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
 
@@ -134,8 +136,8 @@ T3 Env ships the following presets out of the box, all importable from the `/pre
 - `railway` - Railway provided system environment variables. See full list [here](https://docs.railway.app/reference/variables#railway-provided-variables).
 - `fly.io` - Fly.io provided machine runtime environment variables. See full list [here](https://fly.io/docs/machines/runtime-environment/#environment-variables).
 - `netlify` - Netlify provided system environment variables. See full list [here](https://docs.netlify.com/configure-builds/environment-variables).
-- `upstashRedis` -  Upstash Redis environment variables. More info [here](https://upstash.com/docs/redis/howto/connectwithupstashredis).
-- `coolify` -  Coolify environment variables. More info [here](https://coolify.io/docs/knowledge-base/environment-variables#predefined-variables).
+- `upstashRedis` - Upstash Redis environment variables. More info [here](https://upstash.com/docs/redis/howto/connectwithupstashredis).
+- `coolify` - Coolify environment variables. More info [here](https://coolify.io/docs/knowledge-base/environment-variables#predefined-variables).
 - `vite` - Vite environment variables. More info [here](https://vite.dev/guide/env-and-mode).
 - `wxt` - WXT environment variables. More info [here](https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables).
 

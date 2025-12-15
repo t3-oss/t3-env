@@ -2,7 +2,6 @@
  * Script for bumping the version of the packages to a canary version
  * and then publishing them to NPM and JSR
  */
-export const MODULE = true;
 
 const packages = ["core", "nextjs", "nuxt"];
 

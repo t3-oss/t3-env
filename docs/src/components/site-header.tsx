@@ -17,9 +17,7 @@ export function SiteHeader() {
             className="flex items-center space-x-2 rounded-md h-6 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring ring-offset-background"
           >
             <Icons.logo className="h-6 w-6" />
-            <span className="font-medium text-2xl leading-none">
-              {siteConfig.name}
-            </span>
+            <span className="font-medium text-2xl leading-none">{siteConfig.name}</span>
           </Link>
           <MainNav items={siteConfig.mainNav} />
         </div>
