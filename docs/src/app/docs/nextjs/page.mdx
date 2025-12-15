@@ -136,9 +136,8 @@ export default nextConfig
 
 We recommend you importing your newly created file in your `next.config.js`. This will make sure your environment variables are validated at build time which will save you a lot of time and headaches down the road. You can use [unjs/jiti](https://github.com/unjs/jiti) to import TypeScript files in your `next.config.js`:
 
-#### Version 15+
+#### Version 16+
 ```ts title="next.config.ts"
-// As of v15.0.0-canary.60, imports are allowed in next config
 import "./app/env";
 
 /** @type {import('next').NextConfig} */
@@ -149,7 +148,7 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-#### Version < NextJS 15 (`v15.0.0-canary.60`)
+#### Version < NextJS 16
 
 ```js title="next.config.js" {6}
 import { fileURLToPath } from "node:url";
