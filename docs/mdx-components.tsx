@@ -1,6 +1,5 @@
 import type { MDXComponents } from "mdx/types";
 import { Link } from "next-view-transitions";
-import * as React from "react";
 
 import { Icons } from "@/components/icons";
 import { Callout } from "@/components/mdx/callout";
@@ -28,11 +27,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h2>
     ),
     h3: ({ children, ...props }) => (
-      <h3
-        className="mt-8 scroll-m-20 font-cal text-2xl"
-        id={slugify(children)}
-        {...props}
-      >
+      <h3 className="mt-8 scroll-m-20 font-cal text-2xl" id={slugify(children)} {...props}>
         <a className="group" href={`#${slugify(children)}`}>
           <span>{children}</span>
           <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible" />
@@ -40,20 +35,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h3>
     ),
     h4: ({ children, ...props }) => (
-      <h4
-        className="mt-6 -mb-4 scroll-m-20 font-cal text-2xl"
-        id={slugify(children)}
-        {...props}
-      >
+      <h4 className="mt-6 -mb-4 scroll-m-20 font-cal text-2xl" id={slugify(children)} {...props}>
         <a className="group" href={`#${slugify(children)}`}>
           <span>{children}</span>
           <Icons.link className="inline-flex ml-1 h-4 w-4 invisible group-hover:visible" />
         </a>
       </h4>
     ),
-    p: (props) => (
-      <p className="leading-7 [&:not(:first-child)]:mt-6" {...props} />
-    ),
+    p: (props) => <p className="leading-7 not-first:mt-6" {...props} />,
     a: ({ children, href }) => {
       const isExternal = href?.startsWith("http");
       const Component = isExternal ? "a" : Link;
@@ -75,16 +64,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     pre: Codeblock,
 
-    // biome-ignore lint/nursery/noImgElement: <explanation>
     img: (props) => <img {...props} className="rounded-lg" />,
 
     // Add custom components.
     Callout,
     Steps: ({ ...props }) => (
-      <div
-        className="[&>h3]:step mb-12 ml-4 border-l pl-6 [counter-reset:step]"
-        {...props}
-      />
+      <div className="[&>h3]:step mb-12 ml-4 border-l pl-6 [counter-reset:step]" {...props} />
     ),
 
     // Pass through all other components.

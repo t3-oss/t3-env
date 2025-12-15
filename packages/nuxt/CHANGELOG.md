@@ -1,5 +1,27 @@
 # @t3-oss/env-nuxt
 
+## 0.13.8
+
+### Patch Changes
+
+- [#353](https://github.com/t3-oss/t3-env/pull/353) [`31202b8`](https://github.com/t3-oss/t3-env/commit/31202b8d0131ae4da366e26aa3782766c7c23cac) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add Vite preset (https://vite.dev/guide/env-and-mode)
+
+- [#362](https://github.com/t3-oss/t3-env/pull/362) [`21d6d95`](https://github.com/t3-oss/t3-env/commit/21d6d950eac16bf30b72e037683ee94d50fc4663) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add WXT preset (https://wxt.dev/guide/essentials/config/environment-variables.html#built-in-environment-variables)
+
+- Updated dependencies [[`31202b8`](https://github.com/t3-oss/t3-env/commit/31202b8d0131ae4da366e26aa3782766c7c23cac), [`21d6d95`](https://github.com/t3-oss/t3-env/commit/21d6d950eac16bf30b72e037683ee94d50fc4663)]:
+  - @t3-oss/env-core@0.13.8
+
+## 0.13.7
+
+### Patch Changes
+
+- [#357](https://github.com/t3-oss/t3-env/pull/357) [`216bc2d`](https://github.com/t3-oss/t3-env/commit/216bc2df4d391f44311273873f74e2f8dfd2011e) Thanks [@juliusmarminge](https://github.com/juliusmarminge)! - feat: add arktype presets
+
+- [#354](https://github.com/t3-oss/t3-env/pull/354) [`221bdb5`](https://github.com/t3-oss/t3-env/commit/221bdb56e51ec6aa80a3bf751abb8f66822298bd) Thanks [@mmikhan](https://github.com/mmikhan)! - feat: add supabase vercel preset (https://vercel.com/marketplace/supabase)
+
+- Updated dependencies [[`216bc2d`](https://github.com/t3-oss/t3-env/commit/216bc2df4d391f44311273873f74e2f8dfd2011e), [`221bdb5`](https://github.com/t3-oss/t3-env/commit/221bdb56e51ec6aa80a3bf751abb8f66822298bd)]:
+  - @t3-oss/env-core@0.13.7
+
 ## 0.13.6
 
 ### Patch Changes
@@ -57,7 +79,6 @@
   Combination of schemas can now be customised using the `createFinalSchema` option. This allows further refinement or transformation of the environment variables.
 
   For 99% of users, this is a non-breaking change. If you were relying on internal types, there's a type-only breaking change:
-
   - `CreateEnv` now has the signature `CreateEnv<TFinalSchema, TExtends>`, instead of the previous `CreateEnv<TServer, TClient, TShared, TExtends>`.
     - Previous behaviour can be achieved by using `DefaultCombinedSchema<TServer, TClient, TShared>` as the type for `TFinalSchema`.
 
@@ -76,7 +97,6 @@
   for example Zod & Valibot.
 
   This feature comes with some breaking changes:
-
   - If using Zod, the minimum required version is now 3.24.
   - `onValidationError` now gets `StandardSchemaV1.Issue[]` instead of `ZodError`
 
@@ -85,7 +105,6 @@
   Presets using Valibot are now available using the `/presets-valibot` entrypoint.
 
   This feature comes with some breaking changes:
-
   - Zod presets have now been moved to `/presets-zod`.
 
 ### Patch Changes

@@ -1,7 +1,9 @@
 {
   "recommendations": [
-    "biomejs.biome",
-    "bradlc.vscode-tailwindcss",
-    "unifiedjs.vscode-mdx"
+    "arktypeio.arkdark",
+    "oxc.oxc-vscode",
+    "TypeScriptTeam.native-preview",
+    "unifiedjs.vscode-mdx",
+    "vitest.explorer"
   ]
 }

@@ -1,5 +1,5 @@
 import { Link } from "next-view-transitions";
-import Balancer from "react-wrap-balancer";
+import { Balancer } from "react-wrap-balancer";
 
 import { siteConfig } from "@/app/site-config";
 import { Icons } from "@/components/icons";
@@ -10,7 +10,7 @@ export default function IndexPage() {
     <section className="container flex flex-col justify-center overflow-hidden items-center min-h-[calc(100vh-4.0625rem)] gap-6 pb-8 pt-6 md:py-10">
       <div className="max-w-5xl space-y-8">
         <h1
-          className="font-cal animate-fade-up bg-gradient-to-br from-indigo-700 via-accent-foreground to-fuchsia-500 bg-clip-text text-center text-5xl/[3rem] font-bold text-transparent opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
+          className="font-cal animate-fade-up bg-linear-to-br from-indigo-700 via-accent-foreground to-fuchsia-500 bg-clip-text text-center text-5xl/[3rem] font-bold text-transparent opacity-0 drop-shadow-xs md:text-7xl/[5rem]"
           style={{
             animationDelay: "0.20s",
             animationFillMode: "forwards",
@@ -40,10 +40,7 @@ export default function IndexPage() {
             animationFillMode: "forwards",
           }}
         >
-          <Link
-            href={siteConfig.links.docs}
-            className={buttonVariants({ size: "lg" })}
-          >
+          <Link href={siteConfig.links.docs} className={buttonVariants({ size: "lg" })}>
             Documentation
           </Link>
           <Link

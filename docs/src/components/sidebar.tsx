@@ -17,22 +17,15 @@ export function DocsSidebarNav(props: { items: NestedNavItem[] }) {
     <div className="w-full px-2">
       {props.items.map((item) => (
         <div key={item.href} className={cn("pb-6")}>
-          <h4 className="mb-1 rounded-md px-3 py-1 text-sm font-semibold">
-            {item.title}
-          </h4>
-          {item?.items?.length && (
-            <DocsSidebarNavItems items={item.items} pathname={pathname} />
-          )}
+          <h4 className="mb-1 rounded-md px-3 py-1 text-sm font-semibold">{item.title}</h4>
+          {item?.items?.length && <DocsSidebarNavItems items={item.items} pathname={pathname} />}
         </div>
       ))}
     </div>
   ) : null;
 }
 
-export function DocsSidebarNavItems(props: {
-  items: NestedNavItem[];
-  pathname: string | null;
-}) {
+export function DocsSidebarNavItems(props: { items: NestedNavItem[]; pathname: string | null }) {
   return props.items?.length ? (
     <div className="grid grid-flow-row auto-rows-max text-sm">
       {props.items.map((item) =>
@@ -41,7 +34,7 @@ export function DocsSidebarNavItems(props: {
             key={item.title}
             href={item.href}
             className={cn(
-              "group flex w-full items-center rounded-md border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ringfocus-visible:outline-none focus-visible:ring-ring ring-offset-background h-9 px-3",
+              "group flex w-full items-center rounded-md border border-transparent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ringfocus-visible:outline-none focus-visible:ring-ring ring-offset-background h-9 px-3",
               item.disabled && "cursor-not-allowed opacity-60",
               {
                 "font-medium bg-accent border-border text-accent-foreground":

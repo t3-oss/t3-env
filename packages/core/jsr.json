@@ -1,8 +1,9 @@
 {
   "name": "@t3-oss/env-core",
-  "version": "0.13.6",
+  "version": "0.13.8",
   "exports": {
     ".": "./src/index.ts",
+    "./presets-arktype": "./src/presets-arktype.ts",
     "./presets-zod": "./src/presets-zod.ts",
     "./presets-valibot": "./src/presets-valibot.ts"
   },

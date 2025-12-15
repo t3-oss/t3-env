@@ -4,21 +4,31 @@
   "tasks": {
     "dev": {
       "dependsOn": ["^dev"],
-      "cache": false
+      "cache": false,
+    },
+    "clean": {
+      "cache": false,
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", ".nuxt"]
+      "outputs": ["dist/**", ".next/**", ".nuxt"],
     },
     "typecheck": {
       "dependsOn": ["transit", "^build"],
-      "outputs": [".cache/tsbuildinfo.json"]
+      "outputs": [".cache/tsbuildinfo.json"],
+    },
+    "//#test": {
+      "persistent": true,
+      "outputs": [],
+    },
+    "//#test:run": {
+      "outputs": [],
     },
     // Transit node in the turbo graph
     // no package.json scrips actually implement transit but it creates a dependency link for other tasks:
     // https://turbo.build/docs/crafting-your-repository/configuring-tasks#dependent-tasks-that-can-be-run-in-parallel
     "transit": {
-      "dependsOn": ["^transit"]
-    }
-  }
+      "dependsOn": ["^transit"],
+    },
+  },
 }

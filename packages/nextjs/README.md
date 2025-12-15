@@ -1,14 +1,35 @@
 # Typesafe Envs made Simple
 
+![NPM Version](https://img.shields.io/npm/v/%40t3-oss%2Fenv-core)
+[![JSR](https://jsr.io/badges/@t3-oss/env-core)](https://jsr.io/@t3-oss/env-core)
+[![JSR Score](https://jsr.io/badges/@t3-oss/env-core/score)](https://jsr.io/@t3-oss/env-core)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/@t3-oss/env-core)](https://socket.dev/npm/package/@t3-oss/env-core/overview)
+
 The Next.js package comes preconfigured for Next.js and also enforces some extra rules by default to make sure you have out-of-the-box compatibility in all different Next.js runtimes.
+
+> For full documentation, see https://env.t3.gg
 
 ## Installation
 
 ```bash
-npm i @t3-oss/env-nextjs zod
+# npm
+npm i @t3-oss/env-nextjs
+
+# pnpm
+pnpm add @t3-oss/env-nextjs
+
+# bun
+bun add @t3-oss/env-nextjs
+
+# deno
+deno add jsr:@t3-oss/env-nextjs
 ```
 
 ## Usage
+
+> [!NOTE]
+>
+> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod
 
 ```ts
 // src/env.ts
@@ -34,7 +55,7 @@ export const env = createEnv({
   },
   /*
    * Specify what values should be validated by your schemas above.
-   * 
+   *
    * If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
    * For Next.js >= 13.4.4, you can use the experimental__runtimeEnv option and
    * only specify client-side variables.

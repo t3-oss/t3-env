@@ -7,9 +7,10 @@
   "updateInternalDependencies": "patch",
   "fixed": [["@t3-oss/env-core", "@t3-oss/env-nextjs", "@t3-oss/env-nuxt"]],
   "ignore": [
-    "@examples/astro",
+    "@examples/astro-zod",
+    "@examples/astro-valibot",
+    "@examples/astro-arktype",
     "@examples/nextjs",
-    "@examples/nuxt",
     "@t3-env/docs"
   ]
 }

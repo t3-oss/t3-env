@@ -1,17 +1,15 @@
+// oxlint-disable-next-line ban-ts-comment
 // @ts-nocheck - whatever
 import withMdx from "@next/mdx";
+import type { NextConfig } from "next";
 import rehypePrettyCode from "rehype-pretty-code";
+import type { Options } from "rehype-pretty-code";
 import { getHighlighter } from "shiki";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
-  redirects: async () => [
-    { source: "/docs", destination: "/docs/introduction", permanent: true },
-  ],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // oxlint-disable-next-line require-await
+  redirects: async () => [{ source: "/docs", destination: "/docs/introduction", permanent: true }],
 };
 
 export default withMdx({
@@ -19,8 +17,7 @@ export default withMdx({
     rehypePlugins: [
       [
         rehypePrettyCode,
-        /** @type {import("rehype-pretty-code").Options} */
-        ({
+        {
           theme: { dark: "one-dark-pro", light: "min-light" },
           getHighlighter,
           onVisitLine(node) {
@@ -37,7 +34,7 @@ export default withMdx({
             node.properties.className = ["word"];
             node.properties["data-word-id"] = id;
           },
-        }),
+        } satisfies Options,
       ],
     ],
   },

@@ -9,17 +9,10 @@ import type { NavItem } from "./main-nav";
 import type { NestedNavItem } from "./sidebar";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "./ui/button";
-import {
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverTrigger,
-} from "./ui/popover";
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
 
-export function MobileDropdown(props: {
-  items: { main: NavItem[]; docs: NestedNavItem[] };
-}) {
+export function MobileDropdown(props: { items: { main: NavItem[]; docs: NestedNavItem[] } }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const pathname = usePathname();
 
