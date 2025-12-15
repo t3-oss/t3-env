@@ -1,5 +1,12 @@
 # @t3-oss/env-nuxt
 
+## 0.13.10
+
+### Patch Changes
+
+- Updated dependencies [[`a778bf3`](https://github.com/t3-oss/t3-env/commit/a778bf30450b74b74a902d2c6ccae6ec4b320c91)]:
+  - @t3-oss/env-core@0.13.10
+
 ## 0.13.9
 
 ### Patch Changes
@@ -86,6 +93,7 @@
   Combination of schemas can now be customised using the `createFinalSchema` option. This allows further refinement or transformation of the environment variables.
 
   For 99% of users, this is a non-breaking change. If you were relying on internal types, there's a type-only breaking change:
+
   - `CreateEnv` now has the signature `CreateEnv<TFinalSchema, TExtends>`, instead of the previous `CreateEnv<TServer, TClient, TShared, TExtends>`.
     - Previous behaviour can be achieved by using `DefaultCombinedSchema<TServer, TClient, TShared>` as the type for `TFinalSchema`.
 
@@ -104,6 +112,7 @@
   for example Zod & Valibot.
 
   This feature comes with some breaking changes:
+
   - If using Zod, the minimum required version is now 3.24.
   - `onValidationError` now gets `StandardSchemaV1.Issue[]` instead of `ZodError`
 
@@ -112,6 +121,7 @@
   Presets using Valibot are now available using the `/presets-valibot` entrypoint.
 
   This feature comes with some breaking changes:
+
   - Zod presets have now been moved to `/presets-zod`.
 
 ### Patch Changes
