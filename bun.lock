@@ -19,7 +19,7 @@
       "name": "@t3-env/docs",
       "dependencies": {
         "@mdx-js/loader": "^3.1.0",
-        "@next/mdx": "16.0.9",
+        "@next/mdx": "16.0.10",
         "@vercel/analytics": "^1.5.0",
         "class-variance-authority": "^0.7.0",
         "lucide-react": "0.368.0",
@@ -424,7 +424,7 @@
 
     "@next/env": ["@next/env@16.0.10", "", {}, "sha512-8tuaQkyDVgeONQ1MeT9Mkk8pQmZapMKFh5B+OrFUlG3rVmYTXcXlBetBgTurKXGaIZvkoqRT9JL5K3phXcgang=="],
 
-    "@next/mdx": ["@next/mdx@16.0.9", "", { "dependencies": { "source-map": "^0.7.0" }, "peerDependencies": { "@mdx-js/loader": ">=0.15.0", "@mdx-js/react": ">=0.15.0" }, "optionalPeers": ["@mdx-js/loader", "@mdx-js/react"] }, "sha512-9HP1CQ7JLwxraNoGalnfzZm7lRFWGhsEnS8uEOKPR4ttZhpdbOunSxuiA/qBJEaOtNP81W7bDP7x/qIHVjvGWg=="],
+    "@next/mdx": ["@next/mdx@16.0.10", "", { "dependencies": { "source-map": "^0.7.0" }, "peerDependencies": { "@mdx-js/loader": ">=0.15.0", "@mdx-js/react": ">=0.15.0" }, "optionalPeers": ["@mdx-js/loader", "@mdx-js/react"] }, "sha512-i2DXv8Ga+BXvo7XlHhgutnguH9a5Txix3j760RlKctZ22yXHhYhXsie1UCouEff4mxY04nVS+Bz6Jbaq9N+w0g=="],
 
     "@next/swc-darwin-arm64": ["@next/swc-darwin-arm64@16.0.10", "", { "os": "darwin", "cpu": "arm64" }, "sha512-4XgdKtdVsaflErz+B5XeG0T5PeXKDdruDf3CRpnhN+8UebNa5N2H58+3GDgpn/9GBurrQ1uWW768FfscwYkJRg=="],
 
