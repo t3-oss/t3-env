@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.13.9
+
+### Patch Changes
+
+- [#326](https://github.com/t3-oss/t3-env/pull/326) [`5987d5a`](https://github.com/t3-oss/t3-env/commit/5987d5a68fc445ed7ba3485e7a847dca5593607a) Thanks [@Abdalrhman-Almarakeby](https://github.com/Abdalrhman-Almarakeby)! - update skipValidation flag to skip validation for extended presets
+
 ## 0.13.8
 
 ### Patch Changes
