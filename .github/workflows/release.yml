@@ -13,8 +13,8 @@ jobs:
     name: Release
     runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
     permissions:
-      contents: write
-      id-token: write
+      contents: write # For fixing formatting
+      id-token: write # For OIDC publishing
 
     steps:
       - name: Checkout repo
@@ -35,7 +35,7 @@ jobs:
           version: bun run scripts/version.ts
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Fix formatting
         if: steps.changeset.outputs.hasChangesets == 'true'
@@ -43,7 +43,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git checkout changeset-release/main
-          bun lint:fix
+          bun fmt
           git add .
           # Check if there are staged changes before committing and pushing
           if ! git diff --staged --quiet; then
