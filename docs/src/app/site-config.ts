@@ -52,6 +52,7 @@ export const siteConfig = {
         {
           title: "Standard Schema",
           href: "/docs/standard-schema",
+          items: [],
         },
         {
           title: "Customization",
