@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest # blacksmith-4vcpu-ubuntu-2404
     permissions:
       contents: write # For fixing formatting
+      pull-requests: write # For creating release PRs
       id-token: write # For OIDC publishing
 
     steps:
