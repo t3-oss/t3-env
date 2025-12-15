@@ -1,7 +1,7 @@
 name: Setup Workflow
 description: Composite action that sets up bun and installs dependencies
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - uses: actions/setup-node@v6
       with:

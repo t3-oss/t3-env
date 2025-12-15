@@ -30,8 +30,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": ["./**/*.ts"],
-  "exclude": ["./node_modules", "./packages"]
+  "exclude": ["./node_modules", "./packages"],
 }
