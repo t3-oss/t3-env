@@ -8,7 +8,7 @@
 The Next.js package comes preconfigured for Next.js and also enforces some extra rules by default to make sure you have out-of-the-box compatibility in all different Next.js runtimes.
 
 > For full documentation, see https://env.t3.gg
-> 
+
 ## Installation
 
 ```bash
@@ -55,7 +55,7 @@ export const env = createEnv({
   },
   /*
    * Specify what values should be validated by your schemas above.
-   * 
+   *
    * If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
    * For Next.js >= 13.4.4, you can use the experimental__runtimeEnv option and
    * only specify client-side variables.

@@ -1,0 +1,36 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import"],
+  "categories": {
+    "correctness": "warn",
+    "suspicious": "warn"
+  },
+  "env": {
+    "builtin": true
+  },
+  "rules": {
+    "eslint/prefer-rest-params": "warn",
+    "eslint/no-case-declarations": "warn",
+    "eslint/no-var": "warn",
+    "import/consistent-type-specifier-style": ["warn", "prefer-top-level"],
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": ["**/*.css"]
+      }
+    ],
+    "typescript/consistent-type-imports": [
+      "warn",
+      {
+        "prefer": "type-imports",
+        "fixStyle": "separate-type-imports"
+      }
+    ],
+    "typescript/ban-ts-comment": "warn",
+    "typescript/no-explicit-any": "off",
+    "typescript/no-require-imports": "warn",
+    "typescript/no-unnecessary-type-constraint": "warn",
+    "typescript/no-unsafe-type-assertion": "off",
+    "typescript/require-await": "warn"
+  }
+}

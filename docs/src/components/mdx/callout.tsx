@@ -2,12 +2,10 @@
  * @link https://github.com/shuding/nextra/blob/main/packages/nextra-theme-docs/src/components/callout.tsx
  */
 
-import clsx from "clsx";
+import { cx } from "class-variance-authority";
 import type { ComponentProps, ReactElement, ReactNode } from "react";
 
-export function InformationCircleIcon(
-  props: ComponentProps<"svg">,
-): ReactElement {
+export function InformationCircleIcon(props: ComponentProps<"svg">): ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -36,16 +34,16 @@ const TypeToEmoji = {
 type CalloutType = keyof typeof TypeToEmoji;
 
 const classes: Record<CalloutType, string> = {
-  default: clsx(
+  default: cx(
     "border-orange-200 bg-orange-100 text-orange-800 dark:border-orange-400/30 dark:bg-orange-400/20 dark:text-orange-300",
   ),
-  error: clsx(
+  error: cx(
     "border-red-200 bg-red-100 text-red-900 dark:border-red-200/30 dark:bg-red-900/30 dark:text-red-200",
   ),
-  info: clsx(
+  info: cx(
     "border-blue-200 bg-blue-100 text-blue-900 dark:border-blue-200/30 dark:bg-blue-900/30 dark:text-blue-200",
   ),
-  warning: clsx(
+  warning: cx(
     "border-yellow-200 bg-yellow-100 text-yellow-900 dark:border-yellow-200/30 dark:bg-yellow-700/30 dark:text-yellow-200",
   ),
 };
@@ -61,7 +59,7 @@ export function Callout(props: CalloutProps): ReactElement {
 
   return (
     <div
-      className={clsx(
+      className={cx(
         "mt-6 flex rounded-lg border p-4",
         "contrast-more:border-current contrast-more:dark:border-current",
         classes[type],
@@ -70,8 +68,7 @@ export function Callout(props: CalloutProps): ReactElement {
       <div
         className="select-none pr-2 text-xl"
         style={{
-          fontFamily:
-            '"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+          fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
         }}
       >
         {emoji}

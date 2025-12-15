@@ -14,7 +14,7 @@ import type {
 } from "@t3-oss/env-core";
 import { createEnv as createEnvCore } from "@t3-oss/env-core";
 
-const CLIENT_PREFIX = "NEXT_PUBLIC_" as const;
+const CLIENT_PREFIX = "NEXT_PUBLIC_";
 type ClientPrefix = typeof CLIENT_PREFIX;
 
 type Options<
@@ -51,9 +51,7 @@ type Options<
          */
         experimental__runtimeEnv: Record<
           | {
-              [TKey in keyof TClient]: TKey extends `${ClientPrefix}${string}`
-                ? TKey
-                : never;
+              [TKey in keyof TClient]: TKey extends `${ClientPrefix}${string}` ? TKey : never;
             }[keyof TClient]
           | {
               [TKey in keyof TShared]: TKey extends string ? TKey : never;
@@ -68,17 +66,10 @@ type Options<
  */
 export function createEnv<
   TServer extends StandardSchemaDictionary = NonNullable<unknown>,
-  TClient extends Record<
-    `${ClientPrefix}${string}`,
-    StandardSchemaV1
-  > = NonNullable<unknown>,
+  TClient extends Record<`${ClientPrefix}${string}`, StandardSchemaV1> = NonNullable<unknown>,
   TShared extends StandardSchemaDictionary = NonNullable<unknown>,
   const TExtends extends Array<Record<string, unknown>> = [],
-  TFinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<
-    TServer,
-    TClient,
-    TShared
-  >,
+  TFinalSchema extends StandardSchemaV1<{}, {}> = DefaultCombinedSchema<TServer, TClient, TShared>,
 >(
   opts: Options<TServer, TClient, TShared, TExtends, TFinalSchema>,
 ): CreateEnv<TFinalSchema, TExtends> {
@@ -93,14 +84,7 @@ export function createEnv<
         ...opts.experimental__runtimeEnv,
       };
 
-  return createEnvCore<
-    ClientPrefix,
-    TServer,
-    TClient,
-    TShared,
-    TExtends,
-    TFinalSchema
-  >({
+  return createEnvCore<ClientPrefix, TServer, TClient, TShared, TExtends, TFinalSchema>({
     ...opts,
     shared,
     client,

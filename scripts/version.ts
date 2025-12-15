@@ -1,7 +1,6 @@
 /**
  * Script for publishing the packages to JSR after an NPM release
  */
-export const MODULE = true;
 
 const packages = ["core", "nextjs", "nuxt"];
 

@@ -1,17 +1,15 @@
+// oxlint-disable-next-line ban-ts-comment
 // @ts-nocheck - whatever
 import withMdx from "@next/mdx";
 import type { NextConfig } from "next";
-import rehypePrettyCode, { type Options } from "rehype-pretty-code";
+import rehypePrettyCode from "rehype-pretty-code";
+import type { Options } from "rehype-pretty-code";
 import { getHighlighter } from "shiki";
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
-  redirects: async () => [
-    { source: "/docs", destination: "/docs/introduction", permanent: true },
-  ],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // oxlint-disable-next-line require-await
+  redirects: async () => [{ source: "/docs", destination: "/docs/introduction", permanent: true }],
 };
 
 export default withMdx({

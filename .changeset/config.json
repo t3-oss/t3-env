@@ -11,7 +11,6 @@
     "@examples/astro-valibot",
     "@examples/astro-arktype",
     "@examples/nextjs",
-    "@examples/nuxt",
     "@t3-env/docs"
   ]
 }
