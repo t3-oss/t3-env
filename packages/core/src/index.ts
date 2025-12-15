@@ -236,9 +236,9 @@ export interface ServerOptions<
       : TPrefix extends ""
         ? TServer[TKey]
         : TKey extends `${TPrefix}${string}`
-          ? ErrorMessage<`${
-              TKey extends `${TPrefix}${string}` ? TKey : never
-            } should not prefixed with ${TPrefix}.`>
+          ? ErrorMessage<`${TKey extends `${TPrefix}${string}`
+              ? TKey
+              : never} should not prefixed with ${TPrefix}.`>
           : TServer[TKey];
   }>;
 }

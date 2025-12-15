@@ -9,7 +9,7 @@
     "declaration": false,
     "declarationMap": false,
     "noEmit": true,
-    "types": ["astro/client"]
+    "types": ["astro/client"],
   },
-  "include": ["src", "astro.config.mjs"]
+  "include": ["src", "astro.config.mjs"],
 }

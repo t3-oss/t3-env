@@ -10,14 +10,8 @@
     "noEmit": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "~/*": ["./app/*"]
-    }
+      "~/*": ["./app/*"],
+    },
   },
-  "include": [
-    "next-env.d.ts",
-    "app",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "*.js"
-  ]
+  "include": ["next-env.d.ts", "app", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "*.js"],
 }
