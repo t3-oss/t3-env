@@ -24,6 +24,8 @@ jobs:
       - name: Build
         run: bun run build
 
+      - run: bun add -g npm@latest
+
       # Using custom token `MY_GITHUB_TOKEN` with more access to avoid rate limiting
       - name: Create Release
         id: changeset
