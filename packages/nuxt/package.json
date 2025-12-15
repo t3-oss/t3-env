@@ -74,7 +74,7 @@
     "@typescript/native-preview": "7.0.0-dev.20251125.1",
     "arktype": "2.1.22",
     "tsdown": "0.16.7",
-    "valibot": "1.1.0",
+    "valibot": "1.2.0",
     "zod": "4.1.5"
   }
 }
