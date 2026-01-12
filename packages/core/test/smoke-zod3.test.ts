@@ -1,6 +1,6 @@
 import { describe, expect, expectTypeOf, test, vi } from "vitest";
 
-import { z } from "zod/v3";
+import * as z from "zod/v3";
 import { createEnv } from "../src/index.ts";
 import { uploadthing } from "../src/presets-zod.ts";
 

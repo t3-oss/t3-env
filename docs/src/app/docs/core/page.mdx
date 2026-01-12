@@ -70,7 +70,7 @@ The file below is named `env.ts`, but you can name it whatever you want. Some fr
 
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   server: {
@@ -121,7 +121,7 @@ If you consider the **names** of your variables sensitive, you should split your
 
 ```ts title="src/env/server.ts"
 import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   server: {
@@ -134,7 +134,7 @@ export const env = createEnv({
 
 ```ts title="src/env/client.ts"
 import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   clientPrefix: "PUBLIC_",

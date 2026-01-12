@@ -34,7 +34,7 @@ deno add jsr:@t3-oss/env-nuxt
 ```ts
 // src/env.ts
 import { createEnv } from "@t3-oss/env-nuxt";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   /*

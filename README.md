@@ -43,7 +43,7 @@ This package supports the full power of Zod/Valibot etc, meaning you can use `tr
 ```ts
 // src/env.mjs
 import { createEnv } from "@t3-oss/env-nextjs"; // or core package
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   /*
