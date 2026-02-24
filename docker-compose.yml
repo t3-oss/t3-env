@@ -1,0 +1,24 @@
+services:
+  website:
+    build: .
+    container_name: three-tech-thinkers-website
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.t3-website.rule=Host(`t3.com.ar`)"
+      - "traefik.http.routers.t3-website.entrypoints=websecure"
+      - "traefik.http.routers.t3-website.tls.certresolver=letsencrypt"
+      - "traefik.http.services.t3-website.loadbalancer.server.port=3000"
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true
