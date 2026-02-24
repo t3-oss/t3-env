@@ -7,6 +7,7 @@ import type { Options } from "rehype-pretty-code";
 import { getHighlighter } from "shiki";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   pageExtensions: ["ts", "tsx", "mdx"],
   // oxlint-disable-next-line require-await
   redirects: async () => [{ source: "/docs", destination: "/docs/introduction", permanent: true }],
