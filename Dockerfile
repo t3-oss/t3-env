@@ -6,7 +6,6 @@ WORKDIR /app
 COPY package.json bun.lock ./
 
 # Copy package.json files for all workspace members
-# This ensures that bun install can resolve the workspace structure
 COPY docs/package.json ./docs/
 COPY packages/core/package.json ./packages/core/
 COPY packages/nextjs/package.json ./packages/nextjs/
@@ -25,7 +24,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Ensure turbo is available (it should be in node_modules)
 # Build the docs package
 RUN bun run turbo build --filter @t3-env/docs
 
@@ -34,6 +32,7 @@ FROM node:24-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+# Default port if not provided
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
@@ -47,6 +46,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/docs/.next/static ./docs/.next/st
 
 USER nextjs
 
+# The internal port is passed via the PORT environment variable in docker-compose
 EXPOSE 3000
 
 # Next.js standalone entry point
