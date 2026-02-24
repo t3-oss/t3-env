@@ -1,0 +1,15 @@
+node_modules
+.next
+.turbo
+.cache
+dist
+.git
+.vscode
+.cursor
+docs/.next
+docs/node_modules
+packages/*/node_modules
+packages/*/dist
+examples/*/node_modules
+examples/*/.next
+examples/*/.astro
