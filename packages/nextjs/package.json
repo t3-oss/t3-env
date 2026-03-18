@@ -32,6 +32,10 @@
     "./presets-valibot": {
       "types": "./dist/presets-valibot.d.ts",
       "default": "./dist/presets-valibot.js"
+    },
+    "./sst": {
+      "types": "./dist/sst.d.ts",
+      "default": "./dist/sst.js"
     }
   },
   "files": [
@@ -41,7 +45,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral --unbundle",
+    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts src/sst.ts --dts --platform neutral --unbundle",
     "clean": "rm -rf dist node_modules .turbo .cache",
     "typecheck": "tsgo --noEmit",
     "prepack": "bun ../../scripts/replace-workspace-protocol.ts"

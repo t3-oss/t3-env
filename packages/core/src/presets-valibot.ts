@@ -12,6 +12,7 @@ import type {
   NetlifyEnv,
   RailwayEnv,
   RenderEnv,
+  SSTEnv,
   SupabaseVercelEnv,
   UploadThingEnv,
   UploadThingV6Env,
@@ -255,6 +256,19 @@ export const coolify = (): Readonly<CoolifyEnv> =>
       SOURCE_COMMIT: optional(string()),
       PORT: optional(string()),
       HOST: optional(string()),
+    },
+    runtimeEnv: process.env,
+  });
+
+/**
+ * SST (Serverless Stack) Environment Variables
+ * @see https://sst.dev/docs/reference/cli#stage
+ */
+export const sst = (): Readonly<SSTEnv> =>
+  createEnv({
+    server: {
+      SST_APP: optional(string()),
+      SST_STAGE: optional(string()),
     },
     runtimeEnv: process.env,
   });

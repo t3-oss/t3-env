@@ -167,3 +167,18 @@ export interface WxtEnv {
   EDGE?: boolean;
   OPERA?: boolean;
 }
+
+/**
+ * SST (Serverless Stack) Environment Variables
+ * @see https://sst.dev/docs/reference/cli#stage
+ */
+export interface SSTEnv {
+  /**
+   * The name of the SST app
+   */
+  SST_APP?: string;
+  /**
+   * The current SST stage (e.g. "dev", "staging", "prod")
+   */
+  SST_STAGE?: string;
+}
