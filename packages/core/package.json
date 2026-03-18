@@ -1,78 +1,78 @@
 {
-  "name": "@t3-oss/env-core",
-  "version": "0.13.10",
-  "type": "module",
-  "keywords": [
-    "create-t3-app",
-    "environment variables",
-    "zod"
-  ],
-  "author": "Julius Marminge",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/t3-oss/t3-env",
-    "directory": "packages/core"
-  },
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./presets-arktype": {
-      "types": "./dist/presets-arktype.d.ts",
-      "default": "./dist/presets-arktype.js"
-    },
-    "./presets-zod": {
-      "types": "./dist/presets-zod.d.ts",
-      "default": "./dist/presets-zod.js"
-    },
-    "./presets-valibot": {
-      "types": "./dist/presets-valibot.d.ts",
-      "default": "./dist/presets-valibot.js"
-    },
-    "./sst": {
-      "types": "./dist/sst.d.ts",
-      "default": "./dist/sst.js"
-    }
-  },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md"
-  ],
-  "scripts": {
-    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts src/sst.ts --dts --platform neutral --unbundle",
-    "clean": "rm -rf dist node_modules .turbo .cache",
-    "typecheck": "tsgo --noEmit"
-  },
-  "peerDependencies": {
-    "arktype": "^2.1.0",
-    "typescript": ">=5.0.0",
-    "valibot": "^1.0.0-beta.7 || ^1.0.0",
-    "zod": "^3.24.0 || ^4.0.0"
-  },
-  "peerDependenciesMeta": {
-    "typescript": {
-      "optional": true
-    },
-    "arktype": {
-      "optional": true
-    },
-    "zod": {
-      "optional": true
-    },
-    "valibot": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "@typescript/native-preview": "7.0.0-dev.20251125.1",
-    "arktype": "2.1.22",
-    "tsdown": "0.16.7",
-    "valibot": "1.2.0",
-    "zod": "4.1.5"
-  }
+	"name": "@t3-oss/env-core",
+	"version": "0.13.10",
+	"type": "module",
+	"keywords": [
+		"create-t3-app",
+		"environment variables",
+		"zod"
+	],
+	"author": "Julius Marminge",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/t3-oss/t3-env",
+		"directory": "packages/core"
+	},
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./presets-arktype": {
+			"types": "./dist/presets-arktype.d.ts",
+			"default": "./dist/presets-arktype.js"
+		},
+		"./presets-zod": {
+			"types": "./dist/presets-zod.d.ts",
+			"default": "./dist/presets-zod.js"
+		},
+		"./presets-valibot": {
+			"types": "./dist/presets-valibot.d.ts",
+			"default": "./dist/presets-valibot.js"
+		},
+		"./sst": {
+			"types": "./dist/sst.d.ts",
+			"default": "./dist/sst.js"
+		}
+	},
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts src/sst.ts --dts --platform neutral --unbundle",
+		"clean": "rm -rf dist node_modules .turbo .cache",
+		"typecheck": "tsgo --noEmit"
+	},
+	"peerDependencies": {
+		"arktype": "^2.1.0",
+		"typescript": ">=5.0.0",
+		"valibot": "^1.0.0-beta.7 || ^1.0.0",
+		"zod": "^3.24.0 || ^4.0.0"
+	},
+	"peerDependenciesMeta": {
+		"typescript": {
+			"optional": true
+		},
+		"arktype": {
+			"optional": true
+		},
+		"zod": {
+			"optional": true
+		},
+		"valibot": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"@typescript/native-preview": "7.0.0-dev.20251125.1",
+		"arktype": "2.1.22",
+		"tsdown": "0.16.7",
+		"valibot": "1.2.0",
+		"zod": "4.1.5"
+	}
 }
