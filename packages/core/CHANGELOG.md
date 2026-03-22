@@ -1,5 +1,11 @@
 # @t3-oss/env-core
 
+## 0.13.11
+
+### Patch Changes
+
+- [#395](https://github.com/t3-oss/t3-env/pull/395) [`6937086`](https://github.com/t3-oss/t3-env/commit/6937086b36e36f8519aaf75e46def2da4b62eb55) Thanks [@GRA0007](https://github.com/GRA0007)! - Update zod imports to support treeshaking in Webpack (Next.js) and esbuild
+
 ## 0.13.10
 
 ### Patch Changes
