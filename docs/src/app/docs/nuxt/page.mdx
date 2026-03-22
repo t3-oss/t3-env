@@ -43,7 +43,7 @@ Although we'll use Zod as examples throughout these docs, you can use any valida
 
 ```ts title="env.ts"
 import { createEnv } from "@t3-oss/env-nuxt";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   server: {
@@ -64,7 +64,7 @@ If you consider the **names** of your variables sensitive, you should split your
 
 ```ts title="src/env/server.ts"
 import { createEnv } from "@t3-oss/env-nuxt";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   server: {
@@ -76,7 +76,7 @@ export const env = createEnv({
 
 ```ts title="src/env/client.ts"
 import { createEnv } from "@t3-oss/env-nuxt";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   client: {

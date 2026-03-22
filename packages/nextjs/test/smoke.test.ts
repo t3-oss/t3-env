@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test, vi } from "vitest";
-import { z } from "zod";
+import * as z from "zod";
 import { createEnv } from "../src/index.ts";
 
 function ignoreErrors(cb: () => void) {
