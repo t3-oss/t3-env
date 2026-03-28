@@ -85,3 +85,22 @@ const config: StorybookConfig = {
 
 export default config;
 ```
+
+## Git worktrees
+
+If you keep your canonical `.env` in the main checkout of a git worktree setup, you can opt into `worktreeDetection` to make linked worktrees reuse it during local development.
+
+```ts
+import { createEnv } from "@t3-oss/env-core";
+import * as z from "zod";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.url(),
+  },
+  runtimeEnv: process.env,
+  worktreeDetection: true,
+});
+```
+
+This keeps the main checkout's project-root `.env` as the source of truth. Linked worktrees that do not already have their own `.env` can be symlinked to that file automatically, while linked worktrees with an existing `.env` are left untouched.

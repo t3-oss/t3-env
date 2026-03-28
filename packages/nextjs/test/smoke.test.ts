@@ -77,6 +77,18 @@ test("runtimeEnv enforces all keys", () => {
   });
 });
 
+test("accepts worktreeDetection", () => {
+  vi.spyOn(console, "warn").mockImplementation(() => {});
+
+  const env = createEnv({
+    worktreeDetection: true,
+    server: { BAR: z.string() },
+    runtimeEnv: { BAR: "foo" },
+  });
+
+  expect(env.BAR).toBe("foo");
+});
+
 test("new experimental runtime option only requires client vars", () => {
   ignoreErrors(() => {
     createEnv({

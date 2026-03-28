@@ -79,6 +79,24 @@ export const env = createEnv({
 });
 ```
 
+## Experimental worktree detection
+
+`worktreeDetection` is an opt-in workaround for local git worktree development in supported Node and Bun runtimes.
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+
+export const env = createEnv({
+  // ...
+  runtimeEnv: process.env,
+  worktreeDetection: true,
+});
+```
+
+When enabled, T3 Env will try to load values from the main worktree's project-root `.env` file before validation. In linked worktrees, it may also create a `.env` symlink to that main file when the local worktree does not already have its own `.env`.
+
+If a linked worktree already has a real `.env` file, it is preserved. If the main worktree `.env` is missing, or the runtime does not support filesystem and git access, T3 Env warns and falls back to the provided runtime environment.
+
 ## Extending presets
 
 Your env object may extend other presets by using the `extends` property. This can be used to include system environment variables for your deployment provider, or if you have a monorepo with multiple packages that share some environment variables.

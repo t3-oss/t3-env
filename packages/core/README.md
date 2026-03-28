@@ -61,3 +61,28 @@ export const env = createEnv({
   runtimeEnv: process.env,
 });
 ```
+
+## Experimental worktree support
+
+`worktreeDetection` is an opt-in workaround for local git worktree setups in supported Node and Bun runtimes.
+
+```ts
+import { createEnv } from "@t3-oss/env-core";
+import * as z from "zod";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.url(),
+  },
+  runtimeEnv: process.env,
+  worktreeDetection: true,
+});
+```
+
+When enabled, T3 Env will try to treat the main worktree's project-root `.env` as the canonical file for linked worktrees. If the current linked worktree does not already have its own `.env`, T3 Env will try to symlink it to the main worktree's `.env` and load values from there before validation.
+
+This is intentionally conservative:
+
+- It does not move secrets into `.git`.
+- It leaves an existing linked-worktree `.env` file in place.
+- It warns and falls back if the main worktree `.env` is missing or if the runtime does not support filesystem and git access.

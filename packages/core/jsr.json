@@ -8,5 +8,5 @@
     "./presets-valibot": "./src/presets-valibot.ts"
   },
   "include": ["src/**/*.ts", "README.md", "LICENSE", "package.json"],
-  "exclude": ["node_modules", "dist", "test"]
+  "exclude": ["node_modules", "dist", "test", "src/**/*.node.ts"]
 }

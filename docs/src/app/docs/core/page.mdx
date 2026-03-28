@@ -216,3 +216,33 @@ export const env = createEnv({
 When using the strict option, missing any of the variables in `runtimeEnvStrict` will result in a type error:
 
 ![missing runtimeEnv](https://user-images.githubusercontent.com/51714798/234409775-fee3edbd-a73b-415a-829f-28f6f6092707.png)
+
+## Experimental git worktree support
+
+<Callout type="warning">
+
+`worktreeDetection` is an experimental local-development workaround for Node and Bun runtimes. It is meant to help linked git worktrees share the main checkout's project-root `.env`, not to establish a new secret-storage convention.
+
+</Callout>
+
+When enabled, T3 Env will try to detect whether the current checkout is a linked worktree. If it is, T3 Env will treat the main worktree's `.env` file as canonical, load values from it before validation, and create a symlink in the linked worktree when that is safe to do.
+
+```ts title="src/env.ts"
+import { createEnv } from "@t3-oss/env-core";
+import * as z from "zod";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.url(),
+  },
+  runtimeEnv: process.env,
+  worktreeDetection: true,
+});
+```
+
+Behavior to keep in mind:
+
+- The canonical shared file stays at the main worktree root as `.env`.
+- Existing `.env` files inside linked worktrees are left alone and loaded as-is.
+- If the main worktree `.env` is missing, T3 Env warns and skips the linking behavior.
+- Unsupported runtimes warn and fall back to the provided runtime environment.

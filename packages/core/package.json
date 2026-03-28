@@ -18,6 +18,7 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
+      "node": "./dist/index.node.js",
       "default": "./dist/index.js"
     },
     "./presets-arktype": {
@@ -40,7 +41,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsdown src/index.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral --unbundle",
+    "build": "tsdown src/index.ts src/index.node.ts src/presets-arktype.ts src/presets-zod.ts src/presets-valibot.ts --dts --platform neutral --unbundle",
     "clean": "rm -rf dist node_modules .turbo .cache",
     "typecheck": "tsgo --noEmit"
   },
