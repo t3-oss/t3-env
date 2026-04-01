@@ -13,25 +13,24 @@
     "packages/*"
   ],
   "scripts": {
-    "turbo": "turbo --root-turbo-json .config/turbo.jsonc",
-    "build": "bun run turbo run build --filter @t3-oss/env*",
-    "clean": "bun run turbo run clean && rm -rf node_modules",
-    "dev": "bun run turbo watch build test --filter @t3-oss/env* --filter //",
-    "fmt": "oxfmt -c .config/.oxfmtrc.json",
-    "lint": "oxlint -c .config/.oxlintrc.json --type-aware --type-check --deny-warnings --report-unused-disable-directives",
-    "lint:fix": "oxlint -c .config/.oxlintrc.json --fix && oxfmt -c .config/.oxfmtrc.json",
-    "test": "vitest --silent=passed-only",
-    "test:run": "vitest run --silent=passed-only"
+    "build": "vp run --filter @t3-oss/env* build",
+    "clean": "vp run -r clean && rm -rf node_modules",
+    "dev": "vp run --parallel --filter @t3-oss/env* build --watch",
+    "fmt": "vp fmt . --write",
+    "lint": "vp lint --deny-warnings",
+    "lint:fix": "vp lint --fix --deny-warnings && vp fmt . --write",
+    "test": "vp test",
+    "test:run": "vp test run",
+    "prepare": "vp config"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "@types/bun": "^1.3.2",
     "@typescript/native-preview": "7.0.0-dev.20251125.1",
-    "oxfmt": "0.17.0",
-    "oxlint": "1.32.0",
-    "oxlint-tsgolint": "0.9.0",
-    "turbo": "2.6.1",
-    "vitest": "^4.0.15"
+    "vite-plus": "catalog:"
+  },
+  "catalog": {
+    "vite-plus": "latest"
   }
 }

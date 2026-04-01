@@ -4,10 +4,6 @@ on:
     branches:
       - main
 
-env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-
 jobs:
   release:
     name: Release
@@ -23,9 +19,9 @@ jobs:
       - uses: ./.github/setup
 
       - name: Build
-        run: bun run build
+        run: vp run build
 
-      - run: bun add -g npm@latest
+      - run: vp env exec --node 24 npm install -g npm@latest
 
       # Using custom token `MY_GITHUB_TOKEN` with more access to avoid rate limiting
       - name: Create Release
@@ -34,8 +30,8 @@ jobs:
         with:
           commit: "chore(release): 📦 version packages"
           title: "chore(release): 📦  version packages"
-          publish: bun run scripts/publish.ts
-          version: bun run scripts/version.ts
+          publish: bun scripts/publish.ts
+          version: bun scripts/version.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
@@ -46,7 +42,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git checkout changeset-release/main
-          bun fmt
+          vp fmt . --write
           git add .
           # Check if there are staged changes before committing and pushing
           if ! git diff --staged --quiet; then

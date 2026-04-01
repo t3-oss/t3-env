@@ -1,15 +1,13 @@
 name: Setup Workflow
-description: Composite action that sets up bun and installs dependencies
+description: Composite action that sets up Vite+ and installs dependencies
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-node@v6
+    - uses: voidzero-dev/setup-vp@v1
       with:
-        node-version-file: package.json
-
+        cache: true
     - uses: oven-sh/setup-bun@v2
       with:
         bun-version-file: package.json
-
-    - run: bun install
+    - run: vp install
       shell: bash

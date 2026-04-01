@@ -91,14 +91,14 @@ export const GET = (req: Request) => {
 
 ## Contributing
 
-This project uses [Bun](https://bun.sh) as its package manager. To install:
+This project uses [Vite+](https://viteplus.dev) as its unified toolchain and Bun as the package manager declared in `packageManager`.
 
 ```sh
 # Linux & macOS
-curl -fsSL https://bun.sh/install | bash
+curl -fsSL https://vite.plus | bash
 
 # Windows
-powershell -c "irm bun.sh/install.ps1 | iex"
+powershell -c "irm https://vite.plus/ps1 | iex"
 ```
 
 To get started, clone the repo:
@@ -113,7 +113,7 @@ Then, install the project dependencies:
 
 ```sh
 cd t3-env
-bun i
+vp install
 ```
 
 Checkout a feature branch for the change you're about to make:
@@ -127,15 +127,15 @@ Implement your changes, then submit a [Pull Request](https://docs.github.com/en/
 ### General Guidelines
 
 - When developing changes, checkout a feature branch. **DO NOT** create pull requests from your main branch as these are sometimes protected from maintainer edits.
-- Start the build watchers using `bun run dev`. This will recompile the necessary packages whenever you make changes.
+- Start the build watchers using `vp run dev`. This will recompile the necessary packages whenever you make changes.
 - Make as many changes as possible in the [core](./packages/core) package, re-export framework specific code from the respective package.
 - Add tests (both runtime and types) to verify your changes.
-- Add a changeset using `bun changeset` to ensure your changes trigger a release with appropriate changelog.
+- Add a changeset using `vp exec changeset` to ensure your changes trigger a release with appropriate changelog.
 
 ### When it's time to commit
 
-- Run the linters using `bun lint` (`bun lint:fix` to fix auto-fixable issues)
-- Run the tests using `bun run test`. Alternatively, you can use the test explorer in VSCode to target individual tests.
+- Run static checks using `vp check` (`vp run lint:fix` to apply lint and formatting fixes)
+- Run the tests using `vp test`. Alternatively, you can use the test explorer in VSCode to target individual tests.
 - Commit with whatever commit message you want. We squash PRs so the individual commit messages does not matter.
   - For bug fixes, it's a good practise to first add a failing regression test in one commit, and then implement the fix in another. This helps the review process as it's easy to see what was failing before, and how it succeeded after your change.
 - Add a pull request description explaining your changes. Link any relevant issues (e.g. by including `Closes #123` in the description).

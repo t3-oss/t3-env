@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { describe, expect, expectTypeOf, test, vi } from "vitest";
+import { describe, expect, expectTypeOf, test, vi } from "vite-plus/test";
 import { createEnv } from "../src/index.ts";
 import { uploadthing } from "../src/presets-valibot.ts";
 

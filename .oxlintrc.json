@@ -1,5 +1,5 @@
 {
-  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [".vite-build/**"],
   "plugins": ["typescript", "import"],
   "categories": {
     "correctness": "warn",
@@ -7,6 +7,9 @@
   },
   "env": {
     "builtin": true
+  },
+  "options": {
+    "reportUnusedDisableDirectives": "error"
   },
   "rules": {
     "eslint/prefer-rest-params": "warn",
