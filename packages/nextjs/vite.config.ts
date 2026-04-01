@@ -5,15 +5,7 @@ import { defineConfig } from "vite-plus";
  */
 export default defineConfig({
   resolve: {
-    alias: {
-      "@t3-oss/env-core": new URL("../core/src/index.ts", import.meta.url).pathname,
-      "@t3-oss/env-core/presets-arktype": new URL("../core/src/presets-arktype.ts", import.meta.url)
-        .pathname,
-      "@t3-oss/env-core/presets-zod": new URL("../core/src/presets-zod.ts", import.meta.url)
-        .pathname,
-      "@t3-oss/env-core/presets-valibot": new URL("../core/src/presets-valibot.ts", import.meta.url)
-        .pathname,
-    },
+    tsconfigPaths: true,
   },
   pack: {
     entry: [

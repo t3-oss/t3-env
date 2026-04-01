@@ -20,6 +20,12 @@
     "verbatimModuleSyntax": true,
     "rewriteRelativeImportExtensions": true,
     "allowImportingTsExtensions": true,
+    "paths": {
+      "@t3-oss/env-core": ["./packages/core/src/index.ts"],
+      "@t3-oss/env-core/presets-arktype": ["./packages/core/src/presets-arktype.ts"],
+      "@t3-oss/env-core/presets-zod": ["./packages/core/src/presets-zod.ts"],
+      "@t3-oss/env-core/presets-valibot": ["./packages/core/src/presets-valibot.ts"],
+    },
 
     // Type Safety
     "strict": true,
