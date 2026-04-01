@@ -152,12 +152,12 @@ export default nextConfig;
 #### Version < NextJS 16
 
 ```js title="next.config.js" {6}
-import { fileURLToPath } from "node:url";
-import createJiti from "jiti";
-const jiti = createJiti(fileURLToPath(import.meta.url));
+import { createJiti } from 'jiti';
+
+const jiti = createJiti(import.meta.url);
 
 // Import env here to validate during build. Using jiti@^1 we can import .ts files :)
-jiti("./app/env");
+await jiti.import('./app/env');
 
 /** @type {import('next').NextConfig} */
 export default {
