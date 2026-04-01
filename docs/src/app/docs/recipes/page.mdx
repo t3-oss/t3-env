@@ -17,7 +17,7 @@ Coercing booleans from strings is a common use case. Below are examples of how t
 
 <Callout type="warning">
 
-Zod's default primitives coercion should not be used for booleans, since every string gets coerced to true.
+Zod's default primitives coercion should not be used for booleans, since every string gets coerced to true. Alternatively, in Zod v4 you can use [`z.stringbool()`](https://zod.dev/api#stringbool) for coercion of strings to boolean.
 
 </Callout>
 
