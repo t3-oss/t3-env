@@ -145,4 +145,4 @@ Please note that this repo is maintained by individuals with full-time jobs as t
 
 ## License
 
-[MIT](./LICENSE.md) License © 2025 [Julius Marminge](https://github.com/juliusmarminge)
+[MIT](./LICENSE) License © 2026 [Julius Marminge](https://github.com/juliusmarminge)
