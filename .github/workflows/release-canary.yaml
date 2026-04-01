@@ -7,8 +7,7 @@ on:
       - main
 
 env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  FORCE_COLOR: 3
 
 jobs:
   release:
@@ -25,17 +24,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
       - uses: ./.github/setup
-      - run: bun lint
-      - run: bun fmt --check
+      - run: vp check
 
       - name: Build
-        run: bun run build
+        run: vp run build
 
       - name: Authenticate to npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
       - name: Publish
-        run: bun run scripts/canary.ts
+        run: bun scripts/canary.ts
 
       - name: Create a new comment notifying of the new canary version
         uses: actions/github-script@v8

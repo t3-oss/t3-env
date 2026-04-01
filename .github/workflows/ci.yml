@@ -13,8 +13,6 @@ concurrency:
 
 env:
   FORCE_COLOR: 3
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
 jobs:
   check:
@@ -23,19 +21,18 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
       - uses: ./.github/setup
-      - run: bun turbo build --filter=@t3-oss/env*
-      - run: bun lint
-      - run: bun fmt --check
+      - run: vp check
+      - run: vp build
 
   sherif:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
-      - uses: oven-sh/setup-bun@v2
+      - uses: voidzero-dev/setup-vp@v1
         with:
-          bun-version-file: package.json
-      - run: bunx sherif@1.9.0
+          cache: true
+      - run: vp dlx sherif@1.9.0
 
   test:
     runs-on: ubuntu-latest
@@ -43,5 +40,5 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
       - uses: ./.github/setup
-      - run: bun run build --filter=@t3-oss/env*
-      - run: bun run test
+      - run: vp build
+      - run: vp test

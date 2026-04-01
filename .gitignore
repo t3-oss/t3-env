@@ -6,7 +6,7 @@ dist
 .next
 .nuxt
 .output
-.turbo
+.vite-build
 .vercel
 .DS_Store
 

@@ -1,4 +1,4 @@
-import { describe, expect, expectTypeOf, test, vi } from "vitest";
+import { describe, expect, expectTypeOf, test, vi } from "vite-plus/test";
 
 import * as z from "zod/v3";
 import { createEnv } from "../src/index.ts";
