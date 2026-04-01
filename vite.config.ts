@@ -31,6 +31,12 @@ export default defineConfig({
       "@t3-oss/env-core/presets-zod": corePresetsZodPath,
     },
   },
+  run: {
+    cache: {
+      scripts: true,
+      tasks: true,
+    },
+  },
   build: {
     lib: {
       entry: workspaceSmokeEntryPath,

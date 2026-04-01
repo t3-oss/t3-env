@@ -43,7 +43,7 @@
   ],
   "scripts": {
     "build": "vp pack",
-    "clean": "rm -rf dist node_modules .turbo .cache",
+    "clean": "rm -rf dist node_modules .cache",
     "typecheck": "tsgo --noEmit",
     "prepack": "bun ../../scripts/replace-workspace-protocol.ts"
   },

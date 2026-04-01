@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "clean": "rm -rf .next node_modules .turbo .cache",
+    "clean": "rm -rf .next node_modules .cache",
     "build": "next build --webpack",
     "start": "next start"
   },

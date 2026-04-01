@@ -127,7 +127,7 @@ Implement your changes, then submit a [Pull Request](https://docs.github.com/en/
 ### General Guidelines
 
 - When developing changes, checkout a feature branch. **DO NOT** create pull requests from your main branch as these are sometimes protected from maintainer edits.
-- Start the build watchers using `vp run dev`. This will recompile the necessary packages whenever you make changes.
+- Start the build watchers using `vp run dev`. Vite Task runs the package builds recursively in workspace dependency order whenever you make changes.
 - Make as many changes as possible in the [core](./packages/core) package, re-export framework specific code from the respective package.
 - Add tests (both runtime and types) to verify your changes.
 - Add a changeset using `vp exec changeset` to ensure your changes trigger a release with appropriate changelog.
