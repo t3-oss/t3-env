@@ -323,6 +323,10 @@ export function createEnv<
     }
   }
 
+  const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
+    return Object.assign(acc, curr);
+  }, {});
+
   const skip = !!opts.skipValidation;
   if (skip) {
     if (opts.extends) {
@@ -332,7 +336,7 @@ export function createEnv<
     }
 
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    return runtimeEnv as any;
+    return Object.assign(extendedObj, runtimeEnv) as any;
   }
 
   const _client = typeof opts.client === "object" ? opts.client : {};
@@ -386,9 +390,6 @@ export function createEnv<
     return prop === "__esModule" || prop === "$$typeof";
   };
 
-  const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
-    return Object.assign(acc, curr);
-  }, {});
   const fullObj = Object.assign(extendedObj, parsed.value);
 
   const env = new Proxy(fullObj, {
