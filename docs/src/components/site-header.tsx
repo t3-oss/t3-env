@@ -4,7 +4,7 @@ import { siteConfig } from "@/app/site-config";
 import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { MobileDropdown } from "@/components/mobile-nav";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
 
 export function SiteHeader() {
@@ -49,7 +49,7 @@ export function SiteHeader() {
                 <span className="sr-only">Twitter</span>
               </div>
             </Link> */}
-          <ThemeToggle />
+          <ThemeSwitcher />
           <MobileDropdown
             items={{
               main: siteConfig.mainNav,

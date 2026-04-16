@@ -7,7 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ViewTransitions } from "next-view-transitions";
 
 const fontSans = Inter({
@@ -84,7 +84,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontMono.variable,
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeProvider>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
               <div className="flex-1">{children}</div>

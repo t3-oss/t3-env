@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 import { Icons } from "./icons";
 import type { NavItem } from "./main-nav";
 import type { NestedNavItem } from "./sidebar";
-import { ThemeToggle } from "./theme-toggle";
+import  {ThemeSwitcher}  from "@/components/theme/theme-switcher";
 import { Button } from "./ui/button";
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
@@ -70,7 +70,7 @@ export function MobileDropdown(props: { items: { main: NavItem[]; docs: NestedNa
           ))}
         </ScrollArea>
         <div className="border-t pt-4">
-          <ThemeToggle />
+          <ThemeSwitcher />
         </div>
       </PopoverContent>
     </Popover>
