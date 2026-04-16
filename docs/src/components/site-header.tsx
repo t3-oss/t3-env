@@ -4,7 +4,7 @@ import { siteConfig } from "@/app/site-config";
 import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { MobileDropdown } from "@/components/mobile-nav";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
 
 export function SiteHeader() {
@@ -17,7 +17,9 @@ export function SiteHeader() {
             className="flex items-center space-x-2 rounded-md h-6 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring ring-offset-background"
           >
             <Icons.logo className="h-6 w-6" />
-            <span className="font-medium text-2xl leading-none">{siteConfig.name}</span>
+            <span className="font-medium text-2xl leading-none">
+              {siteConfig.name}
+            </span>
           </Link>
           <MainNav items={siteConfig.mainNav} />
         </div>
@@ -49,7 +51,7 @@ export function SiteHeader() {
                 <span className="sr-only">Twitter</span>
               </div>
             </Link> */}
-          <ThemeToggle />
+          <ThemeSwitcher />
           <MobileDropdown
             items={{
               main: siteConfig.mainNav,

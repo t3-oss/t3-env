@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
-export function ThemeToggle() {
+export function ThemeSwitcher() {
   const { setTheme, theme } = useTheme();
 
   return (
