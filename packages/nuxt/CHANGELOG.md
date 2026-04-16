@@ -1,5 +1,19 @@
 # @t3-oss/env-nuxt
 
+## 0.13.11
+
+### Patch Changes
+
+- Updated dependencies [[`6937086`](https://github.com/t3-oss/t3-env/commit/6937086b36e36f8519aaf75e46def2da4b62eb55)]:
+  - @t3-oss/env-core@0.13.11
+
+## 0.13.10
+
+### Patch Changes
+
+- Updated dependencies [[`a778bf3`](https://github.com/t3-oss/t3-env/commit/a778bf30450b74b74a902d2c6ccae6ec4b320c91)]:
+  - @t3-oss/env-core@0.13.10
+
 ## 0.13.9
 
 ### Patch Changes

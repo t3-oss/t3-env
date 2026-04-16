@@ -31,6 +31,7 @@ export const vercel = (): Readonly<VercelEnv> =>
       VERCEL: optional(string()),
       CI: optional(string()),
       VERCEL_ENV: optional(picklist(["development", "preview", "production"])),
+      VERCEL_TARGET_ENV: optional(string()),
       VERCEL_URL: optional(string()),
       VERCEL_PROJECT_PRODUCTION_URL: optional(string()),
       VERCEL_BRANCH_URL: optional(string()),

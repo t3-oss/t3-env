@@ -31,6 +31,7 @@ export const vercel = (): Readonly<VercelEnv> =>
       VERCEL: type("string | undefined"),
       CI: type("string | undefined"),
       VERCEL_ENV: type("'development' | 'preview' | 'production' | undefined"),
+      VERCEL_TARGET_ENV: type("string | undefined"),
       VERCEL_URL: type("string | undefined"),
       VERCEL_PROJECT_PRODUCTION_URL: type("string | undefined"),
       VERCEL_BRANCH_URL: type("string | undefined"),

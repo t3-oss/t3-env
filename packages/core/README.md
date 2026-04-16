@@ -29,12 +29,13 @@ deno add jsr:@t3-oss/env-core
 
 > [!NOTE]
 >
-> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod
+> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod.
+> See the [documentation](https://env.t3.gg/docs/standard-schema) for more details.
 
 ```ts
 // src/env.ts
 import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   /*

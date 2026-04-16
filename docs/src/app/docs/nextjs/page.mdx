@@ -22,7 +22,7 @@ deno add jsr:@t3-oss/env-nextjs
 
 <Callout>
 
-Although we'll use Zod as examples throughout these docs, you can use any validator that supports [Standard Schema](https://github.com/standard-schema/standard-schema).
+Although we'll use Zod as examples throughout these docs, you can use any validator that supports [Standard Schema](/docs/standard-schema).
 
 </Callout>
 
@@ -42,7 +42,7 @@ Although we'll use Zod as examples throughout these docs, you can use any valida
 
 ```ts title="src/env.ts"
 import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   server: {
@@ -81,7 +81,7 @@ If you consider the **names** of your variables sensitive, you should split your
 
 ```ts title="src/env/server.ts"
 import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   server: {
@@ -100,7 +100,7 @@ export const env = createEnv({
 
 ```ts title="src/env/client.ts"
 import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   client: {
@@ -152,12 +152,12 @@ export default nextConfig;
 #### Version < NextJS 16
 
 ```js title="next.config.js" {6}
-import { fileURLToPath } from "node:url";
-import createJiti from "jiti";
-const jiti = createJiti(fileURLToPath(import.meta.url));
+import { createJiti } from 'jiti';
+
+const jiti = createJiti(import.meta.url);
 
 // Import env here to validate during build. Using jiti@^1 we can import .ts files :)
-jiti("./app/env");
+await jiti.import('./app/env');
 
 /** @type {import('next').NextConfig} */
 export default {

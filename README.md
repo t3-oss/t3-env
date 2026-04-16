@@ -33,7 +33,8 @@ Deploying your app with invalid environment variables is a hassle. This package 
 
 > [!NOTE]
 >
-> You may use any Standard Schema compliant validator of your choice. This example uses Zod
+> You may use any [Standard Schema](https://standardschema.dev) compliant validator of your choice. This example uses Zod.
+> See the [documentation](https://env.t3.gg/docs/standard-schema) for more details.
 
 This package supports the full power of Zod/Valibot etc, meaning you can use `transforms` and `default` values.
 
@@ -42,7 +43,7 @@ This package supports the full power of Zod/Valibot etc, meaning you can use `tr
 ```ts
 // src/env.mjs
 import { createEnv } from "@t3-oss/env-nextjs"; // or core package
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   /*
@@ -144,4 +145,4 @@ Please note that this repo is maintained by individuals with full-time jobs as t
 
 ## License
 
-[MIT](./LICENSE.md) License © 2025 [Julius Marminge](https://github.com/juliusmarminge)
+[MIT](./LICENSE) License © 2026 [Julius Marminge](https://github.com/juliusmarminge)

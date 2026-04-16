@@ -2,6 +2,7 @@ export interface VercelEnv {
   VERCEL?: string;
   CI?: string;
   VERCEL_ENV?: "development" | "preview" | "production";
+  VERCEL_TARGET_ENV?: "development" | "preview" | "production" | (string & {});
   VERCEL_URL?: string;
   VERCEL_PROJECT_PRODUCTION_URL?: string;
   VERCEL_BRANCH_URL?: string;
