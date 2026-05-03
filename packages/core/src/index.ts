@@ -312,7 +312,10 @@ export function createEnv<
 >(
   opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends, TFinalSchema>,
 ): CreateEnv<TFinalSchema, TExtends> {
-  const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
+  const runtimeEnv =
+    opts.runtimeEnvStrict ??
+    opts.runtimeEnv ??
+    (typeof process !== "undefined" ? process.env : {});
 
   const emptyStringAsUndefined = opts.emptyStringAsUndefined ?? false;
   if (emptyStringAsUndefined) {
