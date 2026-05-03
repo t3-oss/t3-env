@@ -21,6 +21,9 @@ import type {
   WxtEnv,
 } from "./presets.ts";
 
+const serverEnv = (): Record<string, string | undefined> =>
+  typeof process !== "undefined" ? process.env : {};
+
 /**
  * Vercel System Environment Variables
  * @see https://vercel.com/docs/projects/environment-variables/system-environment-variables#system-environment-variables
@@ -51,7 +54,7 @@ export const vercel = (): Readonly<VercelEnv> =>
       VERCEL_GIT_PREVIOUS_SHA: type("string | undefined"),
       VERCEL_GIT_PULL_REQUEST_ID: type("string | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -77,7 +80,7 @@ export const neonVercel = (): Readonly<NeonVercelEnv> =>
       POSTGRES_URL_NO_SSL: type("string.url | undefined"),
       POSTGRES_PRISMA_URL: type("string.url | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -101,7 +104,7 @@ export const supabaseVercel = (): Readonly<SupabaseVercelEnv> =>
       NEXT_PUBLIC_SUPABASE_ANON_KEY: type("string | undefined"),
       NEXT_PUBLIC_SUPABASE_URL: type("string.url | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -112,7 +115,7 @@ export const uploadthingV6 = (): Readonly<UploadThingV6Env> =>
     server: {
       UPLOADTHING_TOKEN: type("string"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -123,7 +126,7 @@ export const uploadthing = (): Readonly<UploadThingEnv> =>
     server: {
       UPLOADTHING_TOKEN: type("string"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -146,7 +149,7 @@ export const render = (): Readonly<RenderEnv> =>
       RENDER_SERVICE_TYPE: type("'web' | 'pserv' | 'cron' | 'worker' | 'static' | undefined"),
       RENDER: type("string | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -180,7 +183,7 @@ export const railway = (): Readonly<RailwayEnv> =>
       RAILWAY_GIT_REPO_OWNER: type("string | undefined"),
       RAILWAY_GIT_COMMIT_MESSAGE: type("string | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -202,7 +205,7 @@ export const fly = (): Readonly<FlyEnv> =>
       FLY_VM_MEMORY_MB: type("string | undefined"),
       PRIMARY_REGION: type("string | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -224,7 +227,7 @@ export const netlify = (): Readonly<NetlifyEnv> =>
       SITE_NAME: type("string | undefined"),
       SITE_ID: type("string | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -237,7 +240,7 @@ export const upstashRedis = (): Readonly<UpstashRedisEnv> =>
       UPSTASH_REDIS_REST_URL: type("string.url"),
       UPSTASH_REDIS_REST_TOKEN: type("string"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
@@ -256,7 +259,7 @@ export const coolify = (): Readonly<CoolifyEnv> =>
       PORT: type("string | undefined"),
       HOST: type("string | undefined"),
     },
-    runtimeEnv: process.env,
+    runtimeEnv: serverEnv(),
   });
 
 /**
