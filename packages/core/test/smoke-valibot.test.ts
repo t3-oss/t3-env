@@ -1,7 +1,7 @@
 import * as v from "valibot";
 import { describe, expect, expectTypeOf, test, vi } from "vitest";
 import { createEnv } from "../src/index.ts";
-import { uploadthing } from "../src/presets-valibot.ts";
+import { uploadthing, vercel } from "../src/presets-valibot.ts";
 
 function ignoreErrors(cb: () => void) {
   try {
@@ -802,4 +802,13 @@ test("with built-in preset", () => {
 
   expect(env.FOO).toBe("bar");
   expect(env.UPLOADTHING_TOKEN).toBe("token");
+});
+
+test("server presets do not throw when process is not defined", () => {
+  vi.stubGlobal("process", undefined);
+  try {
+    expect(() => vercel()).not.toThrow();
+  } finally {
+    vi.unstubAllGlobals();
+  }
 });
