@@ -312,16 +312,14 @@ export function createEnv<
 >(
   opts: EnvOptions<TPrefix, TServer, TClient, TShared, TExtends, TFinalSchema>,
 ): CreateEnv<TFinalSchema, TExtends> {
-  const runtimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
+  const rawRuntimeEnv = opts.runtimeEnvStrict ?? opts.runtimeEnv ?? process.env;
 
   const emptyStringAsUndefined = opts.emptyStringAsUndefined ?? false;
-  if (emptyStringAsUndefined) {
-    for (const [key, value] of Object.entries(runtimeEnv)) {
-      if (value === "") {
-        delete runtimeEnv[key];
-      }
-    }
-  }
+  const runtimeEnv = emptyStringAsUndefined
+    ? (Object.fromEntries(
+        Object.entries(rawRuntimeEnv).filter(([, v]) => v !== ""),
+      ) as typeof rawRuntimeEnv)
+    : rawRuntimeEnv;
 
   const skip = !!opts.skipValidation;
   if (skip) {

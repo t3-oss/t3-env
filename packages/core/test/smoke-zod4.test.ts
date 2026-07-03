@@ -807,3 +807,37 @@ test("with built-in preset", () => {
   expect(env.FOO).toBe("bar");
   expect(env.UPLOADTHING_TOKEN).toBe("token");
 });
+
+describe("emptyStringAsUndefined", () => {
+  test("does not mutate the runtimeEnv object", () => {
+    const env: Record<string, string> = { EMPTY: "", PRESENT: "hello" };
+
+    createEnv({
+      server: { PRESENT: z.string() },
+      runtimeEnv: env,
+      emptyStringAsUndefined: true,
+    });
+
+    expect(env).toHaveProperty("EMPTY", "");
+  });
+
+  test("treats empty strings as undefined — required field fails validation", () => {
+    expect(() =>
+      createEnv({
+        server: { REQUIRED: z.string() },
+        runtimeEnv: { REQUIRED: "" },
+        emptyStringAsUndefined: true,
+      }),
+    ).toThrow();
+  });
+
+  test("applies schema default when env var is an empty string", () => {
+    const env = createEnv({
+      server: { WITH_DEFAULT: z.string().default("fallback") },
+      runtimeEnv: { WITH_DEFAULT: "" },
+      emptyStringAsUndefined: true,
+    });
+
+    expect(env.WITH_DEFAULT).toBe("fallback");
+  });
+});
