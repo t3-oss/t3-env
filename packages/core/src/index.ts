@@ -381,8 +381,9 @@ export function createEnv<
   }
 
   const isServerAccess = (prop: string) => {
+    if (prop in _shared) return false;
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !(prop in _shared);
+    return !prop.startsWith(opts.clientPrefix);
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
