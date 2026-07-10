@@ -481,9 +481,7 @@ describe("extending presets", () => {
           PRESET_CLIENT_ENV: v.string(),
         },
         onInvalidAccess(variable) {
-          throw new Error(
-            `Attempted to access preset variable ${variable} on the client`,
-          );
+          throw new Error(`Attempted to access preset variable ${variable} on the client`);
         },
         runtimeEnv: processEnv,
       });
@@ -500,9 +498,7 @@ describe("extending presets", () => {
           CLIENT_ENV: v.string(),
         },
         onInvalidAccess(variable) {
-          throw new Error(
-            `Attempted to access variable ${variable} on the client`,
-          );
+          throw new Error(`Attempted to access variable ${variable} on the client`);
         },
         extends: [preset],
         runtimeEnv: processEnv,
@@ -544,9 +540,7 @@ describe("extending presets", () => {
 
       const env = lazyCreateEnv();
 
-      expect(() => env.SERVER_ENV).toThrow(
-        "Attempted to access variable SERVER_ENV on the client",
-      );
+      expect(() => env.SERVER_ENV).toThrow("Attempted to access variable SERVER_ENV on the client");
       expect(() => env.PRESET_SERVER_ENV).toThrow(
         "Attempted to access preset variable PRESET_SERVER_ENV on the client",
       );
