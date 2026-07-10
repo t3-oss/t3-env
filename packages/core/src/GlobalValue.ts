@@ -16,22 +16,21 @@
  * @source https://github.com/Effect-TS/effect/blob/main/packages/effect/src/GlobalValue.ts
  * @since 2.0.0
  */
-import { version } from "../package.json";
+import packageJson from "../package.json" with { type: "json" };
 
-const globalStoreId = `effect/GlobalValue/globalStoreId/${version}`;
+const globalStoreId = `effect/GlobalValue/globalStoreId/${packageJson.version}`;
 
 let globalStore: Map<unknown, any>;
 
 export const globalValue = <A>(id: symbol, compute: (id: symbol) => A): A => {
   if (!globalStore) {
-    // @ts-expect-error
+    // @ts-expect-error not declared
     globalThis[globalStoreId] ??= new Map();
-    // @ts-expect-error
+    // @ts-expect-error not declared
     globalStore = globalThis[globalStoreId] as Map<unknown, any>;
   }
   if (!globalStore.has(id)) {
     globalStore.set(id, compute(id));
   }
-  // biome-ignore lint/style/noNonNullAssertion: <explanation>
   return globalStore.get(id)!;
 };
