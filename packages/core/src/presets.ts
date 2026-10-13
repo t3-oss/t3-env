@@ -8,6 +8,7 @@ export interface VercelEnv {
   VERCEL_BRANCH_URL?: string;
   VERCEL_REGION?: string;
   VERCEL_DEPLOYMENT_ID?: string;
+  VERCEL_PROJECT_ID?: string;
   VERCEL_SKEW_PROTECTION_ENABLED?: string;
   VERCEL_AUTOMATION_BYPASS_SECRET?: string;
   VERCEL_GIT_PROVIDER?: string;

@@ -37,6 +37,7 @@ export const vercel = (): Readonly<VercelEnv> =>
       VERCEL_BRANCH_URL: z.string().optional(),
       VERCEL_REGION: z.string().optional(),
       VERCEL_DEPLOYMENT_ID: z.string().optional(),
+      VERCEL_PROJECT_ID: z.string().optional(),
       VERCEL_SKEW_PROTECTION_ENABLED: z.string().optional(),
       VERCEL_AUTOMATION_BYPASS_SECRET: z.string().optional(),
       VERCEL_GIT_PROVIDER: z.string().optional(),

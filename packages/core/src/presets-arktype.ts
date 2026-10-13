@@ -37,6 +37,7 @@ export const vercel = (): Readonly<VercelEnv> =>
       VERCEL_BRANCH_URL: type("string | undefined"),
       VERCEL_REGION: type("string | undefined"),
       VERCEL_DEPLOYMENT_ID: type("string | undefined"),
+      VERCEL_PROJECT_ID: type("string | undefined"),
       VERCEL_SKEW_PROTECTION_ENABLED: type("string | undefined"),
       VERCEL_AUTOMATION_BYPASS_SECRET: type("string | undefined"),
       VERCEL_GIT_PROVIDER: type("string | undefined"),
