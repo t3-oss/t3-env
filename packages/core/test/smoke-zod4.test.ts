@@ -787,6 +787,75 @@ test("overriding preset env var", () => {
   expect(env.PRESET_ENV).toBe(123);
 });
 
+describe("skipValidation with extends", () => {
+  test("includes extended env vars when skipValidation is true", () => {
+    const processEnv = {
+      PRESET_ENV: "preset",
+      MY_VAR: "myvar",
+    };
+
+    const preset = createEnv({
+      server: { PRESET_ENV: z.string() },
+      runtimeEnv: processEnv,
+    });
+
+    const env = createEnv({
+      server: { MY_VAR: z.string() },
+      extends: [preset],
+      runtimeEnv: processEnv,
+      skipValidation: true,
+    });
+
+    expect(env.MY_VAR).toBe("myvar");
+    expect(env.PRESET_ENV).toBe("preset");
+  });
+
+  test("runtimeEnv values take precedence over extended env vars when skipValidation is true", () => {
+    const preset = createEnv({
+      server: { SHARED_VAR: z.string() },
+      runtimeEnv: { SHARED_VAR: "from-preset" },
+    });
+
+    const env = createEnv({
+      server: { SHARED_VAR: z.string() },
+      extends: [preset],
+      runtimeEnv: { SHARED_VAR: "from-runtime" },
+      skipValidation: true,
+    });
+
+    expect(env.SHARED_VAR).toBe("from-runtime");
+  });
+
+  test("includes vars from multiple extended presets when skipValidation is true", () => {
+    const processEnv = {
+      PRESET_ENV1: "preset1",
+      PRESET_ENV2: "preset2",
+      MY_VAR: "myvar",
+    };
+
+    const preset1 = createEnv({
+      server: { PRESET_ENV1: z.string() },
+      runtimeEnv: processEnv,
+    });
+
+    const preset2 = createEnv({
+      server: { PRESET_ENV2: z.string() },
+      runtimeEnv: processEnv,
+    });
+
+    const env = createEnv({
+      server: { MY_VAR: z.string() },
+      extends: [preset1, preset2],
+      runtimeEnv: processEnv,
+      skipValidation: true,
+    });
+
+    expect(env.MY_VAR).toBe("myvar");
+    expect(env.PRESET_ENV1).toBe("preset1");
+    expect(env.PRESET_ENV2).toBe("preset2");
+  });
+});
+
 test("with built-in preset", () => {
   process.env.UPLOADTHING_TOKEN = "token";
   const env = createEnv({
