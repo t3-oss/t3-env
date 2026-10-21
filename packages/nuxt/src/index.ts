@@ -52,6 +52,7 @@ export function createEnv<
     client,
     server,
     clientPrefix: CLIENT_PREFIX,
-    runtimeEnv: process.env,
+    // `process` isn't defined in browsers, so only read it when it exists
+    runtimeEnv: typeof process !== "undefined" ? process.env : {},
   });
 }

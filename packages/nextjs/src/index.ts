@@ -80,7 +80,7 @@ export function createEnv<
   const runtimeEnv = opts.runtimeEnv
     ? opts.runtimeEnv
     : {
-        ...process.env,
+        ...(typeof process !== "undefined" ? process.env : {}),
         ...opts.experimental__runtimeEnv,
       };
 
