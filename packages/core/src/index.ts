@@ -300,6 +300,13 @@ export type CreateEnv<
 > = Readonly<Simplify<Reduce<[StandardSchemaV1.InferOutput<TFinalSchema>, ...TExtends]>>>;
 
 /**
+ * The raw values and client-readable keys of every env created by `createEnv`,
+ * used when the env is passed to `extends`.
+ * @internal
+ */
+const envSources = new WeakMap<object, { values: object; publicKeys: Set<string> }>();
+
+/**
  * Create a new environment variable schema.
  */
 export function createEnv<
@@ -323,6 +330,16 @@ export function createEnv<
     }
   }
 
+  // Read the raw values of extended envs so the client access guard of a preset
+  // doesn't fire while merging it. Its shared variables stay readable here.
+  const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
+    return Object.assign(acc, envSources.get(curr)?.values ?? curr);
+  }, {});
+  const extendedPublicKeys = (opts.extends ?? []).flatMap((curr) => {
+    const source = envSources.get(curr);
+    return source ? [...source.publicKeys] : Object.keys(curr);
+  });
+
   const skip = !!opts.skipValidation;
   if (skip) {
     if (opts.extends) {
@@ -332,7 +349,7 @@ export function createEnv<
     }
 
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    return runtimeEnv as any;
+    return Object.assign(extendedObj, runtimeEnv) as any;
   }
 
   const _client = typeof opts.client === "object" ? opts.client : {};
@@ -375,9 +392,12 @@ export function createEnv<
     return onValidationError(parsed.issues);
   }
 
+  // Shared variables, including those inherited through `extends`, are readable on the client
+  const sharedKeys = new Set([...Object.keys(_shared), ...extendedPublicKeys]);
   const isServerAccess = (prop: string) => {
+    if (sharedKeys.has(prop)) return false;
     if (!opts.clientPrefix) return true;
-    return !prop.startsWith(opts.clientPrefix) && !(prop in _shared);
+    return !prop.startsWith(opts.clientPrefix);
   };
   const isValidServerAccess = (prop: string) => {
     return isServer || !isServerAccess(prop);
@@ -386,9 +406,6 @@ export function createEnv<
     return prop === "__esModule" || prop === "$$typeof";
   };
 
-  const extendedObj = (opts.extends ?? []).reduce((acc, curr) => {
-    return Object.assign(acc, curr);
-  }, {});
   const fullObj = Object.assign(extendedObj, parsed.value);
 
   const env = new Proxy(fullObj, {
@@ -408,6 +425,11 @@ export function createEnv<
     //       : `Cannot assign to read only property of object #<Object>`
     //   );
     // },
+  });
+
+  envSources.set(env, {
+    values: fullObj,
+    publicKeys: new Set([...sharedKeys, ...Object.keys(_client)]),
   });
 
   return env as any;
